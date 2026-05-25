@@ -34,6 +34,8 @@ relationships:
   - type: supports
     target: 2025-rabobank-bouw-en-vastgoedbericht-2025
     via: "Same publisher; Bouw publication covers the construction-side of the same value chain"
+quality_floor: {D1: 2, D2: 1, D3: 2, D4: 1, D5: null, D6: null}
+quality_floor_notes: ['D2: thin sections (<100 words): how=48, what=43', 'D4: no "Limitations the authors acknowledge" phrase']
 ---
 
 # Vastgoed 2026: selectief investeren, gericht optimaliseren
@@ -271,10 +273,10 @@ For the wiki:
 
 | Field | Value |
 |---|---|
-| Reviewer | Claude (self-score) |
+| Reviewer | Claude (self-score, re-evaluated 2026-05-25 post-D6 introduction) |
 | Date | 2026-05-25 |
 | Claimed depth | Pass 2 |
-| Rubric version | 1.0 |
+| Rubric version | 1.1 (adds D6) |
 
 | Dim | Score | Floor | Notes |
 |---|---:|---:|---|
@@ -283,7 +285,8 @@ For the wiki:
 | D3 Distinctive artifacts | 3 | 2 | Three fiscal-policy changes reproduced as code block; direct-vs-indirect framing rendered; brownfield dual-win as Mermaid; investment thesis 2026 summarised as code; Tabel 1 perspective matrix described narratively (data cells stripped). |
 | D4 Critical reading | 2 | 2 | Five concrete "not flagged" items: missing yield numbers, no bear-case, undeclared author conflict, ESG-claim under-evidenced, Tabel 1 qualitative-only. |
 | D5 Pass-3 markers | — | — | n/a (Pass 2 page) |
+| D6 Appendix coverage | — | — | n/a — Rabobank real-estate outlook; no appendix/bijlage material (0 mentions in raw markdown). Denominator unchanged at /12. |
 
-**Total: 10 / 12 = 0.83** (workable band; D2 just at floor due to missing quantitative metrics in the source itself)
+**Total: 10 / 12 = 0.83** (workable band; unchanged by D6 introduction; D2 just at floor due to missing quantitative metrics in the source itself; appendix N/A)
 
 **Resolution:** accepted as is; D2 = 2 reflects source limitations, not under-reading. Tabel 1 numerical cells deferred to opportunistic PDF re-open.

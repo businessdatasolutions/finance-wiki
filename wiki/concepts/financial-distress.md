@@ -59,7 +59,7 @@ The operational definition matters: the closer the cut-off is to bankruptcy, the
 2. **Macroeconomic** — business cycle, inflation, interest rates, monetary policy. Macro variables explain ~50 % of earnings variation (Bonsall et al. 2013).
 3. **Corporate governance** — board structure (independent / grey directors; mixed evidence); CEO characteristics (gender, duality, overconfidence); ownership structure (family / institutional / state).
 
-[[2022-11-28-altman-2023-omega-score-sme-default|Altman 2023]] extends this with **management-related** (change in management) and **employee-related** (firing ratio, mean employee tenure) sub-channels. [[2024-06-22-hajek-2024-distress-prediction-annual-reports|Hajek 2024]] extends with **risk-factor disclosure linguistic features** (FinBERT sentiment + 26-topic BERTopic taxonomy, top discriminator: credit-risk topic frequency). [[2026-02-04-bari-2026-us-small-business-distress-framework|Bari 2026]] extends with **credit behaviour** (β = +0.34 in regression) and **relationship-based** indicators.
+[[2022-11-28-altman-2023-omega-score-sme-default|Altman 2023]] extends this with **management-related** (change in management) and **employee-related** (firing ratio, mean employee tenure) sub-channels — the full 164-candidate predictor space is reproduced in [[sme-distress-predictor-variables]] for cross-cluster reuse. [[2024-06-22-hajek-2024-distress-prediction-annual-reports|Hajek 2024]] extends with **risk-factor disclosure linguistic features** (FinBERT sentiment + 26-topic BERTopic taxonomy, top discriminator: credit-risk topic frequency). [[2026-02-04-bari-2026-us-small-business-distress-framework|Bari 2026]] extends with **credit behaviour** (β = +0.34 in regression) and **relationship-based** indicators.
 
 ## Consequences (Habib's 4-bucket taxonomy)
 
@@ -102,6 +102,7 @@ The case study is **structurally analogous to firm-level distress** but at secto
 
 - [[altman-z-score]] — the dominant accounting-based distress-measure family.
 - [[multiple-discriminant-analysis]] — the statistical method underlying the Altman lineage.
+- [[sme-distress-predictor-variables]] — the canonical 164-variable predictor catalogue (Altman et al. 2023 appendix), spanning financial / payment-behavior / management / employee / control variables; the operational menu from which any distress model selects.
 - [[merton-distance-to-default]] — the market-based-credit alternative.
 - [[early-warning-systems]] — the deployment paradigm for distress prediction.
 - [[ohlson-o-score]] — the logit-based distress measure.

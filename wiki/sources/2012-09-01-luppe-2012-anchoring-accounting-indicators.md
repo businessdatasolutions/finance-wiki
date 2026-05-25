@@ -349,23 +349,3 @@ A defensible cross-corpus connection exists conceptually:
 
 Luppe is best treated as a **stub-source for the future behavioural-finance corpus** — when a second behavioural-finance paper enters the wiki, the [[anchoring-heuristic]] concept page will become a hub linking both.
 
-## Quality review
-
-| Field | Value |
-|---|---|
-| Reviewer | Claude (self-score) |
-| Date | 2026-05-25 |
-| Claimed depth | Pass 2 |
-| Rubric version | 1.0 |
-
-| Dim | Score | Floor | Notes |
-|---|---:|---:|---|
-| D1 Five Cs | 3 | 2 | Category (experimental + behavioural), Context (Tversky-Kahneman lineage + Brazilian-context novelty + outlier-from-batch noted), Correctness (calibration-bias hypothesis + retrospective-task concern flagged), Contributions (3 named), Clarity (no figures — table-only paper; the asymmetry-finding caveat noted). |
-| D2 IMRaD | 3 | 2 | Results section gives specific AIs per company (range 0.50–1.38), exact t-statistics per question (6.34–11.46), specific confidence-subgroup AI (0.85 vs. 0.91 overall), specific calibration / anchored confidence means (3.00 vs. 3.91–4.00). |
-| D3 Distinctive artifacts | 3 | 2 | **Anchoring Index general + per-anchor formulae transcribed**; Jacowitz-Kahneman transformation formulae transcribed; Table 2 (the headline AI table) fully reproduced; Table 4 (t-tests) reproduced; experimental design rendered as Mermaid flowchart; three robust findings codified as code block. |
-| D4 Critical reading | 2 | 2 | Four concrete "not flagged" items: low/high-anchor asymmetry may be calibration-group-bias artefact; retrospective 2006-task memory contamination; no domain-knowledge interaction; no non-accounting comparison group. Each traceable to specific methodological choices. |
-| D5 Pass-3 markers | — | — | n/a (Pass 2 page) |
-
-**Total: 11 / 12 = 0.92** (at ceiling)
-
-**Resolution:** accepted; catalogue update can proceed. The paper is a thematic outlier in the 2026-05-25 batch; the wiki currently has no thematic neighbours for it. The [[anchoring-heuristic]] concept page is the canonical first home for future behavioural-finance ingests to link back to.

@@ -54,6 +54,10 @@
           {
             "type": "command",
             "command": "node $CLAUDE_PROJECT_DIR/scripts/lint-page.mjs"
+          },
+          {
+            "type": "command",
+            "command": "node $CLAUDE_PROJECT_DIR/scripts/on-rubric-change.mjs"
           }
         ]
       }

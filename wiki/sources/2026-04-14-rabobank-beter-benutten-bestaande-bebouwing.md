@@ -34,6 +34,8 @@ relationships:
   - type: supports
     target: 2025-rabobank-bouw-en-vastgoedbericht-2025
     via: "Bouw publication §Ruw- en afbouwsector covers the same ZZP'ers + MKB renovation-pivot dynamic"
+quality_floor: {D1: 2, D2: 1, D3: 1, D4: 1, D5: null, D6: null}
+quality_floor_notes: ['D2: thin sections (<100 words): how=45, what=28', 'D3: ## Distinctive artifacts section exists but no Figure/Table mentions', 'D4: no "Limitations the authors acknowledge" phrase']
 ---
 
 # Wat zijn de ondernemerskansen van het beter benutten van bestaande bebouwing?
@@ -223,10 +225,10 @@ For the wiki:
 
 | Field | Value |
 |---|---|
-| Reviewer | Claude (self-score) |
+| Reviewer | Claude (self-score, re-evaluated 2026-05-25 post-D6 introduction) |
 | Date | 2026-05-25 |
 | Claimed depth | Pass 2 |
-| Rubric version | 1.0 |
+| Rubric version | 1.1 (adds D6) |
 
 | Dim | Score | Floor | Notes |
 |---|---:|---:|---|
@@ -235,7 +237,8 @@ For the wiki:
 | D3 Distinctive artifacts | 3 | 2 | Four-category taxonomy rendered as Mermaid; advantages/constraints reproduced as code block; competency-shift framing reproduced as before/after. |
 | D4 Critical reading | 2 | 2 | Five concrete "not flagged" items: no market-size numbers, no competitive-landscape, no international benchmarking, undeclared author conflict, political durability unaddressed. |
 | D5 Pass-3 markers | — | — | n/a (Pass 2 page) |
+| D6 Appendix coverage | — | — | n/a — Rabobank short practitioner piece; no appendix/bijlage material (0 mentions in raw markdown). Denominator unchanged at /12. |
 
-**Total: 10 / 12 = 0.83** (workable band; D2 limited by source's qualitative-only character)
+**Total: 10 / 12 = 0.83** (workable band; unchanged by D6 introduction; D2 limited by source's qualitative-only character; appendix N/A)
 
 **Resolution:** accepted; catalogue update can proceed.

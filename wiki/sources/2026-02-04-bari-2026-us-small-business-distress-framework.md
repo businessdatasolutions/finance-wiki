@@ -33,6 +33,9 @@ relationships:
   - type: supports
     target: 2024-06-22-hajek-2024-distress-prediction-annual-reports
     via: "same intellectual move — financial ratios alone are insufficient; both reach the conclusion that an additional channel is needed"
+  - type: uses
+    target: sme-distress-predictor-variables
+    via: "Bari's seven indicator families (liquidity / profitability / leverage / cash flow / credit behaviour / relationship-based / efficiency) overlap with catalogue categories 3 (Profitability), 5 (Liquidity), 6 (Financial leverage), and 16 (Payment behaviour); cash flow and relationship-based are partially novel relative to the catalogue"
 ---
 
 # An Early-Warning Predictive Framework for Financial Distress in U.S. Small Businesses
@@ -41,7 +44,7 @@ relationships:
 
 ## TL;DR
 
-Bari constructs and tests an **integrated multi-indicator early-warning framework** for US small-business distress on N = 482 firms across manufacturing, construction, trade, services, hospitality. Seven hypotheses test the contribution of each indicator family (liquidity / profitability / leverage / cash flow / **credit behaviour** / **relationship-based** / efficiency) to a composite distress outcome. Six of seven null hypotheses are rejected; **credit behaviour has the largest standardised coefficient (β = +0.34)**, followed by leverage (+0.25), cash flow dynamics (−0.23), liquidity (−0.21), relationship indicators (−0.18), profitability (−0.14); **efficiency indicators fail to clear p < 0.05**. Model R² rises from 0.31 (financial-only baseline) to **0.46 (full integrated model)** — a +0.15 R² gain attributable to the behavioural + relational + cash-flow channels Bari emphasises.
+Bari constructs and tests an **integrated multi-indicator early-warning framework** for US small-business distress on N = 482 firms across manufacturing, construction, trade, services, hospitality. Seven hypotheses test the contribution of each indicator family (liquidity / profitability / leverage / cash flow / **credit behaviour** / **relationship-based** / efficiency) to a composite distress outcome — the financial-side indicator families map to categories 3, 5, 6 of [[sme-distress-predictor-variables]]; the credit-behaviour family maps to category 16; cash flow and relationship-based are partially novel relative to the catalogue. Six of seven null hypotheses are rejected; **credit behaviour has the largest standardised coefficient (β = +0.34)**, followed by leverage (+0.25), cash flow dynamics (−0.23), liquidity (−0.21), relationship indicators (−0.18), profitability (−0.14); **efficiency indicators fail to clear p < 0.05**. Model R² rises from 0.31 (financial-only baseline) to **0.46 (full integrated model)** — a +0.15 R² gain attributable to the behavioural + relational + cash-flow channels Bari emphasises.
 
 ## Citation
 
@@ -378,23 +381,3 @@ Neighbour-scan against the 2026-05-25 batch:
 - **`supports` ↔ [[2024-01-01-powell-2024-asean-accounting-early-warning-distress]]** — both papers find profitability + liquidity + leverage dominate among traditional financial indicators; Bari's contribution is that *non-financial* channels add R² beyond what these three deliver. Powell's analogue is the marginal-utility finding for DD.
 - **`supports` ↔ [[2024-06-22-hajek-2024-distress-prediction-annual-reports]]** — same intellectual move: financial ratios + an additional signal (text in Hajek, behaviour+relation in Bari) outperform financial-only baselines. Bari's R² lift (+0.15) is more modest than Hajek's AUC lift (+0.05 from 0.97 to 0.98), but the directional finding is identical.
 
-## Quality review
-
-| Field | Value |
-|---|---|
-| Reviewer | Claude (self-score) |
-| Date | 2026-05-25 |
-| Claimed depth | Pass 2 |
-| Rubric version | 1.0 |
-
-| Dim | Score | Floor | Notes |
-|---|---:|---:|---|
-| D1 Five Cs | 3 | 2 | Category (framework + empirical), Context (process-oriented lineage named, 4 adjacent wiki sources), Correctness (small N, no ML benchmark, credit-behaviour endogeneity flagged), Contributions (3 named), Clarity (Figures 1/2 stock-icon style critique noted). |
-| D2 IMRaD | 3 | 2 | Results section gives specific β coefficients with p values (β=+0.34 / p<0.001 for credit behaviour, etc.), specific R² progression (0.31 → 0.46), specific VIF threshold (<1.9), exact demographic counts. |
-| D3 Distinctive artifacts | 3 | 2 | **Figure 3 cause-effect diagram reproduced as Mermaid** (the specific anchor the rubric flagged at D3=0 in the prior ingest); Indicator-family framework also rendered as Mermaid; Tables 1–2 demographics reproduced; hierarchical regression summary as code block. Figures 4 and 10–12 described in §Visual content but not all opened. |
-| D4 Critical reading | 2 | 2 | Four concrete "not flagged" items: small-N for 7-family regression; ML benchmarks promised but not delivered; credit-behaviour endogeneity; class-imbalance prevalence unreported. Each traceable to specific methodological choices. |
-| D5 Pass-3 markers | — | — | n/a (Pass 2 page) |
-
-**Total: 11 / 12 = 0.92** (at ceiling)
-
-**Resolution:** accepted; catalogue update can proceed. Figures 5–9 and 12 deferred to opportunistic backfill (the load-bearing visuals — Figure 3, Figure 1, Figure 2, Figure 4 — are described and the headline cause-effect diagram is reproduced).

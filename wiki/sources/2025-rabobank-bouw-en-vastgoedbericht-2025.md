@@ -32,6 +32,8 @@ relationships:
   - type: supports
     target: 2026-04-14-rabobank-beter-benutten-bestaande-bebouwing
     via: "Ruw-en-afbouw chapter content directly aligned with Beter benutten thesis (ZZP'ers + MKB renovation pivot)"
+quality_floor: {D1: 2, D2: 1, D3: 1, D4: 1, D5: null, D6: null}
+quality_floor_notes: ['D2: thin sections (<100 words): how=50, what=83', 'D3: ## Distinctive artifacts section exists but no Figure/Table mentions', 'D4: no "Limitations the authors acknowledge" phrase']
 ---
 
 # Bouw- en Vastgoedbericht 2025
@@ -302,10 +304,10 @@ For the wiki:
 
 | Field | Value |
 |---|---|
-| Reviewer | Claude (self-score) |
+| Reviewer | Claude (self-score, re-evaluated 2026-05-25 post-D6 introduction) |
 | Date | 2026-05-25 |
 | Claimed depth | Pass 2 |
-| Rubric version | 1.0 |
+| Rubric version | 1.1 (adds D6) |
 
 | Dim | Score | Floor | Notes |
 |---|---:|---:|---|
@@ -314,7 +316,8 @@ For the wiki:
 | D3 Distinctive artifacts | 3 | 2 | Utiliteitsbouw production forecast table fully reproduced; consolidation trajectory rendered as code block; house-price forecast reproduced; cross-chapter themes synthesised as Mermaid. |
 | D4 Critical reading | 2 | 2 | Five concrete "not flagged" items: partial web-clipper content, Buildsight methodology, missing lending volumes, weak cross-chapter integration, Rabobank conflict undeclared. |
 | D5 Pass-3 markers | — | — | n/a (Pass 2 page) |
+| D6 Appendix coverage | — | — | n/a — Rabobank multi-chapter sector report; no appendix/bijlage material (0 mentions in raw markdown). Denominator unchanged at /12. |
 
-**Total: 10 / 12 = 0.83** (workable band; D2 limited by partial web-clipper ingest)
+**Total: 10 / 12 = 0.83** (workable band; unchanged by D6 introduction; D2 limited by partial web-clipper ingest; appendix N/A)
 
 **Resolution:** accepted; opportunistic recovery path for chapters 12–14 noted for future re-ingest.

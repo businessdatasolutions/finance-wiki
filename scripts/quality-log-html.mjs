@@ -64,6 +64,20 @@ const lastUpdated = entries[entries.length - 1].ts || '';
 const rubricVersion = entries[entries.length - 1].rubric_version || '?';
 const distinctSlugs = new Set(entries.map((e) => e.slug));
 
+// Data-driven dimension list: union of all `scores` keys across the log,
+// sorted by the trailing integer. So when v1.2 adds D7, no script edits.
+const dimSet = new Set();
+for (const e of entries) {
+  if (e.scores && typeof e.scores === 'object') {
+    for (const k of Object.keys(e.scores)) dimSet.add(k);
+  }
+}
+const DIMENSIONS = [...dimSet].sort((a, b) => {
+  const an = parseInt(a.replace(/\D/g, ''), 10) || 0;
+  const bn = parseInt(b.replace(/\D/g, ''), 10) || 0;
+  return an - bn;
+});
+
 const latestPerPage = new Map();
 for (const e of entries) {
   const cur = latestPerPage.get(e.slug);
@@ -169,6 +183,15 @@ const html = `<!doctype html>
   .delta-up { color: var(--ceiling); }
   .delta-down { color: var(--below); }
   .delta-flat { color: var(--muted); }
+  .kind-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-family: var(--mono); font-size: .72rem; font-weight: 600; }
+  .kind-badge.judged { background: var(--ceiling); color: white; }
+  .kind-badge.floor { background: var(--chip-bg); color: var(--muted); }
+  .detail .floor-row, .detail .judgment-row { font-family: var(--mono); font-size: .78rem; }
+  .detail .floor-row td { color: var(--muted); }
+  .detail .reasoning { font-size: .82rem; line-height: 1.45; margin: .35rem 0 0; }
+  .detail .reasoning .dim { font-family: var(--mono); font-weight: 600; padding-right: .35rem; color: var(--fg); }
+  .detail .reasoning li { padding: .25rem 0; border-bottom: 1px dashed var(--border); }
+  .detail .judge-summary { font-style: italic; color: var(--muted); margin: .25rem 0 .5rem; line-height: 1.45; }
   .timeline { list-style: none; padding: 0; margin: 0; font-size: .82rem; font-family: var(--mono); }
   .timeline li { padding: .35rem 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 11rem 6.5rem 4.5rem 9rem 1fr; gap: .5rem; align-items: center; }
   .timeline .ts { color: var(--muted); font-size: .78rem; }
@@ -194,17 +217,15 @@ const html = `<!doctype html>
   </div>
 
   <h2>Pages (latest state per page)</h2>
+  <p class="meta"><strong>J</strong> badge: latest entry includes an LLM-judgment overlay (scores/total reflect judgment). Pages without J show mechanical-floor scores only.</p>
   <input id="filter" class="filter" placeholder="Filter by slug…" autocomplete="off">
   <table id="pages-table">
     <thead>
       <tr>
         <th data-sort="band">band <span class="arrow">↕</span></th>
+        <th>kind</th>
         <th data-sort="total" class="num">total <span class="arrow">↕</span></th>
-        <th data-sort="D1" class="num">D1 <span class="arrow">↕</span></th>
-        <th data-sort="D2" class="num">D2 <span class="arrow">↕</span></th>
-        <th data-sort="D3" class="num">D3 <span class="arrow">↕</span></th>
-        <th data-sort="D4" class="num">D4 <span class="arrow">↕</span></th>
-        <th data-sort="D5" class="num">D5 <span class="arrow">↕</span></th>
+        ${DIMENSIONS.map((d) => `<th data-sort="${esc(d)}" class="num">${esc(d)} <span class="arrow">↕</span></th>`).join('\n        ')}
         <th>D3 trend</th>
         <th data-sort="ts">latest <span class="arrow">↕</span></th>
         <th data-sort="slug">slug <span class="arrow">↕</span></th>
@@ -225,6 +246,10 @@ const html = `<!doctype html>
 
 <script>
 const ALL_ENTRIES = ${jsonForScript(entries)};
+const DIMENSIONS = ${jsonForScript(DIMENSIONS)};
+// Detail-row colspan: band + kind + total + N dimensions + trend + ts + slug
+const DETAIL_COLSPAN = 6 + DIMENSIONS.length;
+const JUDGED_KIND = "mechanical-floor + llm-judgment";
 
 // ----- Tiny DOM helper -----
 // el(tag) | el(tag, "text") | el(tag, {attrs}, ...children) where children
@@ -271,7 +296,7 @@ function cmp(a, b, key) {
   if (key === "total") return (a.total ?? 0) - (b.total ?? 0);
   if (key === "ts") return (a.ts || "").localeCompare(b.ts || "");
   if (key === "slug") return a.slug.localeCompare(b.slug);
-  if (["D1","D2","D3","D4","D5"].includes(key)) {
+  if (DIMENSIONS.includes(key)) {
     const av = a.scores?.[key]; const bv = b.scores?.[key];
     if (av === null || av === undefined) return -1;
     if (bv === null || bv === undefined) return 1;
@@ -336,16 +361,21 @@ function renderPagesTable() {
     if (filter && !e.slug.toLowerCase().includes(filter)) continue;
     const s = e.scores || {};
     const history = historyMap.get(e.slug) || [];
+    const isJudged = e.kind === JUDGED_KIND;
+    const kindBadge = isJudged
+      ? el("span", { class: "kind-badge judged", title: "LLM-judgment overlay applied" }, "J")
+      : el("span", { class: "kind-badge floor", title: "Mechanical floor only" }, "F");
     const tr = el("tr", { class: "row", dataset: { slug: e.slug } },
       el("td", {}, bandCell(e.band)),
+      el("td", {}, kindBadge),
       totalCell(e.total),
-      numCell(s.D1), numCell(s.D2), numCell(s.D3), numCell(s.D4), numCell(s.D5),
+      ...DIMENSIONS.map((d) => numCell(s[d])),
       el("td", {}, sparklineEl(history, "D3")),
       el("td", { class: "mono" }, shortTs(e.ts)),
       el("td", { class: "slug" }, e.slug),
     );
     const detail = el("tr", { class: "detail", dataset: { for: e.slug } },
-      el("td", { colspan: "10" }),
+      el("td", { colspan: String(DETAIL_COLSPAN) }),
     );
     tr.addEventListener("click", () => toggleDetail(tr, detail, e));
     body.appendChild(tr);
@@ -377,9 +407,66 @@ function populateDetail(slot, latest) {
   slot.appendChild(el("h3", {}, latest.slug));
   slot.appendChild(el("div", { class: "depth" }, latest.depth_claim || "(no depth_claim)"));
 
+  // Judgment block — only when the latest entry has the LLM-judge overlay.
+  if (latest.kind === JUDGED_KIND) {
+    slot.appendChild(el("h4", {}, "LLM judgment — summary"));
+    slot.appendChild(el("p", { class: "judge-summary" }, latest.judgment_summary || "(no summary)"));
+
+    slot.appendChild(el("h4", {}, "Floor vs judgment (mechanical floor is the lower bound)"));
+    const compareTable = el("table", { class: "history" });
+    const compareHead = el("thead");
+    const compareHeadRow = el("tr");
+    compareHeadRow.appendChild(el("th", {}, "layer"));
+    compareHeadRow.appendChild(el("th", { class: "num" }, "total"));
+    for (const d of DIMENSIONS) compareHeadRow.appendChild(el("th", { class: "num" }, d));
+    compareHead.appendChild(compareHeadRow);
+    compareTable.appendChild(compareHead);
+    const compareBody = el("tbody");
+    const floorRow = el("tr", { class: "floor-row" },
+      el("td", {}, "floor"),
+      el("td", { class: "num" }, fmtTotal(latest.floor_total)),
+      ...DIMENSIONS.map((d) => el("td", { class: "num" }, fmtScore((latest.floor || {})[d]))),
+    );
+    const judgmentRow = el("tr", { class: "judgment-row" },
+      el("td", {}, "judgment"),
+      el("td", { class: "num" }, fmtTotal(latest.judgment_total)),
+      ...DIMENSIONS.map((d) => el("td", { class: "num" }, fmtScore((latest.judgment || {})[d]))),
+    );
+    compareBody.appendChild(floorRow);
+    compareBody.appendChild(judgmentRow);
+    compareTable.appendChild(compareBody);
+    slot.appendChild(compareTable);
+
+    const reasoning = latest.judgment_reasoning || {};
+    if (Object.keys(reasoning).some((k) => reasoning[k])) {
+      slot.appendChild(el("h4", {}, "Judgment reasoning"));
+      const ul = el("ul", { class: "reasoning" });
+      for (const d of DIMENSIONS) {
+        const r = reasoning[d];
+        if (!r) continue;
+        const li = el("li", {});
+        li.appendChild(el("span", { class: "dim" }, d));
+        li.appendChild(text(r));
+        ul.appendChild(li);
+      }
+      slot.appendChild(ul);
+    }
+
+    if ((latest.judgment_warnings || []).length > 0) {
+      slot.appendChild(el("h4", {}, "Judgment warnings"));
+      const ul = el("ul", { class: "notes" });
+      for (const w of latest.judgment_warnings) ul.appendChild(el("li", {}, w));
+      slot.appendChild(ul);
+    }
+
+    slot.appendChild(el("p", { class: "meta", style: "margin-top:.5rem" },
+      "Judge model: ", el("code", {}, latest.judge_model || "(unknown)")
+    ));
+  }
+
   slot.appendChild(el("h4", {}, "Dimension sparklines"));
   const sparksWrap = el("div");
-  for (const d of ["D1","D2","D3","D4","D5"]) {
+  for (const d of DIMENSIONS) {
     const grp = el("div", { class: "spark-group" }, d + " ");
     grp.appendChild(sparklineEl(history, d));
     sparksWrap.appendChild(grp);
@@ -390,9 +477,11 @@ function populateDetail(slot, latest) {
   const histTable = el("table", { class: "history" });
   const thead = el("thead");
   const headRow = el("tr");
-  for (const h of ["timestamp","band","total","Δ","D1","D2","D3","D4","D5","notes"]) {
-    const isNum = ["total","Δ","D1","D2","D3","D4","D5","notes"].includes(h);
-    headRow.appendChild(el("th", isNum ? { class: "num" } : {}, h));
+  const fixedHeads = ["timestamp","band","total","Δ"];
+  const trailingHeads = ["notes"];
+  const numericSet = new Set(["total","Δ","notes",...DIMENSIONS]);
+  for (const h of [...fixedHeads, ...DIMENSIONS, ...trailingHeads]) {
+    headRow.appendChild(el("th", numericSet.has(h) ? { class: "num" } : {}, h));
   }
   thead.appendChild(headRow);
   histTable.appendChild(thead);
@@ -412,7 +501,7 @@ function populateDetail(slot, latest) {
       el("td", {}, bandCell(e.band)),
       totalCell(e.total),
       el("td", { class: "num" }, deltaNode),
-      numCell(s.D1), numCell(s.D2), numCell(s.D3), numCell(s.D4), numCell(s.D5),
+      ...DIMENSIONS.map((d) => numCell(s[d])),
       el("td", { class: "num" }, (e.notes || []).length),
     );
     tbody.appendChild(row);
@@ -437,14 +526,16 @@ function renderTimeline() {
   const recent = ALL_ENTRIES.slice(-50).reverse();
   for (const e of recent) {
     const s = e.scores || {};
-    const dimStr = ["D1","D2","D3","D4","D5"].map((k) => k + "=" + (s[k] === null || s[k] === undefined ? "—" : s[k])).join(",");
+    const dimStr = DIMENSIONS.map((k) => k + "=" + (s[k] === null || s[k] === undefined ? "—" : s[k])).join(",");
+    const isJudged = e.kind === JUDGED_KIND;
+    const kindBadge = el("span", { class: "kind-badge " + (isJudged ? "judged" : "floor") }, isJudged ? "J" : "F");
     const li = el("li",
       {},
       el("span", { class: "ts" }, shortTs(e.ts)),
       el("span", {}, bandCell(e.band)),
       el("span", { class: "num", style: "text-align:right" }, fmtTotal(e.total)),
       el("span", {}, dimStr),
-      el("span", { class: "slug-cell" }, e.slug),
+      el("span", { class: "slug-cell" }, kindBadge, " ", e.slug),
     );
     tl.appendChild(li);
   }

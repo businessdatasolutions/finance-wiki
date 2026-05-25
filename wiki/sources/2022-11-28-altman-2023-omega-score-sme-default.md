@@ -9,7 +9,7 @@ author:
   - "Srhoj, S."
 url: "https://doi.org/10.1080/00472778.2022.2135718"
 date_published: 2022-11-28
-length: "~36 pages (Pass 2 — abstract, intro, methods, results, all 6 tables, Figure 1, discussion read in full; Supplementary Material referenced but not opened)"
+length: "~36 pages (Pass 2 — abstract, intro, methods, results, all 6 tables, Figure 1, discussion read in full; Appendix variable catalogue (pp. 2411–2417) read in full and reproduced as [[sme-distress-predictor-variables]] on 2026-05-25; Supplementary Material Tables SM1–SM12 and Figures SM1–SM7 still referenced but not opened)"
 venue: "Journal of Small Business Management, 61(6), 2383–2417"
 doi: "10.1080/00472778.2022.2135718"
 citation_key: "altman_2023_omega"
@@ -38,6 +38,9 @@ relationships:
     via: "both papers extend SME distress prediction beyond financial ratios; behavioural channels add R² and AUC"
   - type: authored-by
     target: Edward-I-Altman
+  - type: part-of
+    target: sme-distress-predictor-variables
+    via: "originating source of the 164-variable predictor catalogue; the concept page reproduces the full appendix"
 ---
 
 # Revisiting SME default predictors: The Omega Score
@@ -71,7 +74,11 @@ Altman et al. extend the **Altman Z-score lineage** (Z → Z′′ → Omega) fo
 
 ## What was actually ingested
 
-**Pass 2** — full read of abstract, introduction, theoretical background + three hypotheses, methodology (sample/setting, dependent/independent variables, statistical method), results, discussion (theoretical + practical + limitations). All six in-body tables (Tables 1–6) and Figure 1 read with the markdown conversion cross-checked against the original PDF. The Supplementary Material (Tables SM1–SM12 and Figures SM1–SM7) was referenced but not opened; the appendix variable list was not transcribed.
+**Pass 2** — full read of abstract, introduction, theoretical background + three hypotheses, methodology (sample/setting, dependent/independent variables, statistical method), results, discussion (theoretical + practical + limitations). All six in-body tables (Tables 1–6) and Figure 1 read with the markdown conversion cross-checked against the original PDF.
+
+**Appendix backfill (2026-05-25).** The appendix variable catalogue (pp. 2411–2417, ~164 variables across 18 categories) was originally deferred and noted as untranscribed. It has since been read in full and reproduced as the standalone concept page [[sme-distress-predictor-variables]] — see [§Appendix content](#appendix-content) below. This was the trigger for the v0.5+ appendix-schema refactor (new CLAUDE.md §Check 5, §Appendix content extraction, and quality-rubric D6).
+
+**Still deferred.** The Supplementary Material (Tables SM1–SM12 and Figures SM1–SM7) was referenced but not opened. Future re-read opportunity.
 
 ## Context (WHY)
 
@@ -184,6 +191,50 @@ The paper carries 6 in-body tables (Tables 1–6) and 1 figure (Figure 1), plus 
 - **Tables SM1, SM3–SM12** — detailed performance metrics, stepwise-logit results, macro-variable robustness, NACE 1-digit industry distribution
 
 Opportunistic recovery path if a follow-on query needs these: open the PDF supplementary URL or `raw/assets/altman-2023-omega-score-sme-default.pdf` page 17 + the Taylor & Francis SM endpoint.
+
+## Appendix content
+
+The paper carries a single substantive appendix at journal pp. 2411–2417 (PDF pp. 30–35). The appendix is the wiki's highest-leverage artifact from this source — it catalogues the full 164-variable candidate space that LASSO selects from to build the Omega Score. After deferral at first ingest (2026-05-25 batch), the appendix was read in full and reproduced as a standalone concept page on the same day, as the proof-of-concept for the v0.5+ appendix-schema refactor.
+
+### Appendix — Description of the variables used
+
+**Type:** variable-definitions (catalogue / data dictionary)
+**Location:** pp. 2411–2417 (PDF pp. 30–35)
+**Reproduction:** extracted to [[sme-distress-predictor-variables]]
+
+Standalone concept page — corpus-wide reference catalogue cross-linked from [[financial-distress]] and [[altman-z-score]] (existing); intended to be cross-linked from `omega-score`, `payment-behavior-variables`, and `sme-default-prediction` when those concept pages are created (currently dangling references on this source page).
+
+The catalogue contains **164 candidate predictor variables across 18 categories**, organised by family per the paper's Table on p. 2394: Financial = 87, Payment-behavior = 6, Management-related = 33, Employee-related = 21, Controls = 17. The 18 within-family categories are:
+
+1. **Altman Z-Score variables** (X1–X5 + Z′′ formula + 3 zones — 5 vars)
+2. **Business development** (b1–b4 — 4 vars)
+3. **Profitability** (p1–p10 — 10 vars)
+4. **Interest rate risk exposure** (ir1–ir2 — 2 vars)
+5. **Liquidity** (l1–l12 — 12 vars)
+6. **Financial leverage** (le1–le7 — 7 vars)
+7. **Change in balance-sheet and P&L statement values** (Δ variables — 43 vars; uniform `log(1+x)` transformation, or inverse hyperbolic sine for negative-capable variables like retained earnings, profits)
+8. **Size** (1 var; categorical 1–4 by employee count)
+9. **Age** (firm age + firm age squared — 2 vars)
+10. **Industry** (NACE 2-digit — 1 var)
+11. **Region** (Croatian county — 1 var)
+12. **Calendar year** (year dummies — 1 var)
+13. **Internationalization** (3 vars: exporter, export intensity, import intensity)
+14. **Innovation** (3 vars: IP dummy, IP ratio, R&D active)
+15. **Relational capital / public contracts / political connections** (5 vars)
+16. **Payment behavior variables** (6 vars: blockage duration / category / count, plus t-1 lags)
+17. **Employee-related** (22 vars: 10 base + 12 age-interactions)
+18. **Management-related** (33 vars: CEO prior/current experience, performance quartiles, change-in-management indicators, board composition counts, gender composition)
+
+Each variable carries a code name (e.g. `l3 = Quick ratio`) and a verbatim description (e.g. *"Quick ratio = cash / current liabilities (nonfinancial)"*). The concept page reproduces every code + description pair, grouped by category, with category-overview metadata added.
+
+**Why promoted to a standalone concept page rather than reproduced inline:** the catalogue is reusable across the financial-distress cluster — Powell 2024 uses category 1; Hajek 2024 uses categories 1, 3, 5, 6 + adds unstructured text; Bari 2026 uses categories 1, 3, 5, 6, 16; Habib 2020's review-level taxonomy mirrors several categories. A standalone concept page lets all of these cite the same canonical reference, and it's the kind of artifact an expert reader would copy out for their own analysis (replicating the LASSO selection on local data; running variable-by-variable robustness checks; building a competing distress model). This is the canonical D6 = 3 promotion move documented in `quality-rubric.md`.
+
+**Cross-references to body claims:**
+- §Methods (this page) §"Predictor sets (164 candidates total)" cites the catalogue's family totals.
+- §Results (this page) §"Variable selection (Table 2)" names the 8–9 catalogue entries that survive LASSO selection in the operational Omega Score.
+- The Omega Score formulas reproduced in [§Distinctive artifacts](#distinctive-artifacts) below use category 1 (Surplus dummy is part of Z-Score lineage), category 5 (Quick ratio = l3), category 7 (Δ debtors' change), category 16 (payment defaults), categories 17–18 (Firing ratio, Mean employee tenure, Change in management).
+
+**Honest scoping:** all 164 catalogue rows transcribed verbatim from the appendix; category-overview metadata and the `log(1+x)` transformation annotation are editorial additions documented on the concept page's §Provenance.
 
 ## Distinctive artifacts
 
@@ -310,6 +361,10 @@ References that look central but aren't yet in the wiki:
 - [[sme-default-prediction]] — the application domain; spans this paper, Powell 2024, and parts of Bari 2026.
 - [[payment-behavior-variables]] — Norden & Weber 2010 lineage; this paper validates them on Croatian SMEs.
 
+**Concept extracted from the appendix** (added 2026-05-25 via the appendix-schema refactor):
+
+- [[sme-distress-predictor-variables]] — the canonical 164-variable predictor catalogue, reproduced verbatim from this paper's appendix. The first D6 = 3 promotion in the corpus; serves as the cross-cluster KPI reference for downstream financial-distress papers.
+
 ## Source-to-source relationships
 
 Surfaced by the neighbour-source scan against the 2026-05-25 batch (all 6 are co-ingest neighbours):
@@ -319,23 +374,3 @@ Surfaced by the neighbour-source scan against the 2026-05-25 batch (all 6 are co
 - **`supports` ↔ [[2024-06-22-hajek-2024-distress-prediction-annual-reports]]** — Hajek's BERT/XGBoost pipeline is the *NLP-modality complement* to Omega's structured-data channels; both papers reach the boundary of what financial ratios alone can do and add a new channel. Hajek's class-imbalance handling via semi-supervised learning is methodologically adjacent to Altman's 1:1 matching design.
 - **`supports` ↔ [[2026-02-04-bari-2026-us-small-business-distress-framework]]** — Bari's "integrated framework" of financial + cash-flow + behavioral + relational indicators echoes Omega's four-set structure; the cleanest cross-validation is that *both papers find behavioural indicators significantly improve over financial-only models*.
 
-## Quality review
-
-| Field | Value |
-|---|---|
-| Reviewer | Claude (self-score) |
-| Date | 2026-05-25 |
-| Claimed depth | Pass 2 |
-| Rubric version | 1.0 |
-
-| Dim | Score | Floor | Notes |
-|---|---:|---:|---|
-| D1 Five Cs | 3 | 2 | Category (prototype + empirical), Context (Z-score lineage named, two adjacent wiki sources), Correctness (1:1 matching flagged, single-country flagged), Contributions (3 named), Clarity (Figure 1 axis-label gap noted) all answered substantively. |
-| D2 IMRaD | 3 | 2 | Results section reports specific AUC values (70.4 → 87.2 → 90.3), specific monetary impact (€15.6 M / 18.9 %), Table 2 coefficients quoted (previous-payment-default RR ladder). |
-| D3 Distinctive artifacts | 3 | 3 | Omega Score general form, Regular (60-day) formula, Early-warning (30-day) formula, Omega Group thresholds + cumulative-incidence percentages, Table 5 (Z′′/Omega/RF/XGBoost), Table 6 (monetary impact) all reproduced as wiki-native content. Figure 1 described in §Visual content (asset itself not embedded). |
-| D4 Critical reading | 2 | 2 | Three concrete "not flagged" items (binary-management-change construction, Croatian administrative-data dependence, 1:1 matching prior inflation) — each traceable to a specific methodological choice. Figure-quality critique present (axis-label gap on Figure 1). |
-| D5 Pass-3 markers | — | — | n/a (Pass 2 page) |
-
-**Total: 11 / 12 = 0.92** (at ceiling)
-
-**Resolution:** accepted; catalogue update can proceed.

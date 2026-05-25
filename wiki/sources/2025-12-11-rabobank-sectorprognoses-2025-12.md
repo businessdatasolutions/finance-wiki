@@ -34,6 +34,8 @@ relationships:
   - type: supports
     target: 2025-rabobank-bouw-en-vastgoedbericht-2025
     via: "Same publisher; Bouw publication is the multi-chapter sub-sector deep dive of construction"
+quality_floor: {D1: 2, D2: 1, D3: 2, D4: 1, D5: null, D6: null}
+quality_floor_notes: ['D2: thin sections (<100 words): what=57', 'D4: no "Limitations the authors acknowledge" phrase']
 ---
 
 # Sectorprognoses december 2025: van hardnekkige knelpunten tot AI-gedreven groei in 2026 en 2027
@@ -279,10 +281,10 @@ Neighbour-scan against the 2026-05-25 batch:
 
 | Field | Value |
 |---|---|
-| Reviewer | Claude (self-score) |
+| Reviewer | Claude (self-score, re-evaluated 2026-05-25 post-D6 introduction) |
 | Date | 2026-05-25 |
 | Claimed depth | Pass 2 |
-| Rubric version | 1.0 |
+| Rubric version | 1.1 (adds D6) |
 
 | Dim | Score | Floor | Notes |
 |---|---:|---:|---|
@@ -291,7 +293,8 @@ Neighbour-scan against the 2026-05-25 batch:
 | D3 Distinctive artifacts | 3 | 2 | GDP+sector growth matrix reproduced as text + table; coalition→sector flow rendered as Mermaid; cross-sector personnel-shortage map; Box 1 nominal-vs-real agriculture finding reproduced. |
 | D4 Critical reading | 2 | 2 | Four concrete "not flagged" items: methodology opacity, no CI/scenarios, qualitative-only AI attribution, NACE/ISIC reconciliation gap. |
 | D5 Pass-3 markers | — | — | n/a (Pass 2 page) |
+| D6 Appendix coverage | — | — | n/a — Rabobank quarterly sector forecast; no appendix/bijlage material (0 mentions in raw markdown). Denominator unchanged at /12. |
 
-**Total: 11 / 12 = 0.92** (at ceiling)
+**Total: 11 / 12 = 0.92** (at ceiling — unchanged by D6 introduction; appendix N/A)
 
 **Resolution:** accepted; catalogue update can proceed. Figures 5–10 deferred to opportunistic backfill.

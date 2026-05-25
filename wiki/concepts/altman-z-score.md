@@ -74,7 +74,7 @@ The Omega Score is the most recent named addition. See [[omega-score]] for its f
 ### Limitations (corpus consensus)
 
 - **Cross-context portability is weak.** [[2024-01-01-powell-2024-asean-accounting-early-warning-distress|Powell 2024]] empirically demonstrates that discriminant-function coefficients vary substantially across ASEAN countries and across crisis vs. non-crisis periods. Grice-Ingram 2001 reported 26 % accuracy drop when Altman's original sample-similar accuracy is tested on different periods.
-- **Financial-statement only.** The score cannot incorporate payment behaviour, governance variables, employee characteristics, or textual signals — exactly the channels [[2022-11-28-altman-2023-omega-score-sme-default|Altman 2023]] and [[2024-06-22-hajek-2024-distress-prediction-annual-reports|Hajek 2024]] argue add incremental predictive value.
+- **Financial-statement only.** The score cannot incorporate payment behaviour, governance variables, employee characteristics, or textual signals — exactly the channels [[2022-11-28-altman-2023-omega-score-sme-default|Altman 2023]] and [[2024-06-22-hajek-2024-distress-prediction-annual-reports|Hajek 2024]] argue add incremental predictive value. The full 164-variable candidate space Altman extends Z′′ with — categories 1 (Z-Score itself) through 18 (management characteristics) — is reproduced in [[sme-distress-predictor-variables]] for cross-cluster reuse.
 - **Historical-cost basis.** Cannot capture intangible assets, R&D, or expected future-flow volatility (Beaver et al. 2010 critique).
 - **Static.** Not designed to capture the time-dynamic evolution of distress that [[2026-02-04-bari-2026-us-small-business-distress-framework|Bari 2026]] emphasises.
 
@@ -96,6 +96,7 @@ The Omega Score is the most recent named addition. See [[omega-score]] for its f
 - [[multiple-discriminant-analysis]] — the statistical method Z-score relies on.
 - [[dupont-identity]] — algebraic kin: three of the five Z inputs are DuPont primitives (turnover, profitability-with-TA-denominator, leverage).
 - [[omega-score]] — the most recent Altman-lineage extension.
+- [[sme-distress-predictor-variables]] — the 164-variable candidate space the Omega Score extends Z′′ with; category 1 of the catalogue is the Z-Score itself (X1–X5 + Z′′).
 - [[ohlson-o-score]] — the logit-based alternative.
 - [[merton-distance-to-default]] — the structural / option-pricing alternative.
 

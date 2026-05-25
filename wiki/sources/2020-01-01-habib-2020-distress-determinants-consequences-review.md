@@ -307,23 +307,3 @@ Neighbour-scan against the 2026-05-25 batch surfaces three first-degree relation
 
 (Luppe 2012 is the outlier — anchoring heuristic is outside Habib's accounting-and-finance review scope. No defensible typed edge.)
 
-## Quality review
-
-| Field | Value |
-|---|---|
-| Reviewer | Claude (self-score) |
-| Date | 2026-05-25 |
-| Claimed depth | Pass 2 |
-| Rubric version | 1.0 |
-
-| Dim | Score | Floor | Notes |
-|---|---:|---:|---|
-| D1 Five Cs | 3 | 2 | Category (survey/review), Context (3 wiki sources named + theoretical-base lineage), Correctness (1966–2017 period closure flagged as limitation), Contributions (3 named), Clarity (no figures; tables span 14+ pages, sometimes hard to read in PDF). |
-| D2 IMRaD | 3 | 2 | Results section cites specific paper-counts per measure (8:1 accounting:market-based ratio), specific empirical magnitudes (Zhang 1.3 %, Al-Hadi −1.46 %), specific authors per finding. |
-| D3 Distinctive artifacts | 3 | 2 | The 3×4 taxonomy reproduced as wiki-native matrix; Table 1 reproduced with all 5 model formulae transcribed (Z-score, O-score, Zmijewski, BSM-Prob, DTD) + survey-counts; Table 2 representative rows transcribed. (Per the rubric's Habib anchor: score by the most distinctive artifact — the taxonomy and Table 1 formulary are reproduced, not just gestured at.) |
-| D4 Critical reading | 2 | 2 | Two concrete "not flagged" items: post-2018 ML/NLP coverage gap; Anglo+East-Asian geographic bias. Both traceable to specific methodological choices (review period closure, journal-search scope). The "economic-significance underreporting" observation is a third substantive critique. |
-| D5 Pass-3 markers | — | — | n/a (Pass 2 page) |
-
-**Total: 11 / 12 = 0.92** (at ceiling)
-
-**Resolution:** accepted; catalogue update can proceed.

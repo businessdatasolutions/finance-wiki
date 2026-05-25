@@ -17,7 +17,8 @@ The wiki is instantiated. As of v0.2 the repo contains:
 - Page-type frontmatter: `type: source | entity | concept | thread | synthesis`; `kind:` discriminator on entities and sources.
 - Log entries: `## [YYYY-MM-DD] <op> | <title>` where `<op>` ∈ `ingest | acquire | query | lint | synthesize | refactor | bulk-refactor`. (`acquire` is the v0.9 addition — used only when raw files land without same-session processing; the umbrella op for the typical case remains `ingest`.)
 - Quartz publishing via `npm run build` / `npm run serve`; custom extensions in `extensions/`.
-- **v0.5 is fully landed (2026-05-17).** All three slices: **retention** (`accessed_at` on concepts + entities + syntheses; §Retention decay curve as lint signal), **search** ([qmd](https://github.com/tobi/qmd) / `@tobilu/qmd` registered as collection `ai-wiki`; 205 docs / 1466 chunks; BM25 + vector + query-expansion local models in `~/.cache/qmd/`), **quality** (`quality_score` + `quality_notes` on concepts and syntheses via [`scripts/quality-score.mjs`](scripts/quality-score.mjs); mechanical rubric across structure / citations / cross-consistency). Manual `accessed_at` bumps via [`scripts/bump-accessed.mjs`](scripts/bump-accessed.mjs) pending MCP integration. See [§Lifecycle](#lifecycle), [§Retention](#retention), [§Quality](#quality), [§Search](#search). LLM-as-judge quality scoring deferred to v0.6.
+- **v0.5 is fully landed (2026-05-17).** All three slices: **retention** (`accessed_at` on concepts + entities + syntheses; §Retention decay curve as lint signal), **search** ([qmd](https://github.com/tobi/qmd) / `@tobilu/qmd` registered as collection `ai-wiki`; 205 docs / 1466 chunks; BM25 + vector + query-expansion local models in `~/.cache/qmd/`), **quality** (`quality_score` + `quality_notes` on concepts and syntheses via [`scripts/quality-score.mjs`](scripts/quality-score.mjs); mechanical rubric across structure / citations / cross-consistency). Manual `accessed_at` bumps via [`scripts/bump-accessed.mjs`](scripts/bump-accessed.mjs) pending MCP integration. See [§Lifecycle](#lifecycle), [§Retention](#retention), [§Quality](#quality), [§Search](#search).
+- **v0.6 LLM-as-judge slice lands (2026-05-25) for source pages.** `node scripts/quality-source-page.mjs --judge` filters to `kind: paper`, computes the mechanical floor, then invokes headless Claude Code via [`scripts/_lib/llm-judge.mjs`](scripts/_lib/llm-judge.mjs) for the substantive overlay. Scores live only in `logs/quality-source-pages.jsonl` — never in the page. Concepts/syntheses remain mechanical-only. See [§Source-page scoring (v0.6)](#source-page-scoring-v06).
 
 The implementation roadmap for v2 features lives in [`llm-wiki-v2-plan.md`](llm-wiki-v2-plan.md): eight staged versions (v0.2 → v0.9). Each version lands schema before tooling, and bulk migrations are supervised batches.
 
@@ -50,10 +51,10 @@ A new raw file lands in `raw/`. Acquire **only touches `raw/`** — the wiki sou
 
 ### Process
 A source in `raw/` has not yet been turned into a wiki page. (When invoked under the §Ingest umbrella, Acquire produced this file moments ago; when invoked standalone, the file has been sitting in `raw/` since an earlier session.)
-0. **Verify the source's identity and completeness before reading further.** See [§Verifying sources before ingest](#verifying-sources-before-ingest) — including Check 4 (visual inventory).
-1. **Read the source — text *and* visuals.** Markdown conversions frequently strip or mangle images, charts, and complex tables (`pdftotext -layout` always loses images; `marker` keeps them as referenced assets but figure semantics may need recovery). For any source with substantive visuals, also read the original PDF in `raw/assets/` via the Read tool's PDF mode so figures, tables, diagrams, and embedded images enter context. See [§Visual content extraction](#visual-content-extraction) for the methodology.
-2. Discuss key takeaways with the user before writing (default to one source at a time, supervised — unless the user says batch). When the source has substantive visuals, name the visual count in the pre-write summary (e.g. *"~4 figures, 11 tables — I'll describe all in §Visual content"*) so the user can confirm scope before commit.
-3. Write a summary page in the wiki. The body must include a `## Visual content` section per [§Visual content extraction](#visual-content-extraction) — exhaustive accessibility-quality descriptions of every visual in the source, positioned between `## Results (WHAT)` and `## Distinctive artifacts`.
+0. **Verify the source's identity and completeness before reading further.** See [§Verifying sources before ingest](#verifying-sources-before-ingest) — including Check 4 (visual inventory) and Check 5 (appendix inventory).
+1. **Read the source — text, visuals, *and* appendices.** Markdown conversions frequently strip or mangle images, charts, and complex tables (`pdftotext -layout` always loses images; `marker` keeps them as referenced assets but figure semantics may need recovery). For any source with substantive visuals, also read the original PDF in `raw/assets/` via the Read tool's PDF mode so figures, tables, diagrams, and embedded images enter context. See [§Visual content extraction](#visual-content-extraction) for the methodology. **Appendices are not back matter to skip** — they frequently carry the source's most actionable content (variable definitions, survey instruments, derivations, glossaries). Default to reading; only defer with explicit scoping decision documented per [§Check 5](#check-5--appendix-inventory-what-does-the-appendix-contain-and-how-should-it-be-reproduced). See [§Appendix content extraction](#appendix-content-extraction) for the routing methodology.
+2. Discuss key takeaways with the user before writing (default to one source at a time, supervised — unless the user says batch). When the source has substantive visuals, name the visual count in the pre-write summary (e.g. *"~4 figures, 11 tables — I'll describe all in §Visual content"*). When the source has substantive appendices, name them too (e.g. *"Appendix table of 164 variables — I'll reproduce inline + extract to standalone concept page"*) so the user can confirm scope before commit.
+3. Write a summary page in the wiki. The body must include a `## Visual content` section per [§Visual content extraction](#visual-content-extraction) — exhaustive accessibility-quality descriptions of every visual in the source, positioned between `## Results (WHAT)` and `## Distinctive artifacts`. When the source carries substantive appendix material, the body must also include a `## Appendix content` section per [§Appendix content extraction](#appendix-content-extraction), positioned between `## Visual content` and `## Distinctive artifacts`.
 4. **Tag the source's `dynamic_capabilities:` frontmatter** with the Warner & Wäger microfoundation(s) / strategic-renewal outcome(s) / contextual factors it touches, per [§Dynamic-capabilities tagging](#dynamic-capabilities-tagging). Tagging is encouraged, not forced — skip when the source genuinely sits outside the W&W lens (e.g. pure LLM-internals papers).
 5. **Run a neighbour-source scan.** Query `wiki/sources/` for sources that share at least one `dynamic_capabilities:` cell with the new source, **or** that already cite any of the concept pages you intend to update in step 6 (the fallback path catches pre-GH #4 sources that don't carry W&W tags yet). For each candidate, decide on a typed `relationships:` edge — typically `supports` if both sources address the same phenomenon from compatible angles, `contradicts` if findings or framings conflict (pair with `via:`), or `supersedes` if the new source replaces a prior claim wholesale (per [§Supersession protocol](#supersession-protocol)). Add the edge to the **new source's** frontmatter `relationships:` block. Reverse-linking from the neighbour is encouraged but not required — the graph export computes inverses, and the body-wikilink rule applies in both directions. Skip neighbours where no defensible edge type fits — *not every co-occurrence is a relationship*. **At ≥3 candidate neighbours, surface the list in your response so the user can spot omissions before commit.** See [§Source-to-source relationships](#source-to-source-relationships) for vocabulary guidance.
 6. Update **every** affected entity, concept, and topic page across the wiki — a single ingest may touch 10–15 files. On every touched concept/entity page, bump `last_confirmed` to today's date and recompute `source_count` and `confidence` per [§Lifecycle](#lifecycle).
@@ -218,6 +219,33 @@ Run a four-part inventory before drafting the source page:
 
 See [§Visual content extraction](#visual-content-extraction) for what to do with the inventory once captured.
 
+### Check 5 — Appendix inventory: what does the appendix contain, and how should it be reproduced?
+
+Checks 1–3 ensure the *text* of the source is intact; Check 4 inventories the *visuals*; this check inventories the *appendix material*. **Run this check on every source whose page count, table of contents, or end-pages suggest appendix material** — papers, reports, books, and longer articles. Skip for short articles, blog posts, video transcripts, and image sources where no appendix exists. Appendices over-index on the wiki's most reusable content (variable definitions, survey instruments, derivations, glossaries) so silent omission is the highest-cost failure mode of any pre-flight check.
+
+Conversion fidelity degrades appendix material in predictable patterns:
+
+| Source type | Conversion route | What survives | What's lost |
+| --- | --- | --- | --- |
+| PDF (paper / report) | `pdftotext -layout` | Inline prose, mangled tables | Multi-page tables that straddle page boundaries; columnar layouts; embedded figures |
+| PDF (paper / report) | `marker` / `marker_single` | Prose, image references, most tables | Cross-references between appendix and body (Appendix Table A.1 ↔ §Methods); long-row appendix tables that wrap |
+| PDF (paper / report) | MarkItDown / Pandoc | Prose, some tables | Most appendix-specific layouts; equation arrays |
+| PDF (book) | any route | Front matter, body | Back matter (indices, bibliographies, errata) frequently truncated when only a sample/preview was acquired (see [§Check 1](#check-1--scope-is-this-the-whole-source)) |
+| Article / web | Obsidian Web Clipper | Body prose | Almost always loses linked PDFs containing appendices; "supplementary material" links lost entirely |
+
+Run a four-part inventory before drafting the source page:
+
+1. **Locate the appendix(es) in the raw source.**
+   - **For PDFs**: scan the table of contents for entries named `Appendix` / `Appendix A` / `Online Appendix` / `Web Appendix` / `Supplementary Material`; scan the end pages directly via the Read tool's PDF mode. Note the page range of each.
+   - **For reports**: appendices may be embedded in the main flow under section numbers (e.g. §A, §B) rather than back-matter — search for `^Appendix` headers.
+   - **For books**: distinguish substantive appendices (statistical tables, dataset descriptions, primary documents) from formal back matter (notes, bibliography, index).
+   - **For articles**: check both the converted markdown and the source URL — many articles link to supplementary PDFs that the clipper does not follow.
+2. **Classify each appendix by archetype.** Match against the archetype reference table in the [`scientific-papers-processing`](.claude/skills/scientific-papers-processing/SKILL.md) skill — variable definitions, survey instruments, mathematical derivations, sample data, coding/algorithm details, supplementary statistical tables, supplementary figures, glossaries, or author bios. The archetype determines reproduction strategy.
+3. **Note page range + one-line content summary per appendix.** Example: *"Appendix (pp. 2411–2416, PDF pp. 30–35): variable definitions — 164 predictor variables across 18 categories; reproduction candidate."*
+4. **Decide reproduction strategy per appendix *before* writing.** Three routing options: (a) reproduce inline in `## Distinctive artifacts`; (b) promote to a standalone concept page (`wiki/concepts/<slug>.md`) — the right move when the catalogue is reusable across multiple corpus sources; (c) defer with explicit reason (e.g. *"200-page raw dataset; provenance noted but not transcribed"*). Surface the decisions to the user in the pre-write summary so scope is confirmed before commit.
+
+See [§Appendix content extraction](#appendix-content-extraction) for what to do with the inventory once captured.
+
 ### What to report when a check fails
 
 State: (a) the file as it presents itself (filename, claimed identity from cover), (b) the file as it actually is (page count, identified content, scope), (c) the discrepancy, (d) the proposed next action (ingest as partial / wait for full file / proceed under a different identity). Then ask before proceeding.
@@ -318,13 +346,100 @@ The source-page quality rubric ([`quality-rubric.md`](.claude/skills/scientific-
 
 Source pages ingested before this rule (the 2026-05-25 batch of six financial-distress papers, and any prior sources) do not carry `## Visual content`. Backfill is **opportunistic**: when a page is re-opened during a query or related ingest, add the section then. There is no obligation to bulk-backfill the corpus — the rule applies prospectively to all new Process runs.
 
+## Appendix content extraction
+
+Source materials often carry their most actionable content in the appendix: variable dictionaries that other studies reuse, survey instruments that enable replication, mathematical derivations that underpin named results, glossaries that anchor domain vocabulary. These are exactly the artifacts experts (human and agent) need for setting up their own analyses and experiments. **Every wiki source page whose appendix carries substantive content describes that content in a dedicated `## Appendix content` section** — a catalogue with type, location, and a reproduction decision per appendix, designed to make the appendix material legible to a reader who hasn't opened the PDF, and to make load-bearing content reusable through wiki-native artifacts.
+
+This complements `## Visual content` (which inventories every figure/table by visual appearance) and `## Distinctive artifacts` (which reproduces load-bearing material as wiki-native content). The split:
+
+- **`## Visual content`** — the visual *catalogue*. Every figure/table that appears in the body, described for accessibility.
+- **`## Appendix content`** — the appendix *catalogue*. Every appendix described with type, location, content summary, and routing decision (reproduce / promote / defer).
+- **`## Distinctive artifacts`** — the *reproductions*. Load-bearing material from body or appendix reproduced as wiki-native markdown / Mermaid / fenced code.
+
+A load-bearing appendix appears in **multiple** sections: a routing entry in §Appendix content, a reproduction in §Distinctive artifacts (when inline) or a wikilink to a promoted concept page (when extracted), and — if the appendix material includes figures — accessibility descriptions in §Visual content.
+
+### When the section is required
+
+**The rule:** the `## Appendix content` section applies to *every* source whose appendix carries non-trivial content. If a sighted reader of the source would gain access to substantive material from the appendix that a body-only reader would miss, you have appendix content to catalogue. **Default to writing the section.** Silent omission is indistinguishable from forgetting.
+
+| Source carrier | `## Appendix content` required? |
+| --- | --- |
+| **Has substantive appendices** — variable definitions, survey instruments, mathematical derivations, sample data, coding/algorithm details, supplementary statistical tables, supplementary figures, glossaries | **Yes** — always. |
+| **Has only formal back matter** — author bios, funding statements, conflict-of-interest, IRB approval, acknowledgments, bibliography, index | **Yes** — but as a single one-line marker: `> Appendix [X] contains <bios / funding / disclosures / bibliography> — not substantive content; not transcribed.` so the absence is auditable. |
+| **No appendix at all** — short articles, blog posts, video transcripts, image sources, brief reports | **Not required.** The quality rubric's D6 dimension scores N/A for these (excluded from total denominator). |
+
+### Description format
+
+Each appendix entry follows this skeleton:
+
+```markdown
+### Appendix [letter/number] — <name or one-line topic>
+
+**Type:** <archetype: variable-definitions | survey-instrument | mathematical-derivation | sample-data | coding-algorithm | supplementary-tables | supplementary-figures | glossary | author-bios>
+**Location:** pp. NN–NN (PDF pp. MM–MM if different from journal/print pagination)
+**Reproduction:** inline in §Distinctive artifacts | extracted to [[concept-page-slug]] | deferred (<reason>)
+
+<Content summary: what the appendix carries; row counts / question counts / equation counts; key categories; load-bearing observations. 50–200 words for substantive appendices; one line for formal back matter.>
+```
+
+The description must convey, where applicable to the archetype:
+
+- **Structure** — what the appendix contains by category. *"164 variables across 18 categories: Z-Score (5), Business development (4), Profitability (10), …"*.
+- **Reproduction decision and rationale** — why inline reproduction vs concept-page promotion vs deferral was the right call.
+- **Cross-references to body claims** — which §Methods / §Results sections depend on this appendix material.
+- **Honest scoping** — if only part of the appendix was read or transcribed, state which part and why.
+
+### Position on the source page
+
+`## Appendix content` goes **between** `## Visual content` and `## Distinctive artifacts`. The reading order becomes:
+
+1. **Results** — what the source found.
+2. **Visual content** — how the source *showed* it.
+3. **Appendix content** — what the source *enables* (variable definitions, instruments, derivations).
+4. **Distinctive artifacts** — reproductions of load-bearing body and appendix material.
+5. **Discussion** — what it means.
+
+The "show → catalogue → reproduce → interpret" order matches how an expert reader engages: scan results, inspect visuals, mine the appendix for reusable material, absorb the takeaway.
+
+### Methodology — how to actually extract the content
+
+The Read tool's PDF mode supports `pages:` ranges, so appendix extraction is targeted rather than a full-document re-read:
+
+1. **From Check 5 inventory**, you have the page range of each appendix. Open the PDF in `raw/assets/<slug>.pdf` with `pages: "NN-MM"` scoping to just the appendix.
+2. **Per archetype**, follow the reproduction strategy from the [archetype reference table](.claude/skills/scientific-papers-processing/SKILL.md#appendix-archetypes):
+   - **Variable definitions / data dictionaries** → reproduce as wiki-native markdown table; promote to a standalone concept page when reusable across the cluster.
+   - **Survey instruments** → reproduce as fenced quote or numbered list; promote when the instrument is named (Big Five, NPS, MBTI).
+   - **Mathematical derivations** → reproduce as fenced math; promote when the derivation underpins a named result.
+   - **Sample data / examples** → reproduce as fenced code or table; rarely promoted.
+   - **Coding / algorithm details** → reproduce as fenced code or pseudocode; promote when the algorithm is named.
+   - **Supplementary statistical tables** → describe in §Visual content with location; reproduce only if load-bearing.
+   - **Supplementary figures** → describe in §Visual content; reproduce only if load-bearing.
+   - **Glossaries** → reproduce as inline table or promote to standalone glossary concept page.
+   - **Author bios / funding** → one-line marker only; skip transcription.
+3. **For promoted concept pages**, create the page with frontmatter that cites the source as `source_count: 1` and `confidence: 0.85` (single-source baseline), and add typed `relationships:` linking to the originating source page (`part-of` or similar — use the closest match from the [closed vocabulary](#closed-vocabulary)).
+4. **Honest scoping applies.** If an appendix is partially read (e.g. the first half of a 200-row table is transcribed; the rest is deferred to a future ingest), say so in the entry's content summary and in the `length:` frontmatter field.
+
+### Quality interaction (D6 dimension)
+
+The source-page quality rubric ([`quality-rubric.md`](.claude/skills/scientific-papers-processing/quality-rubric.md)) scores appendix coverage as dimension D6 (0–3, N/A when no appendix). Populating §Appendix content with type/location/content summary for every appendix satisfies D6 = 2. Promoting at least one appendix to a reusable wiki-native artifact (concept page) earns D6 = 3. Silent omission (appendix mentioned in body but no §Appendix content section) scores D6 = 0.
+
+### What this section is not
+
+- **Not full transcription of every appendix.** The wiki page is a catalogue with reproduction decisions; the canonical full-fidelity appendix lives in `raw/assets/<slug>.pdf`.
+- **Not a replacement for `## Distinctive artifacts`.** Cataloguing routes appendix content; reproduction lands it as wiki-native artifact. Both required when appendix material is load-bearing.
+- **Not automated.** [`scripts/lint-appendix-coverage.mjs`](scripts/lint-appendix-coverage.mjs) checks for the section's presence and basic structure, but the catalogue and reproduction decisions stay editorial.
+
+### Backfill expectations
+
+Source pages ingested before this rule do not carry `## Appendix content`. Backfill is **opportunistic**: when a page is re-opened during a query, related ingest, or the user explicitly asks about appendix material, add the section then. There is no obligation to bulk-backfill the corpus — the rule applies prospectively to all new Process runs. The 2026-05-25 Altman 2023 backfill (creating [[sme-distress-predictor-variables]]) is a deliberate proof-of-concept, not a corpus-wide sweep.
+
 ## Working principles
 
 - **The wiki is Claude's codebase.** Touching 15 files in one ingest is normal and expected. Don't be timid about cross-cutting updates — that's the point of the pattern.
 - **Cross-references are the product.** A page without links is undermaintained. Always check what should link to what when adding or updating a page.
 - **Bookkeeping is the job.** Humans abandon wikis because maintenance grows faster than value. Claude's value here is precisely doing the bookkeeping — index updates, log entries, cross-reference repair, consistency sweeps — without being asked twice.
 - **Sources are immutable.** Never edit files in the raw collection. Only read.
-- **Verify before you trust.** Filenames lie, samples masquerade as full sources, and PDFs get truncated. Run the three pre-flight checks (scope, identity, honest scoping) before any ingest. The cleanup cost of a wiki page written on incomplete or misidentified data is much higher than the verification cost.
+- **Verify before you trust.** Filenames lie, samples masquerade as full sources, PDFs get truncated, and the highest-leverage content is often locked in appendices that get silently skipped. Run the five pre-flight checks (scope, identity, honest scoping, visual inventory, appendix inventory) before any ingest. The cleanup cost of a wiki page written on incomplete or misidentified data is much higher than the verification cost.
 - **Co-evolve the schema.** When a workflow turns out to work well (or badly), update this file so future sessions inherit the lesson. The schema is meant to drift toward the user's actual workflow over time.
 - **Citations beat assertions.** Wiki claims should be traceable to a source. When synthesizing across sources, say so.
 
@@ -485,7 +600,7 @@ Pages whose `accessed_at:` falls behind `last_confirmed:` are *read-aged*: they'
 
 ## Quality
 
-Not every wiki page is equally well-written. A concept with three sources but no `## Debates and supersession` section, no inbound wikilinks, and a 50-word body is structurally weak even if its `confidence:` is high. **v0.5 adds a mechanical quality score** that flags those structural weaknesses without trying to judge content correctness (LLM-as-judge is deferred to v0.6).
+Not every wiki page is equally well-written. A concept with three sources but no `## Debates and supersession` section, no inbound wikilinks, and a 50-word body is structurally weak even if its `confidence:` is high. **v0.5 adds a mechanical quality score** that flags those structural weaknesses without trying to judge content correctness on concepts and syntheses. **v0.6 adds an LLM-as-judge overlay** for `kind: paper` source pages — see [§Source-page scoring (v0.6)](#source-page-scoring-v06).
 
 ### What gets scored
 
@@ -522,13 +637,34 @@ The 0.40 / 0.30 / 0.30 weighting reflects the schema's priorities: structure is 
 
 ### The auto-write exception
 
-`quality_score` and `quality_notes` are **the only frontmatter fields the schema permits tooling to write to.** The hooks contract ([§Hooks](#hooks)) forbids content-page edits from automation — but `quality_score` is a *derived* value, not editorial content, and the script is explicit + idempotent + user-invoked (not hook-fired). The exception is narrow on purpose: any future "auto-write" temptation must clear the same bar — derived, deterministic, user-triggered.
+The schema permits tooling to write to **exactly two frontmatter fields**, both derived/mechanical and both on concepts/syntheses only:
+
+| Field | On pages | Written by | When |
+| --- | --- | --- | --- |
+| `quality_score` | concepts, syntheses | [`scripts/quality-score.mjs`](scripts/quality-score.mjs) | user-invoked or hook-fired |
+| `quality_notes` | concepts, syntheses | [`scripts/quality-score.mjs`](scripts/quality-score.mjs) | user-invoked or hook-fired |
+
+**Source pages carry no auto-written fields.** v0.5 added `quality_floor:` and `quality_floor_notes:` to source-page frontmatter; v0.6 removed them. Source-page scores (floor + LLM judgment) live only in `logs/quality-source-pages.jsonl` and the HTML report — never in the page. This protects against anchoring: every `--judge` run starts from clean state, the page text being the only input.
+
+Everything else (lifecycle fields, `relationships:`, body content) is editorial. The hooks contract ([§Hooks](#hooks)) forbids automation from editing wiki content beyond these two fields. The exception bar is narrow on purpose: any future auto-write must be **derived** (computable from page state, not invented), **deterministic** (re-runs idempotent), and **explicit** (the page acknowledges the field as auto-managed).
+
+The rubric version itself lives in [`quality-rubric.md`](.claude/skills/scientific-papers-processing/quality-rubric.md) YAML frontmatter (`rubric_version:`). Tooling parses that field — never hardcoded — so a version bump there propagates automatically through the chain (rubric edit → re-score → JSONL append → HTML regen).
+
+### Source-page scoring (v0.6)
+
+The mechanical-floor scorer for source pages lives in [`scripts/quality-source-page.mjs`](scripts/quality-source-page.mjs). It is now joined by an **LLM-as-judge overlay**:
+
+- **Scope.** Only `kind: paper` source pages are scored. Reports, video transcripts, articles, images drop out — the Keshav 3-pass + IMRaD rubric does not fit those carriers.
+- **Mechanical floor (default).** `node scripts/quality-source-page.mjs [--page <slug>]` walks paper pages and computes per-dim D1–D6 lower bounds. Caps at 2/3 per dim (level-3 needs judgment). Appends one JSONL line per page with `kind: "mechanical-floor"`.
+- **LLM judgment (`--judge`).** `node scripts/quality-source-page.mjs --judge [--page <slug>]` additionally invokes headless Claude Code (`claude -p ... --output-format text`) with the rubric + page body (with any legacy `## Quality review` block stripped) + the mechanical floor as guardrails. The LLM returns per-dim scores 0–3 plus reasoning. Soft-floor rule: judgment may go below floor only with an explicit `below_floor_reason` — the validator in [`scripts/_lib/llm-judge.mjs`](scripts/_lib/llm-judge.mjs) rejects silent downgrades. Judgment runs append JSONL lines with `kind: "mechanical-floor + llm-judgment"` carrying both `floor:` and `judgment:` blocks plus the LLM's reasoning per dim.
+- **Output surfaces.** [`scripts/quality-log-summary.mjs`](scripts/quality-log-summary.mjs) is the CLI viewer; [`scripts/quality-log-html.mjs`](scripts/quality-log-html.mjs) regenerates [`logs/quality-report.html`](logs/quality-report.html). Both show judgment as primary when present, floor as the structural baseline.
+- **Never writes to the page.** Source pages are inputs to scoring, never outputs. This is the load-bearing v0.6 decision.
 
 ### Cuts vs. `llm-wiki-v2.md`
 
-- **No LLM-as-judge yet.** v2 suggests "a second pass with a different prompt" for quality evaluation. That's the v0.6 quality slice — `scripts/judge-quality.mjs` will overlay an LLM rubric on top of the mechanical score for concepts and syntheses.
-- **No auto-rewrite of low-quality pages.** Even when a page scores below 0.65, the script never edits its content — it only writes the score and the notes. The notes tell a human (or Claude in a future session) what to fix; the fix is editorial.
-- **No quality score on entities or sources.** v2 implies scoring "everything" — this repo restricts the rubric to pages where structural shape predicts re-use value (concepts and syntheses). Extending to entities is plausible but adds noise more than signal at current scale.
+- **LLM-as-judge: source pages only.** v0.6 lands the LLM-judge slice for `kind: paper` source pages. Concepts and syntheses remain mechanical-only — the rubric for that surface is structural and does not yet have an LLM-overlay layer.
+- **No auto-rewrite of low-quality pages.** Even when a page scores below 0.65, the script never edits page content — it only appends to the log. The fix is always editorial.
+- **No quality score on entities.** v2 implies scoring "everything" — this repo restricts scoring to pages where structural shape and substantive content predict re-use value (concepts, syntheses, paper-kind sources).
 
 ## Search
 
@@ -794,7 +930,7 @@ v0.4 wires Claude Code hooks (configured in [`.claude/settings.json`](.claude/se
 
 ### Non-negotiable rule
 
-**Hooks may write to `wiki/log.md`, to lint reports (stderr/stdout), and to gitignored derived artifacts (`wiki/.graph.json`). Hooks may NOT edit any `wiki/**/*.md` content page** — not concept, not entity, not source, not synthesis, not thread, and not `index.md`. Content edits always require explicit user approval in-session.
+**Hooks may write to `wiki/log.md`, to lint reports (stderr/stdout), to gitignored derived artifacts (`wiki/.graph.json`, `logs/*`), and to the two whitelisted derived frontmatter fields on concepts/syntheses (`quality_score`, `quality_notes` — see [§The auto-write exception](#the-auto-write-exception)). Hooks may NOT edit any `wiki/**/*.md` page body content, and may NOT write any field to source-page frontmatter** — not concept, not entity, not source, not synthesis, not thread, and not `index.md`. Source-page scores (both floor and LLM-judgment) live exclusively in `logs/quality-source-pages.jsonl`. Content edits always require explicit user approval in-session.
 
 This protects the v1 trust contract ("Claude owns the wiki layer, user owns direction") from automation drift. A hook that silently rewrites a concept page when the user wasn't looking is a worse failure than a hook that doesn't fire.
 
@@ -804,6 +940,7 @@ This protects the v1 trust contract ("Claude owns the wiki layer, user owns dire
 | ----- | ------ | ------- |
 | `SessionStart` | [`scripts/session-start.mjs`](scripts/session-start.mjs) | Outputs a short wiki snapshot (catalog counts, 5 most recent log entries — the *first* 5 since the 2026-05-12 reverse-chronological flip, `status: stale` and `confidence < 0.5` flags) to stdout — Claude Code feeds it back as session context. Read-only. |
 | `PostToolUse` (Edit, Write) | [`scripts/lint-page.mjs`](scripts/lint-page.mjs) | If the just-edited file is under `wiki/**/*.md`, validates the v0.2 lifecycle contract (`confidence`, `last_confirmed`, `source_count`), the v0.3 closed relationship vocabulary, and the v0.3 body-wikilink rule (every `relationships.target` must appear as a body `[[wikilink]]`). Warnings to stderr. Always exits 0 — never blocks the tool call. |
+| `PostToolUse` (Edit, Write) | [`scripts/on-rubric-change.mjs`](scripts/on-rubric-change.mjs) | Filters to the canonical rubric path (`.claude/skills/scientific-papers-processing/quality-rubric.md`); for any other edited file, exits silently. When the rubric is edited, runs `quality-source-page.mjs` (floor only; appends JSONL; auto-chains HTML regen). Judgment never auto-fires from hooks — that's a manual `--judge` invocation. Writes only to `logs/*`; never touches source-page frontmatter or body. Always exits 0 — never blocks. |
 | `Stop` | [`scripts/session-end.mjs`](scripts/session-end.mjs) | Per-turn check: if any `wiki/**/*.md` is modified or untracked, re-runs [`scripts/graph-export.mjs`](scripts/graph-export.mjs) so `wiki/.graph.json` stays fresh; otherwise exits silently. No log writes. |
 
 ### Auto-prefix log convention

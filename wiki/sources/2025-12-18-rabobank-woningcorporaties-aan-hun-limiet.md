@@ -34,6 +34,8 @@ relationships:
   - type: supports
     target: 2025-rabobank-bouw-en-vastgoedbericht-2025
     via: "Same publisher; Bouw publication covers construction-sector dynamics underlying the housing-stock supply side"
+quality_floor: {D1: 2, D2: 1, D3: 1, D4: 1, D5: null, D6: null}
+quality_floor_notes: ['D2: thin sections (<100 words): how=66, what=38', 'D3: ## Distinctive artifacts section exists but no Figure/Table mentions', 'D4: no "Limitations the authors acknowledge" phrase']
 ---
 
 # Woningcorporaties aan hun limiet: investeringsruimte raakt op
@@ -268,10 +270,10 @@ Neighbour-scan against the 2026-05-25 batch:
 
 | Field | Value |
 |---|---|
-| Reviewer | Claude (self-score) |
+| Reviewer | Claude (self-score, re-evaluated 2026-05-25 post-D6 introduction) |
 | Date | 2026-05-25 |
 | Claimed depth | Pass 2 |
-| Rubric version | 1.0 |
+| Rubric version | 1.1 (adds D6) |
 
 | Dim | Score | Floor | Notes |
 |---|---:|---:|---|
@@ -280,7 +282,8 @@ Neighbour-scan against the 2026-05-25 batch:
 | D3 Distinctive artifacts | 3 | 2 | Figure reproduced as table with 2012/2025 stock values + share %; Vpb trajectory reproduced as code block; sector-distress logic chain rendered as Mermaid; Regiewet obligations reproduced as table. |
 | D4 Critical reading | 2 | 2 | Five concrete "not flagged" items: cooperative-housing economics absent, WSW mechanics opaque, no historical-crisis comparison (Vestia 2012), Rabobank-author conflict-of-interest undeclared, no scenarios on verduurzaming cost. Each tied to specific gaps. |
 | D5 Pass-3 markers | — | — | n/a (Pass 2 page) |
+| D6 Appendix coverage | — | — | n/a — Rabobank practitioner report; no appendix material (0 appendix/bijlage mentions in the raw markdown). Denominator unchanged at /12. |
 
-**Total: 11 / 12 = 0.92** (at ceiling)
+**Total: 11 / 12 = 0.92** (at ceiling — unchanged by D6 introduction; appendix N/A)
 
 **Resolution:** accepted; catalogue update can proceed.

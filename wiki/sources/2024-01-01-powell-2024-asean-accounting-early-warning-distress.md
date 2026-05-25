@@ -35,6 +35,9 @@ relationships:
   - type: supports
     target: 2026-02-04-bari-2026-us-small-business-distress-framework
     via: "both find profitability+liquidity+leverage dominant; Bari's contribution is that non-financial channels add beyond"
+  - type: uses
+    target: sme-distress-predictor-variables
+    via: "Powell's 14-ratio candidate set draws from category 1 (Altman Z-Score variables) + categories 3/5/6 (Profitability, Liquidity, Financial leverage); the management/employee channels of the catalogue are not used"
 ---
 
 # Accounting-based variables as an early warning indicator of financial distress in crisis and non-crisis periods
@@ -86,7 +89,7 @@ Adjacent wiki sources: [[2022-11-28-altman-2023-omega-score-sme-default]] (same 
 
 **Distress definition.** ICR < 1 for two consecutive years → distressed (= 1); ICR ≥ 1 → non-distressed (= 0). Faelten-Vitkova 2014 threshold. In sample: 76 % non-distressed, 24 % distressed.
 
-**Predictor variables (14 candidates).** Drawn from prior literature using a *frequency-of-prior-use* methodology (Table 1 inventories which ratios appear in Beaver 1966, Deakin 1972, Altman 1968 + 1977, Ohlson 1980, Taffler 1983, Zmijewski 1984, Izan 1984, Koh-Killough 1990, Shumway 2001, Hillegeist 2004, Beaver et al. 2005, Wu et al. 2004, Tinoco-Wilson 2013, Cultrera-Brédart 2016 — 15 prior models). Three groups:
+**Predictor variables (14 candidates).** Drawn from prior literature using a *frequency-of-prior-use* methodology (Table 1 inventories which ratios appear in Beaver 1966, Deakin 1972, Altman 1968 + 1977, Ohlson 1980, Taffler 1983, Zmijewski 1984, Izan 1984, Koh-Killough 1990, Shumway 2001, Hillegeist 2004, Beaver et al. 2005, Wu et al. 2004, Tinoco-Wilson 2013, Cultrera-Brédart 2016 — 15 prior models). All 14 are subset-matches of [[sme-distress-predictor-variables]] categories 1 (Altman Z-Score), 3 (Profitability), 5 (Liquidity), and 6 (Financial leverage) — the management/employee channels the Omega Score adds are not used here. Three groups:
 
 | Group | Ratios |
 |---|---|
@@ -373,23 +376,3 @@ Neighbour-scan against the 2026-05-25 batch:
 - **`supports` ↔ [[2024-06-22-hajek-2024-distress-prediction-annual-reports]]** — Hajek extends with NLP/BERT; both papers reach the boundary of structured-ratio-only models. Hajek's class-imbalance handling (SSL) is methodologically more sophisticated than Powell's, and could be back-applied here.
 - **`supports` ↔ [[2026-02-04-bari-2026-us-small-business-distress-framework]]** — Bari operationalises the same firm-level + behavioural channels for US small businesses. The cross-context comparison is instructive: ASEAN listed-firm MDA vs. US small-business framework — different operational definitions of distress (ICR<1 vs. Bari's multi-impairment index), same finding that **profitability + liquidity + leverage** dominate.
 
-## Quality review
-
-| Field | Value |
-|---|---|
-| Reviewer | Claude (self-score) |
-| Date | 2026-05-25 |
-| Claimed depth | Pass 2 |
-| Rubric version | 1.0 |
-
-| Dim | Score | Floor | Notes |
-|---|---:|---:|---|
-| D1 Five Cs | 3 | 2 | Category (empirical), Context (Beaver/Altman/Ohlson/Zmijewski lineage named, AEC policy motivation explicit, 3 adjacent wiki sources), Correctness (sample-imbalance and class-weighting gap flagged), Contributions (3 named), Clarity (no figures — table-only paper; pre-GFC sign reversal flagged as un-unpacked anomaly). |
-| D2 IMRaD | 3 | 2 | Results section reports specific accuracies per country and per period (61.1 %, 81.9 %, 76.8 %, χ² = 781.5, etc.), specific coefficients (X1 = +6.269 region-wide; pre-GFC −6.969 reversal), specific DD-improvement averages (+0.90 % / +0.63 %). |
-| D3 Distinctive artifacts | 3 | 3 | ASEAN-wide discriminant functions (Table 3) fully transcribed; **all 38 per-country × per-period discriminant functions (Table 4) reproduced**; Table 5 frequency map reproduced; Table 6 accuracy matrix reproduced in full; Table 8 MDA-DD improvements selectively reproduced. Per the rubric's Powell anchor, this addresses the D3=1 failure of the prior ingest. |
-| D4 Critical reading | 2 | 2 | Three concrete "not flagged" items: pre-GFC sign reversal lack of analysis; sample imbalance without class-weighting; no logit/probit benchmark race. Each tied to specific methodological choices. |
-| D5 Pass-3 markers | — | — | n/a (Pass 2 page) |
-
-**Total: 11 / 12 = 0.92** (at ceiling)
-
-**Resolution:** accepted; catalogue update can proceed.

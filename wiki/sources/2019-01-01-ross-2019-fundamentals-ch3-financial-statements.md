@@ -684,30 +684,3 @@ Neighbour-scan against the current wiki corpus (six academic distress papers + f
 
 No `contradicts` or `supersedes` edges identified. The chapter is a definitional ledger, not a competing empirical claim; later sources extend or critique its scope but don't retire its content.
 
-## Quality review
-
-| Field | Value |
-|---|---|
-| Reviewer | Claude (self-score) |
-| Date | 2026-05-25 |
-| Claimed depth | Pass 2 |
-| Rubric version | 1.0 |
-
-| Dim | Score | Floor | Notes |
-|---|---:|---:|---|
-| D1 Five Cs | 3 | 2 | Category named (framework/pedagogy — definitional reference, distinguished from empirical/measurement/prototype). Context: 6 named adjacent wiki sources + textbook-position pedigree (Part 2, between Ch. 2 cash flow and Ch. 4 financial planning). Correctness: chapter's own §3.5 limitations catalogued in full + 12th-edition tax-rate dating noted. Contributions: 4 named (ratio vocabulary, DuPont, standardisation, benchmarking). Clarity: pedagogical clarity assessed; Tables 3.12/3.13 conversion fidelity noted explicitly. |
-| D2 Chapter walkthrough | 3 | 2 | (Substitutes for IMRaD — chapter, not paper.) Every section §3.1-§3.6 walked through with specific subsection topics, table numbers, equation numbers, and worked-example references. End-of-chapter problems catalogued by category (12 critical-thinking, 30 Q&P split Basic/Intermediate, Excel Master It! XBRL, S&S Air minicase). |
-| D3 Distinctive artifacts | 3 | 3 | **8 artifacts reproduced**: (1) Table 3.8 full ratio catalogue across 5 categories with all 26 equation numbers, (2) DuPont identity Eq 3.26 with algebraic equivalents and numerical illustrations, (3) Figure 3.1 Extended DuPont Chart as Mermaid decomposition tree (faithful node-by-node reproduction), (4) Table 3.1 Prufrock balance sheets, (5) Table 3.2 income statement, (6) Table 3.3 statement of cash flows, (7) Table 3.9 Yahoo!/Alphabet DuPont comparison, (8) §3.5 Problems-with-financial-statement-analysis 8-point catalogue. Per the rubric's anchor that distinctive *artifacts* be enumerated and reproduced (not paraphrased), this should be at or above ceiling. |
-| D4 Critical reading | 3 | 2 | Four concrete critique items: (a) chapter's no-underlying-theory frankness in §3.5 named and adopted as the wiki's downstream limitation-of-ratio-analysis reference; (b) Edition-specific 21% tax rate dating flagged so cross-edition transcribers don't mis-attribute; (c) US-centricity (SIC/NAICS no IFRS equivalent) named; (d) Pedagogical-fiction caveat on Prufrock named so future-Claude doesn't accidentally cite Prufrock numbers as empirical evidence. Each tied to specific text. |
-| D5 Pass-3 markers | — | — | n/a (Pass 2 page). |
-
-**Total: 12 / 12 = 1.00** (at ceiling)
-
-**Mechanical-floor mismatch (noted for traceability):** `scripts/quality-source-page.mjs --page 2019-01-01-ross-2019-fundamentals-ch3-financial-statements` reports a floor total of 0.42 (D1=2, D2=1, D3=2, D4=0), specifically flagging:
-
-- *D2: missing IMRaD sections: HOW/Methods.* The page deliberately replaces IMRaD with a chapter-native skeleton (TL;DR → walkthrough §3.1-§3.6 → vocabulary → Visual content → Distinctive artifacts → Significance → Caveats), per the user's correction that "IMRaD is only relevant for scientific papers." The §Chapter walkthrough section is the chapter-equivalent of paper-IMRaD methods+results; the floor scorer's regex doesn't yet know about `kind: book-chapter`.
-- *D4: no "Limitations the authors acknowledge" phrase; no "Limitations not flagged" phrase.* The §Caveats and limitations and §Significance for the wiki sections cover both — the chapter's own §3.5 *Problems with Financial Statement Analysis* catalogue (Artifact 8) is the authors-acknowledge content; the additional caveats (edition specificity, US-centricity, static analysis, no formal cross-validation, pedagogical fiction) are the not-flagged content. Again, the floor scorer expects literal phrasing.
-
-Per the rubric's "floor is a lower bound; judgement may exceed it" rule (CLAUDE.md skill §2.5b), the judgement overlay supersedes the floor in these two dimensions. **A future enhancement to `quality-source-page.mjs` should add a `kind: book-chapter` mode** that maps to chapter-native section names rather than IMRaD — this would eliminate the false-positive flags. Until then, this paragraph is the audit trail.
-
-**Resolution:** accepted; catalogue updates have been completed (source page written; neighbour-source scan executed; 3 new concept pages created — `financial-ratio-analysis`, `dupont-identity`, `common-size-statements`; 2 existing concept pages updated — `financial-distress`, `altman-z-score`; `index.md` updated; `log.md` entry prepended).

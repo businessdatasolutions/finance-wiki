@@ -1,18 +1,47 @@
+---
+rubric_version: '1.2'
+changelog:
+  - version: '1.2'
+    date: 2026-05-25
+    change: 'LLM-as-judge slice lands: judgment scores are produced by a fresh headless `claude -p` call on every run and live only in `logs/quality-source-pages.jsonl` — never in source-page bodies or frontmatter. Stripped the in-body Scoring form template. D4 floor regex accepts both "Limitations the authors acknowledge" and "Limitations acknowledged by authors" word orders.'
+  - version: '1.1'
+    date: 2026-05-25
+    change: 'Added D6 (Appendix coverage); denominator widens to 15/18 for appendix-bearing sources.'
+  - version: '1.0'
+    date: 2026-05-25
+    change: 'Initial release — D1–D5.'
+---
+
 # Source-page quality rubric
 
-The canonical instrument for self-scoring a `wiki/sources/*.md` page after ingest. Five dimensions, each scored **0–3**, normalised to a 0.0–1.0 final score. Anchored on [Keshav's three-pass method](HowtoReadPaper.pdf) and the [IMRaD body skeleton](Research-Paper-Structure.png.webp).
+The canonical instrument for self-scoring a `wiki/sources/*.md` page after ingest. **Six dimensions** (D1–D5 always-on, D6 conditional on the source carrying an appendix), each scored **0–3**, normalised to a 0.0–1.0 final score. Anchored on [Keshav's three-pass method](HowtoReadPaper.pdf) and the [IMRaD body skeleton](Research-Paper-Structure.png.webp).
+
+The canonical rubric version lives in this file's YAML frontmatter (`rubric_version:`). Tooling parses that field — never hardcoded — so a version bump here propagates automatically.
 
 This rubric complements — does **not** replace — [`scripts/quality-score.mjs`](../../../scripts/quality-score.mjs), which scores `wiki/concepts/` and `wiki/syntheses/` on structural grounds. The two scopes are disjoint: that scorer measures *concept-page consolidation quality*; this rubric measures *source-page extraction fidelity*.
 
 ## When to use
 
-1. **In-line (forward-looking)** — invoked at [`SKILL.md` §2.5b](SKILL.md) after writing a source page, before running the neighbour-source scan and catalogue updates. Run [`scripts/quality-source-page.mjs --page <slug>`](../../../scripts/quality-source-page.mjs) for the mechanical floor, then fill in the rubric block by judgment, then commit the filled-in `## Quality review` block at the bottom of the source page.
-2. **Ad-hoc audit** — read an existing source page, fill in the rubric, decide whether to re-ingest. The same template works for historical audits.
+1. **In-line (forward-looking)** — invoked at [`SKILL.md` §2.5b](SKILL.md) after writing a source page, before running the neighbour-source scan and catalogue updates. Run `node scripts/quality-source-page.mjs --judge --page <slug>` to compute floor + LLM-judgment overlay; the score lands in [`logs/quality-source-pages.jsonl`](../../../logs/quality-source-pages.jsonl). The page itself is never modified.
+2. **Ad-hoc audit** — re-run `--judge` over an existing source page to refresh its score. Idempotent — every run starts from clean state because the page never carries prior scores.
 
 Do NOT use this rubric for:
 - Concept pages or synthesis pages — those have their own scorer.
 - Entity pages — these are catalogue cards, not knowledge claims; no rubric fits.
 - Thread pages — provisional by design; scoring would be premature.
+- **Non-paper source kinds** — `wiki/sources/*.md` pages with `kind:` other than `paper` (reports, video transcripts, articles, images) drop out of scoring. The Keshav 3-pass + IMRaD anchors don't fit those carriers.
+
+## LLM-as-judge
+
+The rubric is the reference document the LLM judge reads on every run. The judge gets:
+
+1. **The full rubric** (this file, frontmatter stripped) — including all six dimensions, anchors, and worked low-quality examples.
+2. **The source page body** — with any pre-existing `## Quality review` H2 block stripped (legacy). The page is the *input* to scoring, never the output.
+3. **The mechanical floor** — the lower bound from the structural-lint pass. The judge may score a dimension below the floor only when it provides an explicit `below_floor_reason` for that dim (per "never overridden silently" below). Such cases land in the log's `judgment_warnings` field.
+
+The judge returns a JSON object with per-dimension scores 0–3 plus reasoning. Scores live exclusively in `logs/quality-source-pages.jsonl` and the HTML report (`logs/quality-report.html`) — they never write back into the wiki, so every re-judgment runs from clean state without anchoring on prior scores.
+
+The judge is implemented in [`scripts/_lib/llm-judge.mjs`](../../../scripts/_lib/llm-judge.mjs) and invoked from [`scripts/quality-source-page.mjs`](../../../scripts/quality-source-page.mjs) when the `--judge` flag is passed. Invocation is `claude -p ... --output-format text` — headless Claude Code, inheriting the user's CLI auth.
 
 ## The five dimensions
 
@@ -84,13 +113,36 @@ A **distinctive artifact** is any element the paper introduces or that carries i
 | **2** | At least two of the four Pass-3 outputs present. |
 | **3** | All four Pass-3 outputs visible; the page is plausibly sufficient to reconstruct the work from memory without re-reading the source. |
 
+### D6 — Appendix coverage *(conditional)*
+
+**Maps to** [CLAUDE.md §Check 5 (Appendix inventory)](../../../CLAUDE.md#check-5--appendix-inventory-what-does-the-appendix-contain-and-how-should-it-be-reproduced) and [§Appendix content extraction](../../../CLAUDE.md#appendix-content-extraction). Scores how the source page handles appendix material — the layer that most often carries reusable artifacts (variable dictionaries, instruments, derivations, glossaries).
+
+**Applies only when** the source carries appendix material. For sources with no appendix (short articles, video transcripts, blog posts, brief reports, image sources), D6 is **N/A** and excluded from the total's denominator. For sources with appendices, **the floor is 2** — silent omission (D6 = 0) or acknowledged-but-deferred (D6 = 1) is below the floor and the page should be revisited before commit.
+
+| Score | Anchor |
+|---:|---|
+| **N/A** | Source has no appendix material. Excluded from total. |
+| **0** | **Silent omission.** Source's body or §Methods references appendix / supplementary content that is clearly substantive (variable list, instrument, derivation, glossary, robustness tables) but the source page has no `## Appendix content` section, no mention in §Visual content, no caveat anywhere. Reader cannot tell whether the gap is deliberate or oversight. |
+| **1** | **Acknowledged but deferred.** Source page acknowledges the appendix exists (e.g. in `length:` or *"What was actually ingested"* prose) but no structured `## Appendix content` section. Honest about the gap; doesn't address it. |
+| **2** | **Section present + reproduced or deferred with reason.** Source page has `## Appendix content` listing every appendix with type, location, and content summary. Load-bearing content either (a) reproduced in `## Distinctive artifacts` as wiki-native artifacts, or (b) explicitly deferred with concrete reason. |
+| **3** | **Promoted to reusable artifact.** Same as 2, plus at least one appendix promoted to a standalone wiki-native artifact (`wiki/concepts/<slug>.md` concept page / glossary / named instrument) that serves the corpus, not just this source page. The promotion is the move from *"this paper's appendix"* to *"the corpus's reference catalogue."* |
+
 ## Scoring math
 
 ```
+appendix_applies = source carries appendix material (per CLAUDE.md §Check 5)
+
 if depth in {Pass 1, Pass 2}:
-    total = (D1 + D2 + D3 + D4) / 12
+    if appendix_applies:
+        total = (D1 + D2 + D3 + D4 + D6) / 15
+    else:
+        total = (D1 + D2 + D3 + D4) / 12
+
 if depth == Pass 3:
-    total = (D1 + D2 + D3 + D4 + D5) / 15
+    if appendix_applies:
+        total = (D1 + D2 + D3 + D4 + D5 + D6) / 18
+    else:
+        total = (D1 + D2 + D3 + D4 + D5) / 15
 ```
 
 **Thresholds** (mirror the existing concept scorer's bands):
@@ -99,36 +151,13 @@ if depth == Pass 3:
 |---:|---|---|
 | **≥ 0.85** | At ceiling | Catalogue update can proceed. |
 | **0.65 – 0.85** | Workable | Specific dimensions flagged; address opportunistically. |
-| **< 0.65** | Below floor | Revisit before commit. Most likely cause: D3 (artifacts) or D4 (critical reading). |
+| **< 0.65** | Below floor | Revisit before commit. Most likely cause: D3 (artifacts), D4 (critical reading), or D6 (appendix coverage). |
 
-## Scoring form template
+## Soft-floor rule (never overridden silently)
 
-Embed this filled-in block as a `## Quality review` H2 at the bottom of every source page, after `## Source-to-source relationships`. The mechanical floor (from `quality-source-page.mjs`) goes in `quality_floor:` frontmatter; the judgment score (from this rubric) goes in this body block.
+When the LLM judge produces a `Score < Floor` for any dimension, the judge must include an explicit `below_floor_reason` string in its JSON response for that dimension. The validator in [`scripts/_lib/llm-judge.mjs`](../../../scripts/_lib/llm-judge.mjs) rejects below-floor scores that lack a reason — protecting against the LLM hallucinating absence of structure that the floor scorer detected.
 
-```markdown
-## Quality review
-
-| Field | Value |
-|---|---|
-| Reviewer | Claude (self-score) |
-| Date | YYYY-MM-DD |
-| Claimed depth | Pass 2 |
-| Rubric version | 1.0 |
-
-| Dim | Score | Floor | Notes |
-|---|---:|---:|---|
-| D1 Five Cs | 3 | 2 | All cleanly answered; Context names two adjacent sources. |
-| D2 IMRaD | 2 | 2 | Results section thin on specific numbers (no per-country coefficients quoted). |
-| D3 Distinctive artifacts | 1 | 1 | Table 4 BERTopic taxonomy mentioned but not enumerated; Fig 3 not named. |
-| D4 Critical reading | 2 | 2 | Author limitations stated; one substantive "not flagged" item. |
-| D5 Pass-3 markers | — | — | n/a (Pass 2 page) |
-
-**Total: 8 / 12 = 0.67** (workable band; D3 flagged — revisit before catalogue commit)
-
-**Resolution:** [planned re-ingest / addressed in this pass / accepted as-is, deferred to follow-up]
-```
-
-When `Score < Floor` for any dimension, the reviewer must explain in Notes why judgment overrides the mechanical floor downward — the floor is a **lower bound**, never overridden silently.
+Legitimate downgrades exist (e.g. the page has a `## Distinctive artifacts` H2 section that's actually empty boilerplate — floor mechanically scores D3 = 2, but judgment legitimately scores D3 = 1). Those land in the log's `judgment_warnings:` field rather than being silently accepted or hard-rejected.
 
 ## Calibration: worked low-quality anchors
 
@@ -169,6 +198,22 @@ These anchors are drawn from the first ingest batch (2026-05-25). They give patt
 
 > Wiki page flags as "not flagged": *"the management-change indicator is a binary signal whose construction details affect interpretability; the dependence on Croatian administrative-data infrastructure (FINA accounts, government payment data) limits replication in jurisdictions without comparable data layers."* Both are concrete, paper-specific, and tied to real methodological choices the authors made. **D4 = 2** legitimately.
 
+### D6 — Appendix coverage (anchors)
+
+**Score 1 anchor — Altman et al. (2023), pre-backfill state** — [`wiki/sources/2022-11-28-altman-2023-omega-score-sme-default.md`](../../../wiki/sources/2022-11-28-altman-2023-omega-score-sme-default.md) as of the 2026-05-25 batch ingest.
+
+> The paper contains a **6-page appendix (journal pp. 2411–2416)** cataloguing **164 predictor variables across 18 categories** (Altman Z-Score variables / Business development / Profitability / Interest rate risk / Liquidity / Financial leverage / Δ balance-sheet / Size / Age / Industry / Region / Year / Internationalization / Innovation / Relational capital / Payment behavior / Employee-related / Management-related). The source page acknowledges on line 74: *"Supplementary Material was referenced but not opened; **the appendix variable list was not transcribed**."* No `## Appendix content` section exists. **D6 = 1** — honest about the gap but doesn't address it. The 164-variable catalogue — exactly the kind of reusable artifact other corpus papers should be able to cite — remains locked in the PDF. This anchor was the trigger for the v0.5+ D6 dimension.
+
+**Score 2 anchor — Hajek & Munk (2024)** — [`wiki/sources/2024-06-22-hajek-2024-distress-prediction-annual-reports.md`](../../../wiki/sources/2024-06-22-hajek-2024-distress-prediction-annual-reports.md)
+
+> The paper contains an appendix with **Figure A.1 (correlation heatmap, p. 18)** and **Table A.1 (hyperparameter grid, p. 19)**. The wiki page's `length:` field names them as read; both are described in `## Visual content` with location and headline observations; neither is treated as load-bearing enough for `## Distinctive artifacts` reproduction or concept-page promotion. **D6 = 2** — the section's intent is satisfied via §Visual content + an explicit "incidental" routing decision, even though the page does not carry a separate `## Appendix content` heading. *(Backfill opportunity: when the page is re-opened, split the appendix entries out of §Visual content into a proper §Appendix content section.)*
+
+**Score 3 anchor — Altman et al. (2023), post-backfill state** — same page as the Score 1 anchor above, after the 2026-05-25 appendix-schema refactor.
+
+> The 164-variable catalogue is reproduced as a standalone concept page [[sme-distress-predictor-variables]]; the source page's `## Appendix content` section names the appendix (type=variable-definitions, location=pp. 2411–2416, reproduction=`[[sme-distress-predictor-variables]]`) with a 160-word content summary; `## Distinctive artifacts` cross-references the concept page and reproduces the 18-category summary table inline. The promoted concept page is cited by [[financial-distress]], [[altman-z-score]], [[payment-behavior-variables]], [[sme-default-prediction]], and [[omega-score]]. **D6 = 3** — the appendix went from locked-in-PDF to corpus-wide reference catalogue. This is the canonical promotion pattern.
+
+**Tie-breaking note.** A page that has §Appendix content but the section is empty boilerplate (`### Appendix A` with no Type / Location / Reproduction / content summary) scores D6 = 1, not 2 — the floor requires *substantive* coverage, not headers. A page whose §Appendix content correctly defers everything ("entirely formal back matter: author bios, funding, IRB; not substantive") still scores D6 = 2 — explicit deferral with reason is what the floor demands.
+
 ### D1 (Five Cs) and D2 (IMRaD) — corpus-wide observations
 
 - **D1 floor across all 6 first-batch pages ≈ 2** (Adequate). The 5 Cs are mostly present in the TL;DR + Context prose but rarely broken out as explicit answers. Future low-quality anchor: a page where Context is generic (*"this is a paper about distress prediction"*) rather than specific (*"this paper sits in the Beaver→Altman→Merton lineage and is adjacent to [[…]]"*).
@@ -187,5 +232,6 @@ To be added once the corpus contains source pages that demonstrate D3 = 3 or D4 
 - **[`HowtoReadPaper.pdf`](HowtoReadPaper.pdf)** — S. Keshav, *How to Read a Paper*, ACM SIGCOMM CCR 2007. The level anchors quote Keshav directly: the five Cs (D1), the figure-criticism criteria *"axes properly labeled, error bars, statistically significant"* (D3 / D4), the four Pass-3 outputs (D5).
 - **[`Research-Paper-Structure.png.webp`](Research-Paper-Structure.png.webp)** — IMRaD anatomy diagram. D2 anchors derive from its WHY / HOW / WHAT / SO WHAT prompts. The diagram's note that Results are *"often shown in tables and figures"* is the structural basis for D3 existing as a separate dimension.
 - **[`SKILL.md`](SKILL.md)** — the parent skill that calls this rubric in §2.5b.
-- **[`../../../scripts/quality-source-page.mjs`](../../../scripts/quality-source-page.mjs)** — the mechanical floor scorer that populates `quality_floor:` frontmatter; the lower bound that the judgment score in this rubric may not silently override downward.
+- **[`../../../scripts/quality-source-page.mjs`](../../../scripts/quality-source-page.mjs)** — the mechanical floor scorer + LLM-as-judge driver. Computes the structural lower bound and (with `--judge`) invokes headless Claude Code for the substantive overlay. Scores land in `logs/quality-source-pages.jsonl` — never in source-page frontmatter or body.
+- **[`../../../scripts/_lib/llm-judge.mjs`](../../../scripts/_lib/llm-judge.mjs)** — encapsulates the `claude -p` invocation, prompt assembly, JSON-response validation, and the soft-floor enforcement (below-floor scores require an explicit reason).
 - **[`../../../scripts/quality-score.mjs`](../../../scripts/quality-score.mjs)** — the existing concept/synthesis scorer (disjoint scope; the two scorers do not overlap).

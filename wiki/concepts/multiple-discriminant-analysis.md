@@ -58,7 +58,7 @@ The result is a parsimonious discriminant function — typically 3–6 ratios �
 
 - **MDA as originally implemented**: [[altman-z-score]], 1968.
 - **MDA with country-period-specific recalibration**: [[2024-01-01-powell-2024-asean-accounting-early-warning-distress|Powell 2024]] — 38 country × period discriminant functions for ASEAN.
-- **MDA applied to LASSO-selected variables**: [[2022-11-28-altman-2023-omega-score-sme-default|Altman 2023]] — LASSO is used to *select* the variables from 164 candidates; MDA then constructs the [[omega-score]] from the LASSO-selected subset. The combination retains MDA's interpretability while letting modern variable-selection methods drive the choice of inputs.
+- **MDA applied to LASSO-selected variables**: [[2022-11-28-altman-2023-omega-score-sme-default|Altman 2023]] — LASSO is used to *select* the variables from 164 candidates (the full candidate space is catalogued at [[sme-distress-predictor-variables]]); MDA then constructs the [[omega-score]] from the LASSO-selected subset. The combination retains MDA's interpretability while letting modern variable-selection methods drive the choice of inputs.
 
 ## Compared to other distress-classification methods
 
@@ -82,6 +82,7 @@ The interpretability vs. accuracy tradeoff is the core design tension in this co
 
 - [[altman-z-score]] — the original MDA-derived distress score.
 - [[omega-score]] — the most recent MDA-derived distress score (LASSO + MDA hybrid).
+- [[sme-distress-predictor-variables]] — the 164-variable candidate space MDA selects from (post-LASSO) in the Omega Score pipeline.
 - [[financial-distress]] — the binary outcome MDA discriminates.
 
 ## Debates and supersession

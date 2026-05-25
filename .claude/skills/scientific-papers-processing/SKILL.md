@@ -101,7 +101,7 @@ If conversion produced a clean file but the YAML header isn't there, **prepend i
 
 ### 2.1 Pre-flight checks (CLAUDE.md §Verifying sources before ingest)
 
-Before reading further, run all four checks. **Surface any failure to the user before continuing.**
+Before reading further, run all five checks. **Surface any failure to the user before continuing.**
 
 | Check | Test | Failure action |
 |---|---|---|
@@ -109,6 +109,7 @@ Before reading further, run all four checks. **Surface any failure to the user b
 | **Identity** | Cover/title page authors + title match the filename's claimed identity? | If mismatch (e.g. `Mitchell-Dino-2011.pdf` actually contains Dell'Acqua 2026), flag the mismatch. The slug names the *actual* content; `raw:` frontmatter records the literal filename; note the mismatch in the source page body + log. |
 | **Honest scoping** | Will the source page's `length:` field state what was *actually read* (not the nominal full length)? | If you only read pp. 1–15, say so. Front matter + intro + framework only? Say so. Never claim "full ingest" when the body chapters were skipped. |
 | **Visual inventory** | How many figures / tables / equations / diagrams does the source carry, and did the markdown conversion preserve them? `pdftotext -layout` drops images entirely; `marker` keeps them as referenced assets but figure semantics may need recovery. | If visuals were lost in conversion, plan to read the original PDF in `raw/assets/<slug>.pdf` directly via Pass 2 (which already covers figures + tables). State the visual count in the pre-write summary so the user can confirm scope of the `## Visual content` section. See [CLAUDE.md §Check 4](../../../CLAUDE.md#check-4--visual-inventory-what-visuals-does-the-source-carry-and-did-the-conversion-preserve-them) and [§Visual content extraction](../../../CLAUDE.md#visual-content-extraction). |
+| **Appendix inventory** | Does the source carry appendix material? If so, what archetype (variable definitions / survey instrument / mathematical derivation / sample data / coding-algorithm / supplementary tables / supplementary figures / glossary / author bios) and what's the page range of each? | If substantive appendices exist, plan a targeted PDF read with `pages: "NN-MM"` scoping. Decide reproduction strategy per appendix *before* writing — inline in §Distinctive artifacts / promote to standalone concept page / defer with reason. State the appendix inventory in the pre-write summary so the user can confirm scope of the `## Appendix content` section. See [CLAUDE.md §Check 5](../../../CLAUDE.md#check-5--appendix-inventory-what-does-the-appendix-contain-and-how-should-it-be-reproduced) and [§Appendix content extraction](../../../CLAUDE.md#appendix-content-extraction). The [§Appendix archetypes](#appendix-archetypes) table below names the reproduction strategy per archetype. |
 
 ### 2.2 The three-pass read (Keshav, 2007)
 
@@ -120,6 +121,7 @@ The pass depth is bounded by the paper's *relevance* to the wiki, not by complet
 2. Read section + subsection headings (skip body).
 3. Read conclusions.
 4. Glance over references — mentally tick those already in the wiki.
+5. **Read appendix headings only.** Note presence, page range, and apparent type (variable list / instrument / derivation / supplementary tables / etc.) for each appendix. Populate the Check 5 inventory. Don't read appendix body content at Pass 1.
 
 At the end of Pass 1, answer the **five Cs**:
 
@@ -140,7 +142,8 @@ At the end of Pass 1, answer the **five Cs**:
 1. Read figures + tables with care. Are axes labelled? Error bars? Sample sizes? Statistical significance noted? *Common figure mistakes separate excellent from shoddy work — flag them in the source page body.*
 2. Read methods + results in full. Skim proofs.
 3. Mark unread references that look central — add them to a "Citations to chase" list in the source page body.
-4. You should now be able to summarise the paper to someone else with supporting evidence.
+4. **Read substantive appendix content** alongside body — especially methods-supporting appendices (variable definitions, hyperparameter grids, survey instruments, glossaries). Use targeted PDF reads via `pages: "NN-MM"` rather than re-reading the whole document. Transcribe load-bearing tables / instruments as wiki-native artifacts per the [§Appendix archetypes](#appendix-archetypes) table.
+5. You should now be able to summarise the paper to someone else with supporting evidence — *including* what the appendix enables a reader to do next (replicate the survey? reuse the variable list? port the algorithm?).
 
 If you can't summarise at the end of Pass 2: either the subject matter is genuinely unfamiliar (note this honestly — confidence cap at 0.7 until a Pass 3 or a second source corroborates), or the paper is poorly written (flag this in the source page).
 
@@ -149,9 +152,32 @@ If you can't summarise at the end of Pass 2: either the subject matter is genuin
 1. Re-create the work mentally: same assumptions, same data, what would *you* have concluded?
 2. Challenge every assumption in every statement.
 3. Identify implicit assumptions, missing citations, weak experimental controls.
-4. Jot down future-work ideas — these may become `wiki/threads/` entries.
+4. **Read all appendix content.** Reproduce everything load-bearing as wiki-native artifacts. **Promote reusable catalogues** (variable dictionaries, named instruments, named algorithms, glossaries) to standalone concept pages under `wiki/concepts/` so they serve the whole corpus, not just this source page. The promotion move is what earns D6 = 3 on the quality rubric.
+5. Jot down future-work ideas — these may become `wiki/threads/` entries.
 
 A Pass-3-read paper supports a confidence of 0.85+ and is candidate material for the page's `## Debates and supersession` section if it contradicts or refines an existing wiki claim.
+
+**Honest-scoping convention extended.** The `length:` field should state what was read from each section, including appendices. Example: *"~36 pages (Pass 2 — main body + Appendix variable table read; Supplementary Material Tables SM1–SM12 deferred)"*. A Pass-2 page that read the body but skipped the appendix is fine — say so in `length:` and in the *"What was actually ingested"* body section, and the D6 score will reflect it (= 1, acknowledged but deferred).
+
+### Appendix archetypes
+
+Used by [CLAUDE.md §Check 5](../../../CLAUDE.md#check-5--appendix-inventory-what-does-the-appendix-contain-and-how-should-it-be-reproduced), [CLAUDE.md §Appendix content extraction](../../../CLAUDE.md#appendix-content-extraction), and the per-pass guidance above. The archetype determines reproduction strategy and whether the content should be promoted to a standalone wiki concept page.
+
+| Archetype | Examples | Reproduction strategy |
+| --- | --- | --- |
+| **Variable definitions / data dictionaries** | Altman's 164-variable Omega Score table; KPI dictionaries; coding schemes; data-element catalogues | Reproduce as wiki-native markdown table in §Distinctive artifacts; **promote to standalone concept page** when reusable across multiple corpus sources (e.g. predictor variables shared across a financial-distress cluster) |
+| **Survey / interview instruments** | Likert scales, question batteries, interview protocols, vignettes, experimental stimuli | Reproduce as fenced quote / numbered list in §Distinctive artifacts; **promote** when the instrument is **named** (Big Five, NPS, MBTI, GHQ-12) — other studies will reuse the same instrument |
+| **Mathematical derivations / proofs** | Step-by-step proofs, alternative derivations, regularity conditions, optimisation derivations | Reproduce as fenced math (LaTeX) in §Distinctive artifacts; promote to a methods-concept page when the derivation underpins a named result reused elsewhere |
+| **Sample data / examples** | Sample firm records, anonymised case studies, example questionnaire responses, code traces | Reproduce as fenced code or table in §Distinctive artifacts; rarely promoted (case-specific) |
+| **Coding / algorithm details** | Pseudocode, hyperparameter grids, R/Python snippets, model-architecture diagrams, training schedules | Reproduce as fenced code or pseudocode in §Distinctive artifacts; **promote** when the algorithm is named and reusable (e.g. a named NLP pipeline, a benchmark protocol) |
+| **Supplementary statistical tables** | Robustness checks, sensitivity analyses, alternative specifications, sub-sample breakdowns | Describe in §Visual content with location and headline observation; reproduce in §Distinctive artifacts only if load-bearing for the page's central claims. Otherwise defer with one-line caveat. |
+| **Supplementary figures** | ROC curves, PCA plots, calibration plots, example trees, additional time-series | Describe in §Visual content (accessibility-quality description); reproduce (Mermaid / ASCII art / fenced) only if load-bearing |
+| **Glossaries / acronym lists** | Domain-specific term definitions, abbreviation tables, controlled vocabularies | Reproduce as inline table in §Distinctive artifacts; **promote** when the glossary has corpus-wide value (e.g. a domain-vocabulary reference other sources will cite) |
+| **Author bios / funding / disclosures / IRB statements** | "About the authors", grant numbers, conflict-of-interest, ethics approval, registered-trial IDs | **Skip transcription.** One-line marker in §Appendix content: `> Appendix [X] contains author bios / funding / disclosures — not substantive content; not transcribed.` |
+
+The taxonomy is non-exhaustive. When you encounter an appendix that doesn't fit, treat it like the closest archetype and document the reasoning in the §Appendix content entry. New archetypes can be added here as they emerge from real ingests.
+
+**Promotion heuristic** (which appendices become standalone concept pages): the appendix earns promotion when (a) more than one corpus source could cite the same artifact, (b) the artifact has a name the wider literature uses (instrument, algorithm, formula, taxonomy), or (c) the artifact is the kind of thing an *expert reader would copy out for their own work* — variable lists, survey instruments, glossaries, named procedures. Bias toward promotion when the choice is borderline; the cost of an under-cited concept page is much lower than the cost of leaving a reusable artifact locked in a single source's body.
 
 ### 2.3 Discuss key takeaways with the user
 
@@ -163,6 +189,7 @@ Per CLAUDE.md §Process step 2: before writing the source page, surface the head
 - **Five Cs:** Category = …, Context = …, Correctness = …, Contributions = …, Clarity = …
 - **Headline finding:** <one sentence>
 - **Visual inventory:** ~N figures, M tables, K equations — conversion fidelity: clean / partial / images-stripped (PDF read planned for §Visual content)
+- **Appendix inventory:** <one line per appendix: archetype + page range + routing decision>, or *"none — no substantive appendix material"*. Example: *"Appendix A (pp. 2411–2416): variable-definitions, 164 vars × 18 categories → promote to standalone concept page `[[sme-distress-predictor-variables]]`"*
 - **W&W cells in play:** <list, or "none — outside W&W lens">
 - **Concepts/entities I'll touch:** [[concept-a]], [[concept-b]], [[Author Name]]
 - **Neighbour-source candidates (preview):** [[source-X]], [[source-Y]] — full scan in step 5
@@ -270,6 +297,20 @@ load-bearing visuals can be terser and end with `→ reproduced in § Distinctiv
 artifacts`. See [CLAUDE.md §Visual content extraction](../../../CLAUDE.md#visual-content-extraction)
 for the full contract. If the paper genuinely has no visuals, write
 `> No visuals in source.` instead of omitting the section.>
+
+## Appendix content
+
+<Catalogue of every appendix in the paper. One entry per appendix, in source
+order, each with: heading (`### Appendix [letter/number] — <name>`),
+**Type:** (archetype from the [§Appendix archetypes](#appendix-archetypes) table),
+**Location:** pp. NN–NN (PDF pp. MM–MM if different), **Reproduction:** inline
+in §Distinctive artifacts | extracted to `[[concept-page-slug]]` | deferred
+(<reason>), followed by a 50–200-word content summary (row counts / question
+counts / key categories / load-bearing observations). Formal back matter (author
+bios, funding, IRB) gets a single one-line marker. See [CLAUDE.md §Appendix
+content extraction](../../../CLAUDE.md#appendix-content-extraction) for the
+full contract. If the paper has no appendix at all, omit this section — the
+quality scorer treats absence as N/A (excluded from denominator).>
 
 ## Distinctive artifacts
 
@@ -416,33 +457,39 @@ Encouraged, not forced. If the paper is about LLM internals, quantisation mechan
 
 ### 2.5b Self-score against the quality rubric
 
-Before running the neighbour-source scan and the catalogue updates, score the just-written source page against [`quality-rubric.md`](quality-rubric.md). Two-step:
+Before running the neighbour-source scan and the catalogue updates, score the just-written source page against [`quality-rubric.md`](quality-rubric.md). v0.6 lands the LLM-as-judge slice — judgment now runs from a fresh LLM call every time, not from a hand-filled body block.
 
-**Step 1 — Mechanical floor.** Run the floor scorer in read-only mode for the just-written page:
+**Single-step:** run the judge for the just-written page:
+
+```sh
+node scripts/quality-source-page.mjs --judge --page <slug>
+```
+
+What happens, in order:
+
+1. The scorer filters to `kind: paper` pages — only paper sources are subject to the Keshav 3-pass + IMRaD rubric. Reports, video transcripts, articles drop out.
+2. The mechanical-floor pass runs first (structural lint per D1–D6). The floor is the **lower bound** — never silently overridden downward.
+3. Headless Claude Code (`claude -p ... --output-format text`) is invoked with the rubric, the page body (with any `## Quality review` block stripped), and the floor as guardrails. It returns per-dimension scores 0–3 plus reasoning.
+4. The judgment may go below the floor for a dimension *only* if the LLM provides an explicit `below_floor_reason` (per the rubric's "never overridden silently" rule). Such cases land in the `judgment_warnings` field of the log line.
+5. Both floor and judgment land in `logs/quality-source-pages.jsonl` as a single entry. The HTML report and CLI viewer surface judgment as primary; floor stays visible as the structural-integrity baseline.
+
+**Gate** (reading the log's `total` for the just-judged slug):
+
+- **Total ≥ 0.85** → at ceiling; proceed to §2.6.
+- **0.65 ≤ Total < 0.85** → workable. Read `judgment_reasoning` per dim for the issues the judge flagged — typically D3 (populate `## Distinctive artifacts` with reproductions) or D4 (replace boilerplate limitations with paper-specific items). Re-run the judge, then proceed.
+- **Total < 0.65** → **do not commit**. Same diagnostic path as above. Fix and re-run.
+
+**Never** write judgment scores back into the wiki page (body or frontmatter). The page is the *input* to scoring, never the output. Every re-judgment starts from clean state — this is the safeguard against anchoring on prior scores.
+
+**Floor-only quick check (no LLM call):**
 
 ```sh
 node scripts/quality-source-page.mjs --page <slug>
 ```
 
-It reports a per-dimension floor (D1–D5) plus a total normalised to the 0.65 / 0.85 thresholds. The floor is the **lower bound** for each dimension — a judgment score may exceed it, but not silently fall below it.
+Useful when iterating on structural compliance (sections present, mentions, phrases). Skip this; just run `--judge` when you're ready for the actual gate.
 
-**Step 2 — Judgment overlay.** Open [`quality-rubric.md`](quality-rubric.md) and fill in the `## Quality review` body block at the bottom of the source page, after `## Source-to-source relationships`. Use the rubric's level anchors and worked low-quality examples (Bari / Hajek / Powell / Habib / Altman) to pattern-match each dimension. Where judgment matches the floor, copy it across; where judgment legitimately exceeds the floor, write the reason in the Notes column.
-
-**Gate**:
-
-- **Total ≥ 0.85** → proceed to §2.6.
-- **0.65 ≤ Total < 0.85** → workable. The flagged dimensions should be addressed in this ingest where feasible (typically D3 by populating `## Distinctive artifacts`, or D4 by replacing boilerplate critique with paper-specific items). Re-score, then proceed.
-- **Total < 0.65** → **do not commit**. Most likely cause: D3 floor = 0 or 1 because the paper's distinctive artifacts (named tables, figures, equations, taxonomies) are not enumerated. Fix and re-score before proceeding to §2.6.
-
-**Optional**: commit the mechanical floor to the page's frontmatter for traceability —
-
-```sh
-node scripts/quality-source-page.mjs --page <slug> --write
-```
-
-This adds `quality_floor: {D1: …, D2: …, …}` and `quality_floor_notes: [...]`. The judgment score lives in the body block (which Quartz renders); the floor lives in frontmatter (which the lint pipeline reads).
-
-**Eval log (automatic).** Every run of `quality-source-page.mjs` — read-only or `--write` — appends one JSONL line per page to [`logs/quality-source-pages.jsonl`](../../../logs/quality-source-pages.jsonl). Each line carries the timestamp, rubric version, all five dimension scores, the total + band, and the mechanical-floor notes. The log is the **trend record** — it answers "did Hajek's D3 actually improve after the re-ingest?" by storing the before-and-after points. Pass `--no-log` if you genuinely don't want the run captured (e.g. local experimentation).
+**Eval log (automatic).** Every run appends one JSONL line per scored page to [`logs/quality-source-pages.jsonl`](../../../logs/quality-source-pages.jsonl). Entries with `kind: "mechanical-floor"` are floor-only; entries with `kind: "mechanical-floor + llm-judgment"` carry the LLM overlay. Pass `--no-log` to skip the log append (e.g. local experimentation).
 
 View the log via the read-only **CLI viewer**:
 
@@ -477,7 +524,6 @@ For every concept or entity page touched, bump `last_confirmed` and `accessed_at
 - Add the new source page to `wiki/index.md` under `## Sources`, one-line summary.
 - Prepend a `log.md` entry: `## [<today>] ingest | <slug>` (or `acquire | <slug>` if Process is being deferred).
 - Re-run `node scripts/quality-score.mjs` for any concept page touched.
-- (Optional, traceability) `node scripts/quality-source-page.mjs --write` to commit the source-page floor to frontmatter. Required only when an LLM-judgment overlay is later expected; the §2.5b in-line check is the gating decision.
 - Re-embed for search: `npx @tobilu/qmd embed`.
 
 ## Pass-depth quick-reference
@@ -529,7 +575,7 @@ A paper does not need Pass 3 to enter the wiki. A Pass-1-only paper is honest ab
 
 - **Reading discipline:** [`HowtoReadPaper.pdf`](HowtoReadPaper.pdf) — S. Keshav, *How to Read a Paper*, ACM SIGCOMM CCR 2007. The three-pass method this skill operationalises.
 - **Body skeleton:** [`Research-Paper-Structure.png.webp`](Research-Paper-Structure.png.webp) — IMRaD anatomy: Title/Abstract → Intro (WHY) → Methods (HOW) → Results (WHAT) → Discussion (SO WHAT) → References.
-- **Quality rubric:** [`quality-rubric.md`](quality-rubric.md) — five-dimension source-page scoring instrument (D1 Five Cs / D2 IMRaD / D3 Distinctive artifacts / D4 Critical reading / D5 Pass-3 markers). Invoked at §2.5b before catalogue updates. Mechanical floor computed by [`scripts/quality-source-page.mjs`](../../../scripts/quality-source-page.mjs); judgment overlay filled in as a `## Quality review` body block on each source page.
+- **Quality rubric:** [`quality-rubric.md`](quality-rubric.md) — six-dimension source-page scoring instrument (D1 Five Cs / D2 IMRaD / D3 Distinctive artifacts / D4 Critical reading / D5 Pass-3 markers / D6 Appendix coverage). Invoked at §2.5b before catalogue updates. Mechanical floor + LLM-as-judge overlay both computed by [`scripts/quality-source-page.mjs`](../../../scripts/quality-source-page.mjs) (`--judge` flag); scores live only in `logs/quality-source-pages.jsonl`, never in the source page itself.
 - **Schema contract:** [`CLAUDE.md`](../../../CLAUDE.md) — §Ingest, §Verifying sources before ingest, §Lifecycle, §Author-entity promotion, §Dynamic-capabilities tagging.
 - **Neighbour-scan:** [`neighbour-source-scan`](../neighbour-source-scan/SKILL.md) — invoked in step 2.6.
 - **Sibling acquire-time skill (videos):** [`youtube-transcript-skill`](../youtube-transcript-skill/SKILL.md) — same Acquire/Process discipline applied to a different source kind. Refer to it when the schema for video sources needs to be cross-checked against paper conventions.

@@ -34,6 +34,9 @@ relationships:
   - type: supports
     target: 2026-02-04-bari-2026-us-small-business-distress-framework
     via: "same intellectual move — financial-ratios + an additional channel (text vs. credit-behaviour) outperforms baseline"
+  - type: uses
+    target: sme-distress-predictor-variables
+    via: "Hajek's structured-financial baseline draws from categories 1 (Altman Z-Score), 3 (Profitability), 5 (Liquidity), 6 (Financial leverage) of the catalogue; the NLP channel (FinBERT + BERTopic) is an addition beyond the catalogue's structured-data scope"
 ---
 
 # Corporate financial distress prediction using the risk-related information content of annual reports
@@ -187,7 +190,7 @@ Columns: Study, Data source, Methods for textual features, Prediction method, Pe
 
 ### Table 3 — Mean values and SDs of financial features
 
-**Type:** descriptive-statistics table. **Location:** p. 10. 23 features × (mean, SD). Notable: cash ratio mean 0.849, SD 16.733 (heavy-tailed); ICR mean 122.5, SD 4903.8 (extreme outliers in non-distressed sample).
+**Type:** descriptive-statistics table. **Location:** p. 10. 23 features × (mean, SD). The 23 features map to [[sme-distress-predictor-variables]] categories 1 (Altman Z-Score), 3 (Profitability), 5 (Liquidity), 6 (Financial leverage). Notable: cash ratio mean 0.849, SD 16.733 (heavy-tailed); ICR mean 122.5, SD 4903.8 (extreme outliers in non-distressed sample).
 
 ### Table 4 — Topics identified using BERTopic
 
@@ -407,23 +410,3 @@ Neighbour-scan against the 2026-05-25 batch:
 - **`supports` ↔ [[2024-01-01-powell-2024-asean-accounting-early-warning-distress]]** — Hajek's class-imbalance handling (SSL/XGBOD) is a methodologically more sophisticated treatment of the same imbalance Powell flagged (76:24 sample → Type I bias) but did not address. Reading them together: Powell shows the problem; Hajek shows a clean solution.
 - **`supports` ↔ [[2026-02-04-bari-2026-us-small-business-distress-framework]]** — Bari's "behavioural + relational" indicators echo Hajek's intuition that signal lives in text/behaviour beyond financial ratios. Bari uses survey-style behavioural variables; Hajek uses risk-text frequencies. Both reach the same conclusion: financial ratios alone are insufficient.
 
-## Quality review
-
-| Field | Value |
-|---|---|
-| Reviewer | Claude (self-score) |
-| Date | 2026-05-25 |
-| Claimed depth | Pass 2 |
-| Rubric version | 1.0 |
-
-| Dim | Score | Floor | Notes |
-|---|---:|---:|---|
-| D1 Five Cs | 3 | 2 | Category (prototype+empirical), Context (4-stage NLP-distress lineage named, four adjacent wiki sources), Correctness (credit-rating circularity flagged, single-language flagged), Contributions (4 named), Clarity (table-heavy, Figure 5 similarity matrix and Figure 9 SHAP plot called out as load-bearing). |
-| D2 IMRaD | 3 | 2 | Results section gives specific AUC = 0.9864 ± 0.0076, F1 = 0.9717, Sensitivity = 0.8616, exact Friedman p ≤ 4.21e−10, exact 2-year robustness ΔAcc −1.48 % / ΔAUC −1.56 %, per-baseline performance reported. |
-| D3 Distinctive artifacts | 3 | 3 | **Table 4 BERTopic 26-topic taxonomy reproduced in full** (the specific anchor the rubric flagged at D3=1 in the prior ingest); Table 6 classification performance reproduced; XGBoost objective + XGBOD TOS-selection formulae transcribed; Figure 2 framework reproduced as Mermaid diagram. |
-| D4 Critical reading | 2 | 2 | Four concrete "not flagged" items: English-only, 2021 single-year, credit-rating-circularity, no multimodal-LLM comparison. Each tied to a specific methodological choice. |
-| D5 Pass-3 markers | — | — | n/a (Pass 2 page) |
-
-**Total: 11 / 12 = 0.92** (at ceiling)
-
-**Resolution:** accepted; catalogue update can proceed.

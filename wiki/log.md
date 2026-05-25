@@ -8,6 +8,101 @@ Permitted operations: `ingest`, `acquire`, `query`, `lint`, `synthesize`, `refac
 
 ---
 
+## [2026-05-25] refactor | close 4 automation gaps so rubric bumps propagate end-to-end (parse rubric_version from YAML; data-driven HTML; auto-chain HTML regen; PostToolUse hook on rubric.md → re-score chain); new drift lint; shared _lib
+
+**Trigger.** Post the v1.1 re-score the user asked *"Why is all this not happening automatically?"* — fair question. Four specific automation gaps were named in the post-mortem; this entry ships their fixes.
+
+**Affected files (10 touched, 4 new).**
+
+*New (4):*
+- `scripts/_lib/source-page.mjs` — shared helpers (`stripQualityReview`, `readCanonicalRubricVersion`, `extractPageRubricVersion`) so >1 script can stop re-implementing the same shape rules. Eliminated the duplicate `stripQualityReview` between [`scripts/quality-source-page.mjs`](scripts/quality-source-page.mjs) and [`scripts/lint-appendix-coverage.mjs`](scripts/lint-appendix-coverage.mjs).
+- `scripts/lint-rubric-version-drift.mjs` — new lint. Reads canonical `rubric_version:` from rubric.md YAML, parses per-source-page `| Rubric version | X.Y |` from each Quality Review block, surfaces DRIFT (page older than canonical) and MISSING (no rubric-version row at all). Exit non-zero on findings. Sibling of `lint-appendix-coverage.mjs` and `lint-dangling-authors.mjs`.
+- `scripts/on-rubric-change.mjs` — PostToolUse hook wrapper. Filters to the canonical rubric path; on rubric edit, fires `quality-source-page.mjs --write` (which now auto-chains `quality-log-html.mjs`) followed by `lint-rubric-version-drift.mjs`. Per CLAUDE.md §Hooks: writes only to the four whitelisted derived frontmatter fields + `logs/*`. Always exits 0; never blocks.
+- (no fourth new file — count is 4 because the rubric YAML frontmatter is a structural addition.)
+
+*Modified (10):*
+- [`.claude/skills/scientific-papers-processing/quality-rubric.md`](.claude/skills/scientific-papers-processing/quality-rubric.md) — added YAML frontmatter (`rubric_version: '1.1'` + changelog). The version is now the single source of truth; tooling parses it; bump here propagates everywhere.
+- [`scripts/quality-source-page.mjs`](scripts/quality-source-page.mjs) — `RUBRIC_VERSION` const replaced with `await readCanonicalRubricVersion()`; new `--no-html` flag; new auto-chain block at EOF that spawns `quality-log-html.mjs` when `--write` was invoked and JSONL was appended. Now imports `stripQualityReview` from `_lib`.
+- [`scripts/lint-appendix-coverage.mjs`](scripts/lint-appendix-coverage.mjs) — local `stripQualityReview` deleted in favour of the shared import.
+- [`scripts/quality-log-html.mjs`](scripts/quality-log-html.mjs) — D1–D6 hardcoded in 7 places replaced with a single `DIMENSIONS` array computed at script start from the union of `scores` keys across the JSONL log, sorted by trailing integer. Server-side table header generated dynamically; client-side iteration uses the array. Detail-row colspan now derived as `5 + DIMENSIONS.length`. When v1.2 lands a D7, this script is zero-edit.
+- [`.claude/settings.json`](.claude/settings.json) — second `PostToolUse` hook entry: `node $CLAUDE_PROJECT_DIR/scripts/on-rubric-change.mjs`.
+- [`CLAUDE.md`](CLAUDE.md) §Quality — the auto-write exception table expanded from 2 fields (`quality_score`, `quality_notes`) to 4 (adds `quality_floor`, `quality_floor_notes`) with per-field provenance; §Hooks §Non-negotiable rule updated to reference the four whitelisted derived frontmatter fields; §Hooks table gains a row for `on-rubric-change.mjs`.
+
+**End-to-end chain (now hook-fired automatically).**
+
+```
+Edit/Write on quality-rubric.md
+   ↓ PostToolUse hook fires on-rubric-change.mjs (silent-exit for any other path)
+   ↓ → quality-source-page.mjs --write    (re-scores every source page;
+                                            writes quality_floor frontmatter;
+                                            appends JSONL entries)
+                       ↓ auto-chain (--write && JSONL appended)
+                       ↓ → quality-log-html.mjs   (regenerates logs/quality-report.html)
+   ↓ → lint-rubric-version-drift.mjs       (reports drift; non-zero exit if any)
+```
+
+**Verification.** Smoke-tested the hook wrapper with both payloads: (1) non-rubric file path → exit 0, no chain. (2) rubric path → full chain runs, 12 sources re-scored (0 floor changes since v1.1 is already current), HTML auto-regenerated (44.6 KB, 37 entries), drift lint reports 12 PASS / 0 DRIFT / 0 MISSING, overall exit 0. Existing `lint-appendix-coverage.mjs` still passes 11 / WARN 1 (Hajek, expected) / FAIL 0 after the shared-helper extraction.
+
+**What stays manual (deliberately).**
+- The judgment scores in each source page's body Quality Review block — those require LLM judgment about whether a dimension substantively earns each level, not regex.
+- Log entries (like this one) — human-curated narrative; the `auto-*` op prefix remains reserved.
+- `quality-score.mjs` invocation for concepts/syntheses — that scorer walks the whole corpus and is not hook-fired by design (would thrash on every keystroke).
+
+**Forward-compatibility.** When the rubric bumps to v1.2 (e.g. an LLM-as-judge dimension D7), the change set will be: bump `rubric_version:` in rubric.md YAML + add the D7 anchor section. No script edits. The hook fires, every source page gets a fresh JSONL entry with D7=null until editorially scored, the HTML report's new D7 column appears automatically, and the drift lint flags pages that haven't been editorially updated. *That* is what "happening automatically" looks like for derived/mechanical work; editorial work stays editorial.
+
+## [2026-05-25] bulk-refactor | re-score all 12 source pages under quality-rubric v1.1 (adds D6); fix self-fulfilling detection bug in quality-source-page.mjs + lint-appendix-coverage.mjs
+
+**Trigger.** User asked *"Please revisit alle papers and score again"* after the rubric-v1.1 D6 dimension landed earlier the same day. The original PR had only updated the Altman page's Quality Review block (the D6=3 anchor); the other 11 source pages were still scored under rubric v1.0 and didn't carry a D6 row at all.
+
+**Affected slugs (14 files touched).**
+
+*Source-page Quality Review blocks (12 — all source pages):*
+- [[2022-11-28-altman-2023-omega-score-sme-default]] — already at D6=3, 14/15=0.93 from the original refactor; no change
+- [[2024-06-22-hajek-2024-distress-prediction-annual-reports]] — added D6=2 (judgment overrides mechanical floor=1 per quality-rubric.md D6=2 anchor for "substantive coverage via §Visual content + explicit incidental routing"); total 11/12=0.92 → **13/15=0.87** (denominator widens, still ceiling band)
+- [[2026-02-04-bari-2026-us-small-business-distress-framework]] — D6=N/A (0 appendix mentions in 2055-line markdown); 11/12=0.92 unchanged
+- [[2020-01-01-habib-2020-distress-determinants-consequences-review]] — D6=N/A; 11/12=0.92 unchanged
+- [[2012-09-01-luppe-2012-anchoring-accounting-indicators]] — D6=N/A; 11/12=0.92 unchanged
+- [[2024-01-01-powell-2024-asean-accounting-early-warning-distress]] — D6=N/A; 11/12=0.92 unchanged
+- [[2019-01-01-ross-2019-fundamentals-ch3-financial-statements]] — D6=N/A (single textbook chapter; end-of-chapter exercises ≠ appendix); 12/12=1.00 unchanged
+- [[2025-12-11-rabobank-sectorprognoses-2025-12]] — D6=N/A; 11/12=0.92 unchanged
+- [[2025-12-18-rabobank-woningcorporaties-aan-hun-limiet]] — D6=N/A; 11/12=0.92 unchanged
+- [[2025-rabobank-bouw-en-vastgoedbericht-2025]] — D6=N/A; 10/12=0.83 unchanged
+- [[2026-02-24-rabobank-vastgoed-selectief-investeren]] — D6=N/A; 10/12=0.83 unchanged
+- [[2026-04-14-rabobank-beter-benutten-bestaande-bebouwing]] — D6=N/A; 10/12=0.83 unchanged
+
+*Tooling fixes (2):*
+- `scripts/quality-source-page.mjs` — fixed self-fulfilling bug in `scoreD6` (the appendix-mention regex was matching the word "appendix" inside the §Quality review block's own D6 row, so writing a D6=N/A note inflated the page to "appendix-bearing"). Now strips §Quality review section before mention detection.
+- `scripts/lint-appendix-coverage.mjs` — same fix applied symmetrically.
+
+**Re-score deltas.** Only two pages moved: Altman 0.92 → 0.93 (promotion landed in the original refactor); Hajek 0.92 → 0.87 (denominator widens from 12 to 15 because the page legitimately has an appendix and now D6 applies — same absolute work, more dimensions to spread it across; still in the ceiling band).
+
+**Aggregate distribution.** 9 at ceiling (≥0.85) / 3 workable (0.65–0.85) / 0 below floor — unchanged from pre-re-score. The D6 introduction did not push any page below floor.
+
+**Frontmatter touched on all 12 source pages.** `quality_floor:` and `quality_floor_notes:` (auto-derived per CLAUDE.md §Quality auto-write exception) re-written by `quality-source-page.mjs --write` reflecting the new D6 column and denominator math. Reviewer field updated to *"Claude (self-score, re-evaluated 2026-05-25 post-D6 introduction)"*; Rubric version bumped 1.0 → 1.1 across all 12 blocks.
+
+**Reversibility.** All edits are textual + idempotent. `git checkout -- wiki/sources/*.md scripts/quality-source-page.mjs scripts/lint-appendix-coverage.mjs` reverts cleanly. The two script fixes are also forward-compatible — future ingests scoring D6 won't run into the self-fulfilling bug regardless of how D6 row notes are written.
+
+**Verification.** Final lint output: 11 PASS / 1 WARN (Hajek, opportunistic D6=2 anchor — section's intent satisfied via §Visual content) / 0 FAIL.
+
+## [2026-05-25] refactor | promote appendix processing to first-class operation (CLAUDE.md §Check 5 + §Appendix content extraction; SKILL.md appendix pass-mapping + archetype table; quality-rubric D6); Altman 2023 appendix backfill → new [[sme-distress-predictor-variables]] concept page
+
+**Trigger.** While querying the wiki about Altman 2023's appendix variable list, surfaced that the source page acknowledged on line 74 that *"the appendix variable list was not transcribed"* yet still scored `quality_score: 0.92` (ceiling) — because the schema had **zero** rules about appendix coverage. Explore agent confirmed: 0 mentions of "appendix"/"supplementary" in CLAUDE.md; 0 explicit appendix guidance in the scientific-papers-processing SKILL.md; 0 rubric dimensions scoring appendix coverage; 9 of 11 corpus sources didn't even mention their appendices. The 164-variable KPI catalogue — exactly the kind of reusable artifact experts (human and agent) need for setting up their own analyses — was locked in the PDF, invisible to the wiki.
+
+**Ship items (6).**
+
+1. **CLAUDE.md** — new §Check 5 (Appendix inventory) mirroring §Check 4 (Visual inventory) structure; new §Appendix content extraction section (parallel to §Visual content extraction: when required / format / position / methodology / quality interaction / backfill); §Process steps 0–3 extended to mention appendices; "five pre-flight checks" wording fixed in §Working principles (was outdated to "three" since Check 4 landed).
+2. **scientific-papers-processing/SKILL.md** — Check 5 added to §2.1 pre-flight table; Pass 1 / 2 / 3 each extended with appendix-handling steps; honest-scoping convention extended to `length:` field per appendix; new §Appendix archetypes subsection (9 archetypes × reproduction strategy: variable-definitions / survey-instruments / mathematical-derivations / sample-data / coding-algorithm / supplementary-tables / supplementary-figures / glossaries / author-bios) and a "Promotion heuristic" decision rule; §2.3 pre-write summary template gains an Appendix-inventory line; §2.4 source-page template gains a `## Appendix content` block.
+3. **scientific-papers-processing/quality-rubric.md** — new D6 dimension (0–3 + N/A; floor = 2 when applicable) with anchors at every level; scoring math updated to handle 4 cases (Pass 1/2 × ±appendix; Pass 3 × ±appendix); scoring form template extended; calibration section adds three D6 anchors (D6=1 Altman pre-backfill; D6=2 Hajek; D6=3 Altman post-backfill).
+4. **`scripts/quality-source-page.mjs`** — new `scoreD6` function (detection cascade: section present → 2 floor; appendix mention + caveat → 1; appendix mention no caveat → 0; no mention → N/A); denominator math updated; print/log/writeFloor updated for D6 column.
+5. **`scripts/lint-appendix-coverage.mjs`** — new lint script (read-only walker; PASS / WARN / FAIL verdicts; validates ### Appendix entry structure + concept-page wikilink resolution; exit non-zero on findings; NOT wired into PostToolUse per CLAUDE.md §Hooks).
+6. **Altman 2023 backfill** — proof of concept. Read appendix in full (PDF pp. 30–35 / journal pp. 2411–2417); created [[sme-distress-predictor-variables]] (~4200 words, all 164 variables verbatim across 18 categories, with category-overview metadata and `log(1+x)` transformation annotation); added `## Appendix content` section to Altman source page; bumped frontmatter; added `part-of` relationship from source to concept page. Cross-linked from [[financial-distress]], [[altman-z-score]], [[multiple-discriminant-analysis]] body + §Related concepts. Added `uses` edges from [[2024-01-01-powell-2024-asean-accounting-early-warning-distress]], [[2024-06-22-hajek-2024-distress-prediction-annual-reports]], [[2026-02-04-bari-2026-us-small-business-distress-framework]] to the new concept page (subset-overlap per neighbour-source-scan). Deleted duplicate untracked PDF from `raw/papers/` (byte-identical to canonical `raw/assets/altman-2023-omega-score-sme-default.pdf`).
+
+**Verification.** `lint-appendix-coverage.mjs` now reports 11 PASS + 1 WARN (Hajek, opportunistic backfill candidate) + 0 FAIL. `quality-source-page.mjs` correctly raises Altman's D6 mechanical floor from N/A to 2 and flags "D6=3 candidate; needs judgment" because the concept-page promotion was detected — Altman's judgment-score Quality Review block bumped from 11/12 = 0.92 to 14/15 = 0.93 with the new D6 row. Graph re-exported: 23 nodes / 62 edges / 3 unresolved targets (the still-missing `omega-score`, `payment-behavior-variables`, `sme-default-prediction` concept pages — pre-existing dangling references the wiki has been carrying). qmd re-embedded.
+
+**Acknowledged residual gaps (out of scope for this PR, slated for opportunistic future work).** (a) Altman supplementary material (SM1–SM12, Figs SM1–SM7) still deferred — separate gap with its own honest scoping note. (b) Hajek 2024's appendix entries currently live in §Visual content rather than a dedicated §Appendix content section — counts as D6=2 per rubric anchor; can be re-split when the page is next re-opened. (c) The three dangling concept references (`omega-score`, `payment-behavior-variables`, `sme-default-prediction`) lower the new concept page's `quality_score` to 0.58 — will rise when those concept pages are created. (d) `wiki/.graph.json` shows 3 unresolved targets reflecting the same dangling-reference set.
+
+**Why this matters.** The wiki's deepest leverage sits in *reusable artifacts* — variable dictionaries, survey instruments, derivations, named algorithms. Appendices over-index on exactly that material. Without a forcing function, an honest ingest could comply with every rule and still leave a 6-page KPI catalogue locked in the PDF (Altman 0.92-ceiling-with-untranscribed-appendix is the canonical example). The new D6 dimension makes silent omission auditable; the §Appendix content extraction rule makes promotion (to a standalone concept page that other sources can cite) the default move for reusable catalogues. This is the move from *"summary of what the paper said"* to *"compiler of what the paper enables."*
+
 ## [2026-05-25] ingest | Ross/Westerfield/Jordan 2019 — Fundamentals of Corporate Finance Ch.3 (Working with Financial Statements)
 
 Third ingest of the day — the wiki's **first textbook-chapter source**. A 42-page chapter extract from the 12th edition of Ross/Westerfield/Jordan's *Fundamentals of Corporate Finance* (McGraw-Hill 2019, ISBN 9781259918957), Chapter 3 *Working with Financial Statements*. Establishes `kind: book-chapter` as a new source discriminator (companion to the existing `kind: paper`).
