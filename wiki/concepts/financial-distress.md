@@ -7,9 +7,9 @@ aliases:
   - Distress risk
 confidence: 0.90
 last_confirmed: 2026-05-25
-source_count: 5
+source_count: 6
 accessed_at: 2026-05-25
-tags: [financial-distress, bankruptcy, default, insolvency, distress-prediction]
+tags: [financial-distress, bankruptcy, default, insolvency, distress-prediction, sector-distress]
 relationships: []
 ---
 
@@ -65,11 +65,29 @@ The operational definition matters: the closer the cut-off is to bankruptcy, the
 
 ## Sources
 
+**Academic distress-prediction corpus**:
+
 - [[2020-01-01-habib-2020-distress-determinants-consequences-review]] — definitional anchor and 3×4 taxonomy.
 - [[2022-11-28-altman-2023-omega-score-sme-default]] — SME default; bank-blockage operationalisation.
 - [[2024-01-01-powell-2024-asean-accounting-early-warning-distress]] — ASEAN MDA; ICR operationalisation.
 - [[2024-06-22-hajek-2024-distress-prediction-annual-reports]] — NLP + class-imbalance; S&P-rating operationalisation.
 - [[2026-02-04-bari-2026-us-small-business-distress-framework]] — US small business; composite-event operationalisation.
+
+**Sectoral-distress practitioner reports** (added 2026-05-25):
+
+- [[2025-12-18-rabobank-woningcorporaties-aan-hun-limiet]] — Dutch woningcorporaties at sector-wide financial limit; ATAD / Vpb / WSW mechanics. The canonical sectoral-distress case study in the wiki.
+
+## Sectoral financial distress (added 2026-05-25 with the Rabobank-reports ingest)
+
+Beyond firm-level distress, the wiki also tracks **sectoral financial distress** — entire sectors approaching their financial constraint boundary. The 2026-05-25 Rabobank-reports ingest contributes a Dutch case study: [[2025-12-18-rabobank-woningcorporaties-aan-hun-limiet|Cooiman & van der Zanden 2025]] document Dutch *woningcorporaties* (social-housing corporations) reaching a sector-wide financial limit driven by:
+
+- Rising bouwkosten + interest rates
+- Stricter huurregulering capping revenues
+- Vpb burden projected from €700 M → €1.5 B by 2027 under [[atad-interest-deductibility|ATAD]]
+- Verduurzaming verplichtingen competing with nieuwbouw for capital
+- WSW guarantee volume crossing €100 billion (sector-wide borrowing-capacity indicator)
+
+The case study is **structurally analogous to firm-level distress** but at sector aggregation: the same "rising obligations vs. capped revenues vs. cost pressures" mechanism that drives single-firm distress, played out across an entire institutional category. Habib's macroeconomic-determinants bucket ([[2020-01-01-habib-2020-distress-determinants-consequences-review|Habib 2020]] §3.2) does not cleanly capture this — the policy-spillover dimension (ATAD designed for tax avoidance, binding on non-profit social housing) is the variable that makes the Dutch case distinctive.
 
 ## Related concepts
 
@@ -78,6 +96,8 @@ The operational definition matters: the closer the cut-off is to bankruptcy, the
 - [[merton-distance-to-default]] — the market-based-credit alternative.
 - [[early-warning-systems]] — the deployment paradigm for distress prediction.
 - [[ohlson-o-score]] — the logit-based distress measure.
+- [[dutch-housing-shortage]] — adjacent: the sectoral context for woningcorporaties distress.
+- [[dutch-construction-sector]] — adjacent: production-cycle downturns translate to firm-level distress.
 
 ## Debates and supersession
 
