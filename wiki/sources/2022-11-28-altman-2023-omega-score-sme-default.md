@@ -284,6 +284,19 @@ Recalibrated Z′′ (AUC 70.4) → Omega Groups (82.2) → continuous Omega (87
 
 The 164-variable candidate space that LASSO selects from. Kept as `type: concept` (not `type: artifact`) because it's reusable across the financial-distress cluster — Powell 2024, Hajek 2024, Bari 2026, and Habib 2020 all draw on overlapping variables.
 
+### Deferred (Supplementary Material — separate file, not in raw/)
+
+The Supplementary Material (Tables SM1–SM12 and Figures SM1–SM7) lives as a separate downloadable file on the Wiley journal site, not bundled with the main-article PDF in [`raw/assets/altman-2023-omega-score-sme-default.pdf`](../../raw/assets/altman-2023-omega-score-sme-default.pdf). The SM file was not acquired during the original 2026-05-25 ingest and has not been acquired since. Per CLAUDE.md §Acquire, a future re-acquisition would land it at `raw/assets/altman-2023-omega-score-sme-default-supplement.pdf` (or similar), after which the SM tables and figures could be transcribed into separate artifact pages.
+
+Known SM content from body cross-references:
+
+- **Tables SM1, SM3–SM12** — detailed performance metrics, stepwise-logit results, macro-variable robustness, NACE 1-digit industry distribution.
+- **Figure SM1** — variable correlation matrix.
+- **Table SM2** — correlated-pair retention decisions (which of paired-correlated variables LASSO retained, with notes).
+- **Figures SM2–SM7** — additional ROC, calibration, and stability plots.
+
+These are deferred-with-reason rather than skipped silently; the gap is in the *raw* layer, not the *processing* layer.
+
 ## Discussion / Significance (SO WHAT)
 
 For the wiki, three contributions land:

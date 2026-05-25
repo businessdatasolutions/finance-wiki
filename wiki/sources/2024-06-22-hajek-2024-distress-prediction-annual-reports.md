@@ -296,11 +296,17 @@ The load-bearing tables of the paper are each reproduced as standalone artifact 
 
 XGBOD ranked best (mean rank 2.4 vs. CS-SVM 11.0); Friedman p ≤ 4.21e−10; Shafer post-hoc significant against all baselines except the three other XGBoost-derived methods (XGBoost, SMOTE+XGBoost, ROS+XGBoost) — XGBOD is statistically indistinguishable from those three on AUC rank, confirming the methodological claim that the **XGBoost backbone + TOS augmentation** combination matters more than any single component.
 
-### Deferred (descriptive bookkeeping)
+### Appendix Table A.1 — SSL hyperparameter grid
+
+**Type:** hyperparameter grid · **Location:** p. 19 (Appendix) · **Reproduced in:** [[hajek-2024-ssl-hyperparameter-grid]]
+
+The XGBOD + XGBoost + 6 unsupervised-detector hyperparameter search grids. Reproducibility-grade detail: with this table + the financial features + the BERTopic topics + the PyOD library reference, the entire XGBOD pipeline is reconstructable.
+
+### Deferred (descriptive bookkeeping or non-load-bearing)
 
 - **Table 3** (mean values + SDs of 23 financial features, p. 10): descriptive statistics; not transcribed.
 - **Table 5** (mean values + SDs of 27 linguistic features, p. 13): descriptive statistics; not transcribed.
-- **Appendix Table A.1** (SSL hyperparameter settings, p. 19): computational-detail catalogue; not transcribed.
+- **Appendix Figure A.1** (26×26 topic-correlation heatmap, p. 18): diagnostic visualisation; described in §Visual content above. Per the rubric, supplementary figures get described but not reproduced as standalone artifacts unless load-bearing. Cross-topic correlations are mostly low (BERTopic separability check), with two visible clusters: Compliance + Regulatory; Security + Data privacy.
 
 ### XGBoost objective + XGBOD TOS-selection formulae
 

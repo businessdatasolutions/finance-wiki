@@ -8,6 +8,33 @@ Permitted operations: `ingest`, `acquire`, `query`, `lint`, `synthesize`, `refac
 
 ---
 
+## [2026-05-25] refactor | v0.7 appendix backfill — close 4 appendix gaps deferred in the initial Solution-B pass; 4 new artifact pages; 3 source-page catalogues extended; Altman SM gap documented as raw-layer (not processing-layer) deferral
+
+**Trigger.** User asked: *"Did you also include appendices in the process?"* — honest audit: the v0.7 bulk slice focused on in-body tables and unilaterally deferred 4 specific appendix items (Hajek A.1, Hajek Figure A.1, Powell Appendices A+B+C, Altman SM). User then asked to close the gaps.
+
+**Affected files (9 touched: 4 new artifact pages + 3 source-page catalogue updates + 2 wiki-catalogue files).**
+
+*New (4 artifact pages under `wiki/artifacts/`):*
+
+- [[hajek-2024-ssl-hyperparameter-grid]] — Hajek Appendix Table A.1: SSL hyperparameter search grids for XGBOD + XGBoost + 6 unsupervised detectors (KNN, LOF, HBOS, OCSVM, LODA, Isolation Forest). Reproducibility-grade detail.
+- [[powell-2024-research-population]] — Powell Appendix Table A1: listed vs. delisted company counts per ASEAN country (DataStream 2016). Singapore is the outlier with 4.5× more delisted than listed.
+- [[powell-2024-out-of-sample-discriminant-functions]] — Powell Appendix Table C1: 12 out-of-sample MDA functions for Approaches 2 (forward-testing) + 3 (back-testing). Coefficient instability across approaches is the strongest argument for periodic re-estimation.
+- [[powell-2024-out-of-sample-accuracy]] — Powell Appendix Table C2: out-of-sample classification accuracy by country × approach × period × class with χ² significance. Distressed-class accuracy ranges 25–87% out-of-sample (much worse than 61.1% in-sample).
+
+*Modified (5):*
+
+- [`2024-06-22-hajek-2024-distress-prediction-annual-reports.md`](sources/2024-06-22-hajek-2024-distress-prediction-annual-reports.md) — §Distinctive artifacts catalogue gains Appendix Table A.1 entry; §Deferred clarifies Appendix Figure A.1 stays in §Visual content per rubric (diagnostic heatmap, not load-bearing).
+- [`2024-01-01-powell-2024-asean-accounting-early-warning-distress.md`](sources/2024-01-01-powell-2024-asean-accounting-early-warning-distress.md) — §Distinctive artifacts catalogue gains 3 appendix entries (Tables A1, C1, C2). Appendix B (lag-2 lag-choice analysis) is prose-only and noted as already-covered in §Results.
+- [`2022-11-28-altman-2023-omega-score-sme-default.md`](sources/2022-11-28-altman-2023-omega-score-sme-default.md) — §Distinctive artifacts catalogue gains an explicit "Deferred (Supplementary Material — separate file, not in raw/)" entry. **The SM file is a raw-layer gap, not a processing-layer gap**: the journal hosts SM1–SM12 + SM1–SM7 as a separate downloadable, and we never acquired it. A future re-acquisition would land at `raw/assets/altman-2023-omega-score-sme-default-supplement.pdf`. Until then, these tables remain in the PDF, not the wiki.
+- [`wiki/index.md`](index.md) — §Artifacts section extended with the 4 new pages (Hajek hyperparameter; Powell A1 / C1 / C2).
+- [`wiki/log.md`](log.md) — this entry.
+
+**Rubric implication.** No D3 score-change expected on re-judge; all four artifact pages are catalogue-linked from their source pages' §Distinctive artifacts, which v1.3 D3 = 3 already accepts. The Altman SM deferral is now explicit (was implicit before) — D6 unchanged because Altman's main-body Appendix is the one that scores D6, and that's been [[sme-distress-predictor-variables]] since the v0.5 backfill.
+
+**What's still genuinely missing.** The Altman Supplementary Material file (SM1–SM12 tables, SM1–SM7 figures). Until that file is acquired and lands in `raw/assets/`, the wiki cannot reproduce its content — this is the only honest deferred-with-reason in the v0.7 slice. The other "deferred" items (Hajek Tables 3 + 5 descriptive stats; Habib Tables 2 + 3 ~80-row bibliographic synthesis) are processing-layer choices and reversible by re-running the per-paper ingest with broader scope.
+
+---
+
 ## [2026-05-25] bulk-refactor | v0.7 Solution-B artifact-page slice: promote every load-bearing paper table to a standalone `type: artifact` page under `wiki/artifacts/`; 28 new pages across 6 papers; source-page `## Distinctive artifacts` sections become catalogues with wikilinks; rubric v1.3 D3 anchor recognises wikilink-to-artifact as satisfying full reproduction
 
 **Trigger.** User asked: *"When an expert agent wants to find a comprehensive list of risk categories or financial variables, he will not be able to find it in the Wiki. I want all tables fully ingested and reconstructed."* — the source pages named tables and paraphrased headlines, but the rows were missing. An expert agent searching qmd or reading the wiki couldn't find Hajek's 26 BERTopic categories by row, Powell's per-country MDA functions, Bari's regression coefficients, Habib's measurement-model formulary, Altman's monetary-impact table, or Luppe's per-company Anchoring Indexes.

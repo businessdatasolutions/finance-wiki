@@ -262,9 +262,28 @@ Seven Z-score functions (one per period: entire / AFC / Post-AFC / Pre-GFC / GFC
 
 Robustness check: does adding the Merton Distance-to-Default to accounting MDA improve classification? Across 84 cells, cross-country average is only +0.90% distressed, +0.63% non-distressed. A few isolated cells show meaningful lift (Thailand stable +16.7% distressed; AFC +14.8% non-distressed) but the headline answer is: DD adds essentially nothing once MVE/TL or MVE/TC is in the accounting model.
 
+### Appendix Table A1 — Research-population company counts
+
+**Type:** sample-composition table · **Location:** p. 4122 (Appendix A) · **Reproduced in:** [[powell-2024-research-population]]
+
+Listed vs. delisted counts per ASEAN country, 1997–2016 (DataStream 2016). Singapore is the outlier (143 listed vs **650 delisted**); Thailand has the highest total. Vietnam's sample is small because its markets opened late (HOSE 2000, HASTC 2005).
+
+### Appendix Table C1 — Out-of-sample MDA functions (Approaches 2 + 3)
+
+**Type:** discriminant-function table · **Location:** p. 4123 (Appendix C.1) · **Reproduced in:** [[powell-2024-out-of-sample-discriminant-functions]]
+
+12 country-by-approach discriminant functions for the forward-testing (Approach 2: train AFC–Pre-GFC, test GFC–Current) and back-testing (Approach 3: train GFC–Current, test AFC–Pre-GFC) robustness check. X₁ EBIT/TA still dominates (6 entries each approach). Coefficient instability across approaches is the strongest argument for periodic re-estimation.
+
+### Appendix Table C2 — Out-of-sample classification accuracy
+
+**Type:** classification-accuracy matrix · **Location:** p. 4124 (Appendix C) · **Reproduced in:** [[powell-2024-out-of-sample-accuracy]]
+
+6 countries × 6 (period × approach) cells × 3 stats (distressed %, non-distressed %, χ²). Out-of-sample distressed-class accuracy ranges 25–87% — substantially worse than in-sample. Singapore AFC (χ² = 2.155) and Singapore Stable (χ² = 7.005) are the only non-significant cells. The Vietnam exclusion (insufficient pre-2007 data) is noted.
+
 ### Deferred (descriptive bookkeeping)
 
 - **Table 7** (consolidated MDA functions + accuracy rates summary, p. 4117): integrative cross-reference of Tables 4 + 6; not separately transcribed. The substance is covered by both source artifact pages.
+- **Appendix B** (the accounting-based MDA model using lag-2): prose discussion of lag-2 lag-choice analysis without an associated table. The cited result is a 4.2% accuracy reduction; documented in body §Results §Approaches 2 and 3.
 
 ## Discussion / Significance (SO WHAT)
 

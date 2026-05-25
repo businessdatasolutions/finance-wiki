@@ -77,6 +77,7 @@ v0.7 — paper-tied artifact pages (`type: artifact`). Each reproduces a single 
 - [[hajek-2024-bertopic-risk-categories]] — Table 4: 26-topic risk-factor taxonomy (Intellectual property, R&D, Security, Tax, Litigation, …).
 - [[hajek-2024-model-comparison]] — Table 6: 11-model AUC + Sensitivity comparison; XGBOD wins on AUC + Sensitivity simultaneously.
 - [[hajek-2024-friedman-test]] — Table 7: Friedman + Shafer post-hoc multi-model significance test.
+- [[hajek-2024-ssl-hyperparameter-grid]] — Appendix Table A.1: SSL hyperparameter grid (XGBOD + XGBoost + 6 unsupervised detectors: KNN, LOF, HBOS, OCSVM, LODA, Isolation Forest).
 
 ### Luppe 2012 — anchoring on accounting magnitudes
 
@@ -93,6 +94,9 @@ v0.7 — paper-tied artifact pages (`type: artifact`). Each reproduces a single 
 - [[powell-2024-ratio-frequency]] — Table 5: EBIT/TA dominates (33 entries); profitability ratios lead.
 - [[powell-2024-classification-accuracy]] — Table 6: per-country × per-period accuracy matrix; ASEAN-wide 61.1% distressed / 81.9% non-distressed.
 - [[powell-2024-mda-dd-improvements]] — Table 8: Merton DD adds only +0.90% distressed / +0.63% non-distressed accuracy on average.
+- [[powell-2024-research-population]] — Appendix Table A1: listed vs. delisted company counts per ASEAN country (DataStream 2016).
+- [[powell-2024-out-of-sample-discriminant-functions]] — Appendix Table C1: 12 out-of-sample MDA functions (Approaches 2 + 3, forward + back-testing).
+- [[powell-2024-out-of-sample-accuracy]] — Appendix Table C2: out-of-sample classification accuracy by country × approach × period; χ² significance per cell.
 
 ## Threads
 
