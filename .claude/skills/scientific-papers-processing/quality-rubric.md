@@ -1,6 +1,9 @@
 ---
-rubric_version: '1.2'
+rubric_version: '1.3'
 changelog:
+  - version: '1.3'
+    date: 2026-05-25
+    change: 'D3 (Distinctive artifacts) updated for the `wiki/artifacts/` slice. Level 3 is now satisfied when load-bearing artifacts are reproduced *either* inline in §Distinctive artifacts *or* by wikilink to a `type: artifact` / `type: concept` page. The wikilink path makes the source page a catalogue; the artifact page carries the verbatim reproduction. Mechanical floor scorer + LLM judge prompt updated to recognize artifact wikilinks.'
   - version: '1.2'
     date: 2026-05-25
     change: 'LLM-as-judge slice lands: judgment scores are produced by a fresh headless `claude -p` call on every run and live only in `logs/quality-source-pages.jsonl` — never in source-page bodies or frontmatter. Stripped the in-body Scoring form template. D4 floor regex accepts both "Limitations the authors acknowledge" and "Limitations acknowledged by authors" word orders.'
@@ -78,9 +81,11 @@ A **distinctive artifact** is any element the paper introduces or that carries i
 | **0** | No mention of any figure, table, equation, or named diagram from the paper. *(See Bari (2026) anchor below.)* |
 | **1** | Some figures/tables mentioned by number but **not described** — gestured at, not reproduced. *(See Hajek (2024) and Powell (2024) anchors below.)* |
 | **2** | All paper-named distinctive artifacts (named scores, key tables, headline figures, named equations, taxonomies) are listed in the body; at least one is described in enough detail that a reader could reconstruct its key content without opening the PDF. |
-| **3** | All distinctive artifacts named **and reproduced where reasonable**: taxonomies enumerated as lists/tables; named-equation formulae transcribed (e.g. `Z = 1.2X₁ + 1.4X₂ + ...`); cause-effect diagrams reproduced as a Mermaid block or interpreted as an ordered narrative; named scores given their explicit formula. The page is **self-sufficient** for the paper's distinctive content. |
+| **3** | All distinctive artifacts named **and verbatim-reproduced**, *either* inline in `## Distinctive artifacts` *or* by wikilink to a `type: artifact` / `type: concept` page where the verbatim reproduction lives. Taxonomies enumerated as lists/tables; named-equation formulae transcribed (e.g. `Z = 1.2X₁ + 1.4X₂ + ...`); cause-effect diagrams reproduced as a Mermaid block or interpreted as an ordered narrative; named scores given their explicit formula. The reader can find every load-bearing row, coefficient, and category in the wiki — they never need to open the PDF for the data. |
 
-**Structural home**: the skill's body skeleton (see [SKILL.md §2.4](SKILL.md)) now includes a `## Distinctive artifacts` H2 section so D3 content has a dedicated place. Reproduce tables as markdown tables, formulae as blockquotes or code-fenced math, diagrams as Mermaid where possible.
+**Structural home**: v0.7 introduces `wiki/artifacts/<slug>.md` as the default reproduction target for paper-tied tables, named instruments, regression outputs, and per-segment breakdowns. The source page's `## Distinctive artifacts` section becomes a **catalogue** of those artifacts (catalogue entry = type + location + wikilink to the artifact page + 1-sentence summary). Reusable catalogues — variable dictionaries shared across the cluster, named instruments other studies cite — stay in `wiki/concepts/` per the v0.5 precedent. Inline reproduction remains the right choice for tiny tables (<8 rows) and short equations. See [CLAUDE.md §Artifacts](../../../CLAUDE.md#artifacts) for the concept/artifact split and the artifact frontmatter contract.
+
+**What the LLM judge looks for at D3 = 3**: in the source page, every load-bearing artifact appears as a catalogue entry with a wikilink to its reproduction. Following any one wikilink reaches a page whose body carries the full row-by-row table / verbatim equation / numbered instrument items. Inline reproduction in the source page also satisfies D3 = 3 when the table is small enough that promotion would be over-engineering.
 
 **Tie-breaking rule** — when artifact handling varies within a paper (e.g. headline taxonomy enumerated but supporting tables skipped), score by the paper's **most distinctive** artifact, not the average. Log the un-transcribed secondaries in the rubric notes.
 

@@ -252,82 +252,31 @@ Left-side oval "Ratio Screening" with Input/Output static/dynamic LCR labels →
 
 ## Distinctive artifacts
 
-### Figure 3 — Process of Financial Distress Evolution (Mermaid reproduction)
+Each load-bearing artifact is reproduced as a standalone artifact page — this section is the catalogue.
 
-The paper's headline visual argument — a process model of how distress unfolds, moderated by external factors, with a feedback loop into deteriorating financial health. This is the artifact the wiki's quality rubric explicitly flagged as un-reproduced in the prior ingest.
+### Figure 3 — Process of Financial Distress Evolution
 
-```mermaid
-flowchart LR
-    A1[Declining Income] --> B
-    A2[Increasing Debt] --> B
-    A3[Eroding Liquidity] --> B
-    A4[Operating Losses] --> B
-    A5[Cash Flow Volatility] --> B
+**Type:** cause-effect flowchart (Mermaid reproduction) · **Location:** p. 86 · **Reproduced in:** [[bari-2026-financial-distress-process-diagram]]
 
-    B[⚡ FINANCIAL DISTRESS ⚡]
+The paper's headline visual argument — distress as an iterative feedback loop, not a single event. Five causes → central distress state → moderating factors → two responses → either FAILURE or feedback into Deterioration of Financial Health → back to distress.
 
-    F[FACTORS:<br/>Industry Conditions<br/>Management Challenges<br/>External Shocks]
-    F -. moderates .-> R
+### Hierarchical regression coefficients + hypothesis tests
 
-    B --> R[RESPONSES:<br/>Short-Term Borrowing<br/>Asset Liquidation]
-    R --> C[FAILURE]
+**Type:** regression-output table + hypothesis-test summary · **Location:** Body §Results (Tables 3–7) · **Reproduced in:** [[bari-2026-hierarchical-regression-results]]
 
-    R --> D[Deterioration of Financial Health:<br/>✓ Liquidity Problems<br/>✓ Operating Decline<br/>✓ Rising Leverage]
-    D -. feedback .-> B
-```
+Six of seven hypotheses rejected the null; credit behaviour β = +0.34 is the largest single channel; +0.15 R² from financial-only to integrated. Only Efficiency failed to reach significance (possibly attributable to low Cronbach's α = 0.77).
 
-**Key claim of the diagram**: distress is not a single event but an **iterative loop** in which responses (borrowing, asset sales) intended to escape distress can deepen it (rising leverage, eroded asset base) — exactly the path Altman-style point-in-time bankruptcy models obscure. The feedback loop is the conceptual contribution: failure is not the terminus of distress, it's one possible exit from a process that may instead spiral.
+### Seven indicator-family framework
 
-### Hierarchical-regression result summary (β + p, signs of effect)
+**Type:** conceptual framework (Mermaid reproduction) · **Location:** §Methods + Figure 12 · **Reproduced in:** [[bari-2026-indicator-family-framework]]
 
-```
-H1: Liquidity → Distress         β = −0.21   p = 0.002   ✓ rejected null
-H2: Profitability → Distress     β = −0.14   p = 0.008   ✓ rejected null
-H3: Leverage → Distress          β = +0.25   p < 0.001   ✓ rejected null
-H4: Cash flow → Distress         β = −0.23   p = 0.001   ✓ rejected null
-H5: Credit behaviour → Distress  β = +0.34   p < 0.001   ✓ rejected null  (LARGEST)
-H6: Relationship → Distress      β = −0.18   p = 0.005   ✓ rejected null
-H7: Efficiency → Distress        n.s.        p > 0.05    ✗ FAILED to reject
+Bari's conceptual scaffold — three financial channels (liquidity, profitability, leverage) + three contribution channels (cash-flow dynamics, credit behaviour, relationship-based indicators) + standalone efficiency = seven families converging on a composite distress score. This is the framework the regression tests.
 
-Δ R²: 0.31 (financial-only) → 0.46 (full integrated)  = +0.15
-VIF: < 1.9 throughout (no multicollinearity)
-```
+### Demographic distribution
 
-### Indicator-family framework (the paper's conceptual scaffold)
+**Type:** sample-composition tables · **Location:** pp. 91–92 (Tables 1–2) · **Reproduced in:** [[bari-2026-demographic-distribution]]
 
-```mermaid
-flowchart TB
-    F1[Liquidity]
-    F2[Profitability]
-    F3[Leverage]
-    F4[Cash Flow Dynamics]
-    F5[Efficiency]
-    F6[Credit Behaviour]
-    F7[Relationship-based<br/>Indicators]
-
-    subgraph "Financial channel — protective − or risk +"
-        F1
-        F2
-        F3
-    end
-
-    subgraph "Behavioural + relational + cash-flow channels — Bari's contribution"
-        F4
-        F6
-        F7
-    end
-
-    F1 -.−.-> D[Distress Score]
-    F2 -.−.-> D
-    F3 -.+.-> D
-    F4 -.−.-> D
-    F5 -.ns.-> D
-    F6 -.+.-> D
-    F7 -.−.-> D
-
-    D --> O[Composite Distress Outcome:<br/>delinquency / charge-off / restructuring /<br/>negative OCF / covenant breach]
-```
-
+N = 482 US small-business firms; size 1–249 employees; age 1–>20 years; five industries × four US Census regions. 80.3% of firms are ≤50 employees — the sample is genuinely small-business focused.
 ## Discussion / Significance (SO WHAT)
 
 For the wiki, three contributions land:

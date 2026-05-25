@@ -14,7 +14,7 @@ The wiki is instantiated. As of v0.2 the repo contains:
 
 - `raw/` — source material under `articles/`, `assets/`, `books/`, `images/`, `lectures/`, `papers/`, `reports/`, `videos/`. Immutable.
 - `wiki/` — `sources/`, `entities/`, `concepts/`, `threads/`, `syntheses/` plus the catalogues `index.md` and `log.md`. Wikilinks-only cross-refs.
-- Page-type frontmatter: `type: source | entity | concept | thread | synthesis`; `kind:` discriminator on entities and sources.
+- Page-type frontmatter: `type: source | entity | concept | thread | synthesis | artifact`; `kind:` discriminator on entities and sources; `artifact_kind:` discriminator on artifacts.
 - Log entries: `## [YYYY-MM-DD] <op> | <title>` where `<op>` ∈ `ingest | acquire | query | lint | synthesize | refactor | bulk-refactor`. (`acquire` is the v0.9 addition — used only when raw files land without same-session processing; the umbrella op for the typical case remains `ingest`.)
 - Quartz publishing via `npm run build` / `npm run serve`; custom extensions in `extensions/`.
 - **v0.5 is fully landed (2026-05-17).** All three slices: **retention** (`accessed_at` on concepts + entities + syntheses; §Retention decay curve as lint signal), **search** ([qmd](https://github.com/tobi/qmd) / `@tobilu/qmd` registered as collection `ai-wiki`; 205 docs / 1466 chunks; BM25 + vector + query-expansion local models in `~/.cache/qmd/`), **quality** (`quality_score` + `quality_notes` on concepts and syntheses via [`scripts/quality-score.mjs`](scripts/quality-score.mjs); mechanical rubric across structure / citations / cross-consistency). Manual `accessed_at` bumps via [`scripts/bump-accessed.mjs`](scripts/bump-accessed.mjs) pending MCP integration. See [§Lifecycle](#lifecycle), [§Retention](#retention), [§Quality](#quality), [§Search](#search).
@@ -923,6 +923,118 @@ When a thread is ready to close:
 3. Update the thread page: `status: closed` in frontmatter; add a "Closed" note pointing to the synthesis.
 4. Update `index.md`: drop the thread from the open-threads list; add the synthesis to the (no-longer-empty) Syntheses section.
 5. Prepend a `log.md` entry under `op: synthesize` describing the question and the headline finding (reverse-chronological convention since 2026-05-12, GH #3).
+
+## Artifacts
+
+A source's value is usually compressible into prose — *what the paper argued, why it matters* — but some load-bearing content resists compression: a 23-row variable list, a 5×6 model-comparison table, a per-country coefficient matrix, a named instrument's full item list. These are the artifacts an expert agent needs *verbatim*, not paraphrased, and they have always strained the source-page format. v0.7 introduces `wiki/artifacts/` as the dedicated home for them.
+
+### When to promote a table/figure/equation to an artifact page
+
+A reproducible artifact earns its own page in `wiki/artifacts/` when it meets **all three** of:
+
+1. **Load-bearing.** Skipping it would lose information the paper is known for — a named taxonomy, a headline-result table, a variable dictionary, a named diagram. (Correlation heatmaps, descriptive-statistics tables, and reference lists usually fail this test.)
+2. **Resists prose compression.** The artifact's content can't be summarised in 2–3 sentences without losing rows. A 5-row table that says "AUC went up at each modelling step" can stay inline; a 23-row financial-features list cannot.
+3. **Paper-specific provenance matters.** The artifact is a specific paper's empirical or methodological output — its regression coefficients, its sample composition, its derived instrument scoring. It belongs to *this* paper, not the literature at large.
+
+The third criterion is what separates `wiki/artifacts/` from `wiki/concepts/`. A concept is *reusable knowledge*: when multiple sources cite the same instrument (Big Five, NPS), the same variable dictionary, the same named algorithm, that lives in `wiki/concepts/`. An artifact is *paper-tied evidence*: Powell 2024's per-country MDA coefficients, Hajek 2024's BERTopic categories, Altman 2023's monetary-impact table. When in doubt: paper-specific → artifact; corpus-shared → concept.
+
+Edge case: a paper's *appendix* of variables can be either. Altman 2023's 164-variable Omega Score appendix landed in [[concepts/sme-distress-predictor-variables]] because it's the reference catalogue for the financial-distress cluster (other papers cite the same variables). Hajek 2024's Table 4 BERTopic taxonomy lands in `wiki/artifacts/hajek-2024-bertopic-risk-categories.md` because the 26 categories are tied to Hajek's specific BERTopic run on Item 1A filings — a different paper running BERTopic would produce different categories.
+
+### Frontmatter contract (`type: artifact`)
+
+```yaml
+---
+type: artifact
+artifact_kind: table | equation-block | figure-diagram | survey-instrument | glossary | algorithm
+title: "<verbatim source title — e.g. 'Table 4 — BERTopic risk categories'>"
+source: "[[<source-slug>]]"            # mandatory; the originating source page
+source_table_ref: "Table 4"            # the paper's own numbering, verbatim
+source_pages: "pp. 11–12"              # location in the source's pagination
+last_confirmed: <YYYY-MM-DD>
+accessed_at: <YYYY-MM-DD>
+tags: [<topic-1>, <topic-2>, ...]
+relationships:                          # optional; v0.3 typed edges
+  - type: part-of
+    target: <source-slug or concept-slug>
+---
+```
+
+Notes:
+
+- **No `confidence:` field.** Artifacts are evidence, not claims. Their fidelity is binary (verbatim or not) and trust is inherited from the source page that cites them.
+- **No `source_count:`.** Artifacts are always tied to one source. (When a *second* source documents the same artifact — e.g. two papers both reproduce a standard instrument — keep the artifact tied to whichever source described it first and add a `cited-by` relationship from the second source.)
+- **No `kind:` field.** `artifact_kind:` is the discriminator.
+- **`accessed_at:` participates in §Retention decay** with tau = 365 days (same as entities — artifacts are reference material, not arguments).
+
+### Slug convention
+
+`<first-author-surname>-<year>-<topic-keyword>`, mirroring the source-page slug stem. Examples:
+
+| Source | Artifact | Slug |
+|---|---|---|
+| Hajek 2024 | Table 2 — 23 financial features | `hajek-2024-financial-features` |
+| Hajek 2024 | Table 4 — BERTopic risk categories | `hajek-2024-bertopic-risk-categories` |
+| Powell 2024 | Table 1 — prior-literature matrix | `powell-2024-prior-literature-matrix` |
+| Powell 2024 | Table 3 — ASEAN discriminant functions | `powell-2024-asean-discriminant-functions` |
+| Altman 2023 | Table 5 — ML model comparison | `altman-2023-model-comparison` |
+| Habib 2020 | Table 1 — distress measurement models | `habib-2020-distress-measurement-models` |
+
+Topic keyword: short, content-bearing, 1–3 words. The table number stays in `source_table_ref:`, not in the slug.
+
+### Body skeleton
+
+```markdown
+# <Title>
+
+> <Brief context: what this artifact is, where it sits in the paper.>
+
+## Provenance
+
+| Field | Value |
+|---|---|
+| Source | [[<source-slug>]] |
+| Source's reference | Table N / Figure N / Equation N (verbatim from the paper) |
+| Location | pp. NN–MM |
+| Last confirmed | YYYY-MM-DD |
+
+## <The artifact itself — markdown table, fenced code, Mermaid diagram, etc.>
+
+<The verbatim reproduction. For tables: full row-by-row markdown table.
+For equations: fenced math. For named instruments: numbered list.
+For diagrams: Mermaid where the source's topology is clear.>
+
+## Notes
+
+<Optional. Any wiki-relevant context: how the source uses this artifact,
+known errata, links to neighbouring artifact pages or concepts.>
+
+## Cross-references
+
+<Wikilinks to related concept pages, neighbouring artifacts, and
+the parent source's `## Distinctive artifacts` catalogue entry.>
+```
+
+### Source-page changes
+
+When an artifact is promoted, the source page's `## Distinctive artifacts` section transforms from *reproduction* to *catalogue*. Each entry becomes a short wikilink stub:
+
+```markdown
+### Table 4 — BERTopic risk categories
+
+**Type:** taxonomy · **Location:** pp. 11–12 · **Reproduced in:** [[hajek-2024-bertopic-risk-categories]]
+
+26-row taxonomy of risk categories with top-5 terms each (Intellectual property, R&D, Security, Tax, Litigation, …). The artifact page carries the full reproduction.
+```
+
+The `## Visual content` section is unchanged — it still describes the visual for accessibility. The `## Distinctive artifacts` section is what shrinks: the *data* moves to the artifact page; the *catalogue entry* stays on the source page.
+
+### Quality rubric implication (D3)
+
+A source page satisfies **D3 = 3** when every load-bearing distinctive artifact is reproduced *either* inline in `## Distinctive artifacts` *or* by wikilink to an `[[<artifact-slug>]]` page where the verbatim reproduction lives. The LLM judge counts both equally.
+
+### Migration path
+
+The existing [[concepts/sme-distress-predictor-variables]] stays as `type: concept` (it's the reference catalogue for the financial-distress cluster — corpus-shared, not paper-tied). No migration. Going forward, *paper-specific* tables go to `wiki/artifacts/`; *cluster-reusable* catalogues stay in `wiki/concepts/`.
 
 ## Hooks
 

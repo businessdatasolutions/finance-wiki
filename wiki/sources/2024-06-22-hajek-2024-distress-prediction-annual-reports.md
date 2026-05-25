@@ -136,21 +136,13 @@ Accuracy, F1, AUC, Sensitivity. Pairwise classifier comparison: **McNemar test**
 
 Distressed firms' average risk-related sentiment x24 = **−0.459** vs. non-distressed **−0.397**. Distressed firms are *more* negative on average — but the magnitude (~0.06) is small enough that sentiment alone is a weak signal. Topic distribution: IP, R&D, and Security risks dominate the risk-section content across all firms; **credit risk is most discriminating between distressed and non-distressed firms**.
 
-### Headline classification performance (Table 6, full reproduction)
+### Headline classification performance (Table 6)
 
-| Model | Accuracy | F1 | **AUC** | **Sensitivity** |
-|---|---:|---:|---:|---:|
-| CS-SVM (Zieba et al. 2016) | 0.8039 ± 0.0844 | 0.8848 | 0.7510 | 0.7474 |
-| RUS + MLP (Zhou 2013) | 0.8777 | 0.9327 | 0.9085 | 0.8563 |
-| ROS + MLP (Zhou 2013) | 0.8883 | 0.9377 | 0.9055 | 0.7969 |
-| SMOTE + MLP (Zhou 2013) | 0.9591 | 0.9619 | 0.9325 | 0.6300 |
-| SMOTE + XGBoost (Le 2022) | 0.9739 | 0.9733 | 0.9725 | 0.6026 |
-| SMOTE + AdaBoost (Faris et al. 2020) | 0.9627 | 0.9636 | 0.9630 | 0.5821 |
-| SMOTE + RF (Veganzones-Séverin 2018) | 0.9702 | 0.9684 | 0.9642 | 0.5089 |
-| XGBoost baseline (Park et al. 2021) | 0.9727 | 0.9708 | 0.9739 | 0.5100 |
-| RUS + XGBoost | 0.9194 | 0.9564 | 0.9657 | 0.8979 |
-| ROS + XGBoost | 0.9614 | 0.9656 | 0.9762 | 0.7453 |
-| **XGBOD (this study)** | **0.9749** | **0.9717** | **0.9864** | **0.8616** |
+Full per-model table reproduced in [[hajek-2024-model-comparison]]. Headline:
+
+- **XGBOD (this study)**: Acc 0.9749, F1 0.9717, AUC **0.9864**, Sensitivity **0.8616**.
+- Best XGBoost baseline (Park et al. 2021): Acc 0.9727, AUC 0.9739, Sensitivity 0.5100.
+- Best non-XGBoost baseline (RUS+MLP): Acc 0.8777, AUC 0.9085, Sensitivity 0.8563.
 
 Three observations:
 
@@ -272,40 +264,43 @@ Global feature-importance ranking. Top contributors are financial features (size
 
 ## Distinctive artifacts
 
-### Table 4 — BERTopic 26-topic taxonomy (full reproduction)
+The load-bearing tables of the paper are each reproduced as standalone artifact pages — this section is the catalogue. The smaller artifacts (the named equations, the pipeline diagram, the headline performance summary) stay inline.
 
-This is the single most reusable artifact in the paper — the empirically-derived risk-category taxonomy of US/foreign 10-K Risk-Factors disclosures.
+### Table 1 — Summary of related linguistic distress-prediction studies
 
-| ID | Topic | Top 5 terms |
-|---|---|---|
-| x25 | **Intellectual property risk** | intellectual, patent, right, license, property |
-| x26 | **R&D risk** | clinical, fda, trial, approval, candidate |
-| x27 | **Security risk** | security, breach, information, data, unauthorized |
-| x28 | **Tax risk** | tax, income, deferred, jurisdiction, reform |
-| x29 | **Litigation risk** | litigation, proceeding, claim, legal, court |
-| x30 | **Currency risk** | currency, exchange, dollar, foreign, fluctuation |
-| x31 | **Insurance risk** | insurance, coverage, reinsurance, catastrophe, covered |
-| x32 | **Competitive risk** | margin, gross, competition, reduce, profit |
-| x33 | **Product risk** | acceptance, success, develop, introduce, product |
-| x34 | **Dividend risk** | dividend, common, equity, unit, pay |
-| x35 | **Compliance risk** | penalty, comply, criminal, civil, fine |
-| x36 | **Regulatory risk** | regulation, compliance, legislation, law, change |
-| x37 | **Personnel risk** | personnel, key, retain, qualified, attract |
-| x38 | **Workforce risk** | disruption, labor, stoppage, strike, work |
-| x39 | **Health risk** | reimbursement, care, healthcare, medicare, health |
-| x40 | **Liquidity risk** | financing, need, fund, capital, additional |
-| x41 | **Overseas business risk** | china, located, country, united, states |
-| x42 | **Failure management** | failure, fail, effectively, successfully, manage |
-| x43 | **Commercial lending risk** | commercial, loan, estate, real, loan |
-| x44 | **Material risk** | actually, risk, following, material, occur |
-| x45 | **Price risk** | stock, common, price, analyst, fluctuation |
-| x46 | **Data privacy risk** | information, confidential, sensitive, data, collect |
-| x47 | **Timing risk** | quarter, timing, quarterly, fluctuate, period |
-| x48 | **Intangible asset risk** | goodwill, impairment, intangible, carrying, asset |
-| x49 | **IT risk** | system, interruption, information, disruption, availability |
-| x50 | **Credit risk** | credit, counterparty, creditworthiness, risk, rating |
+**Type:** prior-literature matrix · **Location:** p. 4 · **Reproduced in:** [[hajek-2024-prior-nlp-distress-literature]]
 
-Coherence (Cv, body §6.1): UMAP 0.712 > PCA 0.471.
+17-row prior-literature matrix positioning this study against fourteen earlier text-based distress-prediction studies. The modelling lineage: bag-of-words (Cecchini 2010) → dictionary methods (L&M, HowNet) → embeddings (word2vec) → contextualised BERT.
+
+### Table 2 — Financial features
+
+**Type:** variable-definitions table · **Location:** p. 7 · **Reproduced in:** [[hajek-2024-financial-features]]
+
+23 financial features (x₁–x₂₃) organised into 8 categories: company size (2), corporate reputation (1), profitability (4), activity (3), growth (1), liquidity (2), leverage (3), valuation (6). The structured-data half of the joint feature space; the linguistic half lives at [[hajek-2024-bertopic-risk-categories]].
+
+### Table 4 — BERTopic 26-topic taxonomy
+
+**Type:** topic taxonomy · **Location:** p. 11 · **Reproduced in:** [[hajek-2024-bertopic-risk-categories]]
+
+**The most reusable artifact in the paper** — the empirically-derived risk-category taxonomy of US/foreign 10-K Risk-Factors disclosures. 26 topics (x₂₅–x₅₀) with names and top-5 terms each: Intellectual property, R&D, Security, Tax, Litigation, Currency, Insurance, Competitive, Product, Dividend, Compliance, Regulatory, Personnel, Workforce, Health, Liquidity, Overseas business, Failure management, Commercial lending, Material, Price, Data privacy, Timing, Intangible asset, IT, Credit risk. Topic coherence Cv: UMAP 0.712 > PCA 0.471.
+
+### Table 6 — Classification performance of 11 models
+
+**Type:** model-comparison table · **Location:** p. 14 · **Reproduced in:** [[hajek-2024-model-comparison]]
+
+11 distress-prediction models compared on stratified 10-fold CV. XGBOD wins on Acc (0.9749) and AUC (0.9864); RUS+XGBoost wins on Sensitivity (0.8979); SMOTE+XGBoost wins on F1 (0.9733). The story: only XGBOD reaches high AUC *and* high sensitivity simultaneously.
+
+### Table 7 — Friedman + Shafer post-hoc test
+
+**Type:** statistical-test table · **Location:** p. 15 · **Reproduced in:** [[hajek-2024-friedman-test]]
+
+XGBOD ranked best (mean rank 2.4 vs. CS-SVM 11.0); Friedman p ≤ 4.21e−10; Shafer post-hoc significant against all baselines except the three other XGBoost-derived methods (XGBoost, SMOTE+XGBoost, ROS+XGBoost) — XGBOD is statistically indistinguishable from those three on AUC rank, confirming the methodological claim that the **XGBoost backbone + TOS augmentation** combination matters more than any single component.
+
+### Deferred (descriptive bookkeeping)
+
+- **Table 3** (mean values + SDs of 23 financial features, p. 10): descriptive statistics; not transcribed.
+- **Table 5** (mean values + SDs of 27 linguistic features, p. 13): descriptive statistics; not transcribed.
+- **Appendix Table A.1** (SSL hyperparameter settings, p. 19): computational-detail catalogue; not transcribed.
 
 ### XGBoost objective + XGBOD TOS-selection formulae
 

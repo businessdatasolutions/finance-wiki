@@ -218,107 +218,53 @@ Six country panels × ≤7 period rows each. 38 country-by-period discriminant f
 
 ## Distinctive artifacts
 
-### ASEAN-wide discriminant functions (Table 3, reproduced)
+Each load-bearing table is reproduced as a standalone artifact page — this section is the catalogue. The pre-GFC sign-reversal note and the variable key stay inline for narrative flow.
 
-```
-Full period:    Z = −0.157 + 6.269 X₁ + 0.226 X₂ − 0.754 X₃ + 0.335 X₄ − 1.292 X₉
-AFC:            Z = −0.907 + 2.467 X₁ + 1.095 X₆ − 1.499 X₁₁
-Post-AFC:       Z = −0.043 + 4.618 X₁ + 0.353 X₂ − 1.421 X₉
-Pre-GFC:        Z = −0.205 − 6.969 X₁ − 0.299 X₂ + 2.471 X₃ + 1.057 X₇ + 0.778 X₁₁ + 0.007 X₁₃
-GFC:            Z = −0.452 + 7.127 X₁ − 0.494 X₃ + 1.018 X₄ − 0.082 X₈
-Post-GFC:       Z = −0.316 + 7.905 X₁ + 0.218 X₂ + 0.629 X₄ − 1.700 X₉
-Stable period:  Z = −0.017 + 8.258 X₁ − 2.530 X₃ + 0.635 X₄ − 1.628 X₉
-```
+### Table 1 — Prior-literature matrix (14 ratios × 15 prior studies)
 
-(X1 = EBIT/TA, X2 = S/TA, X3 = NI/TA, X4 = RE/TA, X6 = WC/TA, X7 = CA/CL, X8 = CA/CL, X9 = CL/TA, X11 = TL/TA, X13 = MVE/TC.)
+**Type:** prior-literature matrix · **Location:** p. 4110 · **Reproduced in:** [[powell-2024-prior-literature-matrix]]
 
-Note the AFC and pre-GFC coefficient instability — discriminant rules in crisis-period training data look meaningfully different from non-crisis-period rules. Pre-GFC's **negative** X1 coefficient (−6.969) — a sign reversal versus the rest — is the most striking anomaly; Powell attributes it to the pre-GFC asset-price boom inflating EBIT in ways that decoupled from distress.
+3-page bibliographic asset: 14 candidate ratios × 15 prior MDA distress-prediction studies × 3 group panels (profitability/liquidity/leverage). Total column sums prior endorsements per ratio; top-endorsed are EBIT/TA (7), WC/TA (7), CA/CL (7), TL/TA (7). Powell uses this as evidence-based feature selection for the ASEAN stepwise regression.
 
-### Per-country discriminant functions (Table 4, reproduced)
+### Table 2 — Descriptive statistics (14 ratios × non-distressed/distressed panels)
 
-```
-INDONESIA:
-  Full period:   Z = −0.603 + 3.310 X₁ + 0.237 X₂ + 1.426 X₃ − 0.351 X₄ + 1.655 X₆ + 0.03 X₁₀
-  AFC:           Z = −0.634 + 4.947 X₁ + 0.891 X₂ + 1.105 X₆
-  Post-AFC:      Z =  0.051 + 3.593 X₁ + 1.497 X₆ + 0.04 X₁₀
-  Pre-GFC:       Z = −0.405 + 6.337 X₃ + 1.433 X₆
-  GFC:           Z = −0.76 + 7.598 X₁ − 0.183 X₁₀
-  Post-GFC:      Z = −0.778 + 6.091 X₁ + 1.087 X₆ + 0.34 X₁₀
-  Stable:        Z = −0.321 + 3.11 X₁ + 1.572 X₆ + 0.044 X₁₀
+**Type:** descriptive-statistics table · **Location:** p. 4111 · **Reproduced in:** [[powell-2024-descriptive-statistics]]
 
-MALAYSIA:
-  Full period:   Z = −0.869 + 6.315 X₁ − 3.944 X₃ + 2.698 X₄ + 0.73 X₅ + 0.199 X₁₀
-  AFC:           Z =  0.167 + 2.746 X₅
-  Post-AFC:      Z = −1.558 + 7.052 X₁ + 3.233 X₄ + 2.458 X₉
-  Pre-GFC:       Z = −0.754 + 0.639 X₂ + 1.564 X₅ + 0.467 X₁₀
-  GFC:           Z = −1.147 + 4.168 X₁ + 4.408 X₄
-  Post-GFC:      Z = −0.678 + 9.148 X₁ − 0.429 X₂ + 3.377 X₄ − 1.671 X₅ + 0.609 X₁₀
-  Stable:        Z = −1.436 + 0.627 X₈ + 3.21 X₁₂
+Two-panel univariate summary (mean/median/SD). Headline univariate gaps: distressed firms show EBIT/TA mean −0.062 vs +0.086 (sign reversal), RE/TA −0.436 vs +0.164, WC/TA −0.272 vs +0.121, TL/TA 0.865 vs 0.533. These previews the multivariate findings.
 
-PHILIPPINES:
-  Full period:   Z = −0.423 + 4.801 X₁ + 0.647 X₂ + 0.23 X₄ − 1.787 X₉ + 0.883 X₁₁
-  AFC:           Z = −1.767 + 3.658 X₁₁
-  Post-AFC:      Z = −0.122 + 3.539 X₁ + 0.563 X₂ − 2.753 X₉ + 0.854 X₁₁
-  Pre-GFC:       Z = −0.308 − 4.756 X₁ − 0.826 X₂ + 3.379 X₃ + 2.403 X₉ + 0.01 X₁₀ + 0.026 X₁₂
-  GFC:           Z = −0.546 + 13.78 X₁ − 7.988 X₃ + 1.476 X₄ − 0.019 X₁₄
-  Post-GFC:      Z = −0.330 − 7.183 X₁ + 2.786 X₉
-  Stable:        Z = −1.836 + 10.340 X₁ + 2.370 X₆ − 0.116 X₁₀ + 2.128 X₁₁
+### Table 3 — ASEAN-wide discriminant functions (7 periods)
 
-SINGAPORE:
-  Full period:   Z = −0.774 + 4.076 X₁ + 2.175 X₄
-  AFC:           (no significant variables)
-  Post-AFC:      Z = −0.605 + 4.088 X₁ − 2.814 X₉
-  Pre-GFC:       Z = −0.784 + 4.08 X₄ + 0.187 X₁₀
-  GFC:           Z = −0.859 + 8.561 X₁ + 1.865 X₃ + 1.971 X₄ − 0.968 X₅
-  Post-GFC:      Z = −0.386 + 16.83 X₁ − 13.249 X₃
-  Stable:        Z =  0.9 + 12.308 X₁ − 4.223 X₆
+**Type:** discriminant-function table · **Location:** p. 4112 · **Reproduced in:** [[powell-2024-asean-discriminant-functions]]
 
-THAILAND:
-  Full period:   Z = −0.112 + 8.038 X₁ + 1.003 X₆ − 0.219 X₇ − 0.367 X₁₁ − 0.021 X₁₄
-  AFC:           Z = −1.289 + 2.383 X₅ + 0.372 X₈ + 0.481 X₁₃
-  Post-AFC:      Z =  0.703 − 9.768 X₁ + 0.587 X₇ + 1.435 X₁₁
-  Pre-GFC:       Z = −0.289 − 6.838 X₁ + 1.101 X₃ − 0.647 X₄ + 0.73 X₅ + 0.945 X₁₁
-  GFC:           Z = −0.057 + 10.305 X₁ − 0.318 X₃ + 0.075 X₁₀ − 0.326 X₁₁ − 1.332 X₁₂
-  Post-GFC:      Z = −0.870 + 5.885 X₁ + 3.445 X₆ − 0.336 X₈ + 0.715 X₁₁ + 2.451 X₁₂
-  Stable:        Z =  0.48 − 4.273 X₅ + 0.109 X₁₄
+Seven Z-score functions (one per period: entire / AFC / Post-AFC / Pre-GFC / GFC / Post-GFC / Stable). The famous Pre-GFC X₁ sign reversal (−6.969) is the methodological flag — asset-price boom decoupled reported EBIT from distress risk. AFC and pre-GFC coefficient instability shows discriminant rules in crisis-period training data look meaningfully different from non-crisis-period rules.
 
-VIETNAM (sample begins 2007):
-  Full period:   Z = −0.394 − 3.172 X₅ + 0.373 X₈ + 0.819 X₁₂ + 0.161 X₁₄
-  GFC:           Z = −1.208 + 0.536 X₂ − 1.735 X₅ + 0.28 X₈ + 0.169 X₁₄
-  Post-GFC:      Z = −1.567 + 2.994 X₅ + 3.076 X₉ − 0.297 X₁₄
-  Stable:        Z = −0.456 − 5.905 X₅ + 0.46 X₈ + 2.958 X₁₂ + 0.216 X₁₄
-```
+### Table 4 — Per-country discriminant functions
 
-(Variables: X1 EBIT/TA, X2 S/TA, X3 NI/TA, X4 RE/TA, X5 EBITDA/TL, X6 WC/TA, X7 CA/TL, X8 CA/CL, X9 CL/TA, X10 NOCREDINT, X11 TL/TA, X12 FU/TL, X13 MVE/TC, X14 MVE/TL.)
+**Type:** discriminant-function table · **Location:** pp. 4114–4115 · **Reproduced in:** [[powell-2024-country-discriminant-functions]]
 
-### Classification accuracy across country × period (Table 6, full)
+38 country-by-period Z-score functions across Indonesia, Malaysia, Philippines, Singapore, Thailand, Vietnam (Vietnam's sample begins 2007). The per-country empirical contribution. Variable subsets and signs differ substantially across countries — Indonesia & Philippines lean on WC/TA, Malaysia on RE/TA, Singapore has the most parsimonious models, Thailand the broadest. Vietnam shows counterintuitive negative EBITDA/TL across periods.
 
-| Country | AFC | Post-AFC | Pre-GFC | GFC | Post-GFC | Stable | Full |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Indonesia distressed | 75.7 | 61.2 | 57.6 | 84.4 | 80.0 | 50.0 | **66.7** |
-| Indonesia non-distressed | 77.2 | 86.8 | 88.8 | 71.1 | 91.6 | 95.8 | **86.1** |
-| Malaysia distressed | 25.0 | 56.0 | 46.2 | 63.2 | 65.8 | 76.3 | **60.4** |
-| Malaysia non-distressed | 91.9 | 80.8 | 86.5 | 78.0 | 85.9 | 61.7 | **80.8** |
-| Philippines distressed | 64.3 | 55.0 | 52.9 | 77.8 | 46.8 | 68.1 | **60.6** |
-| Philippines non-distressed | 66.2 | 93.0 | 89.6 | 75.4 | 83.8 | 91.1 | **85.8** |
-| Singapore distressed | — | 32.0 | 68.0 | 45.8 | 58.8 | 76.2 | **42.9** |
-| Singapore non-distressed | — | 89.4 | 81.4 | 96.0 | 78.8 | 70.7 | **88.3** |
-| Thailand distressed | 84.7 | 73.7 | 55.1 | 56.0 | 82.5 | 25.0 | **67.5** |
-| Thailand non-distressed | 55.5 | 82.0 | 94.6 | 90.6 | 84.1 | 95.7 | **85.1** |
-| Vietnam distressed | — | — | — | 47.7 | 68.1 | 70.5 | **61.6** |
-| Vietnam non-distressed | — | — | — | 86.4 | 75.2 | 81.2 | **82.2** |
-| **Total ASEAN distressed** | 59.7 | 53.8 | 54.7 | 61.2 | 64.0 | 57.4 | **61.1** |
-| **Total ASEAN non-distressed** | 81.7 | 90.5 | 90.5 | 82.2 | 73.9 | 78.0 | **81.9** |
+### Table 5 — Frequency of ratios in discriminant functions
 
-### MDA-DD marginal improvements (Table 8, reproduced selectively)
+**Type:** count-summary table · **Location:** p. 4115 · **Reproduced in:** [[powell-2024-ratio-frequency]]
 
-| Country | When DD significant | Δ Distressed | Δ Non-distressed |
-|---|---|---:|---:|
-| Malaysia | Stable, Full period | +2.6 % / +6.3 % | +2.7 % |
-| Philippines | GFC (+3.7 % distressed); Post-AFC (+0.4 % non); Stable (+0.7 % non) | small | small |
-| Singapore | Stable (+4.8 % distressed; +1.4 % non) | small | small |
-| Thailand | Stable (+16.7 % distressed); AFC (+14.8 % non); Post-AFC (+6.4 % non) | larger but isolated | larger but isolated |
-| **Cross-country / cross-period average** | — | **+0.90 %** | **+0.63 %** |
+14 ratios × 7 periods + Total row. EBIT/TA (X₁) leads with 33 entries; profitability ratios (EBIT/TA, RE/TA, NI/TA, S/TA) occupy the top 4 ranks. The empirical synthesis of the prior-literature matrix.
+
+### Table 6 — Classification accuracy by country × period
+
+**Type:** classification-accuracy matrix · **Location:** p. 4116 · **Reproduced in:** [[powell-2024-classification-accuracy]]
+
+12-row × 7-column matrix of percent correctly classified. ASEAN-wide: 61.1% distressed correctly identified, 81.9% non-distressed. The Type I error skew (distressed harder than non-distressed) follows from the 76:24 sample imbalance. Singapore distressed-class is weakest at 42.9% full-period.
+
+### Table 8 — MDA-DD predictive improvements
+
+**Type:** Δ-improvement matrix · **Location:** p. 4118 · **Reproduced in:** [[powell-2024-mda-dd-improvements]]
+
+Robustness check: does adding the Merton Distance-to-Default to accounting MDA improve classification? Across 84 cells, cross-country average is only +0.90% distressed, +0.63% non-distressed. A few isolated cells show meaningful lift (Thailand stable +16.7% distressed; AFC +14.8% non-distressed) but the headline answer is: DD adds essentially nothing once MVE/TL or MVE/TC is in the accounting model.
+
+### Deferred (descriptive bookkeeping)
+
+- **Table 7** (consolidated MDA functions + accuracy rates summary, p. 4117): integrative cross-reference of Tables 4 + 6; not separately transcribed. The substance is covered by both source artifact pages.
 
 ## Discussion / Significance (SO WHAT)
 

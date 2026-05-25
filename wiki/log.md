@@ -8,6 +8,60 @@ Permitted operations: `ingest`, `acquire`, `query`, `lint`, `synthesize`, `refac
 
 ---
 
+## [2026-05-25] bulk-refactor | v0.7 Solution-B artifact-page slice: promote every load-bearing paper table to a standalone `type: artifact` page under `wiki/artifacts/`; 28 new pages across 6 papers; source-page `## Distinctive artifacts` sections become catalogues with wikilinks; rubric v1.3 D3 anchor recognises wikilink-to-artifact as satisfying full reproduction
+
+**Trigger.** User asked: *"When an expert agent wants to find a comprehensive list of risk categories or financial variables, he will not be able to find it in the Wiki. I want all tables fully ingested and reconstructed."* — the source pages named tables and paraphrased headlines, but the rows were missing. An expert agent searching qmd or reading the wiki couldn't find Hajek's 26 BERTopic categories by row, Powell's per-country MDA functions, Bari's regression coefficients, Habib's measurement-model formulary, Altman's monetary-impact table, or Luppe's per-company Anchoring Indexes.
+
+**Three architectural options were considered** (full plan: `~/.claude/plans/see-users-witoldtenhove-projects-finance-generic-kitten.md`):
+
+- **A: inline reproduction** — source pages grow to 500–800 lines each; cross-paper reuse lost.
+- **B: universal concept/artifact-page promotion** — extends the [[sme-distress-predictor-variables]] precedent; new `wiki/artifacts/` directory.
+- **C: structured data layer** — `data/tables/*.csv` + custom renderer; highest machine-queryability, highest engineering cost.
+
+**User picked B**, with three calibrations: (i) keep [[sme-distress-predictor-variables]] as `type: concept` (corpus-shared, not paper-tied — the rule of thumb in the new §Artifacts section), (ii) transcribe everything reproducible across all six papers in one pass, (iii) slug convention `<author>-<year>-<topic>`.
+
+**Affected files (43 touched: 28 new artifact pages + 6 source-page catalogues + 4 schema-doc updates + 5 supporting edits).**
+
+*New (28 artifact pages under `wiki/artifacts/`):*
+
+- Altman 2023: `altman-2023-hypothesis-test-performance.md`, `altman-2023-omega-score-formulas.md`, `altman-2023-omega-score-groups.md`, `altman-2023-prediction-performance-comparison.md`, `altman-2023-monetary-impact.md`
+- Bari 2026: `bari-2026-financial-distress-process-diagram.md`, `bari-2026-hierarchical-regression-results.md`, `bari-2026-indicator-family-framework.md`, `bari-2026-demographic-distribution.md`
+- Habib 2020: `habib-2020-distress-measurement-models.md`, `habib-2020-determinants-consequences-taxonomy.md`, `habib-2020-determinants-literature-rows.md`, `habib-2020-consequences-literature-rows.md` (last two are partial — exemplar rows + column structure + panel findings; ~80 author rows each remain deferred-with-reason for a future re-ingest)
+- Hajek 2024: `hajek-2024-prior-nlp-distress-literature.md`, `hajek-2024-financial-features.md`, `hajek-2024-bertopic-risk-categories.md`, `hajek-2024-model-comparison.md`, `hajek-2024-friedman-test.md`
+- Luppe 2012: `luppe-2012-anchoring-index-results.md`, `luppe-2012-t-test-results.md`, `luppe-2012-experimental-design.md`
+- Powell 2024: `powell-2024-prior-literature-matrix.md`, `powell-2024-descriptive-statistics.md`, `powell-2024-asean-discriminant-functions.md`, `powell-2024-country-discriminant-functions.md`, `powell-2024-ratio-frequency.md`, `powell-2024-classification-accuracy.md`, `powell-2024-mda-dd-improvements.md`
+
+*Modified (15):*
+
+- 4 schema docs:
+  - [`CLAUDE.md`](../CLAUDE.md) — added §Artifacts (concept/artifact split rule, `type: artifact` frontmatter contract, slug convention, body skeleton, source-page catalogue pattern, D3 implication); page-type frontmatter line extended to include `artifact`.
+  - [`.claude/skills/scientific-papers-processing/SKILL.md`](../.claude/skills/scientific-papers-processing/SKILL.md) — §Appendix archetypes table gained a "Reproduction target" column distinguishing concept-page vs artifact-page vs inline; §2.4 body skeleton's `## Distinctive artifacts` section reworded as catalogue with wikilinks; §2.7 catalogue step lists artifact-page creation.
+  - [`.claude/skills/scientific-papers-processing/quality-rubric.md`](../.claude/skills/scientific-papers-processing/quality-rubric.md) — bumped v1.2 → **v1.3**; D3 level-3 anchor reworded to recognise full reproduction *either* inline *or* by wikilink to a `type: artifact` / `type: concept` page; new prose explaining how the LLM judge counts the wikilink path.
+  - [`scripts/_lib/llm-judge.mjs`](../scripts/_lib/llm-judge.mjs) — Rule 5 added to the judge prompt: *"D3 = 3 ... full reproduction either inline OR by wikilink to a `type: artifact` / `type: concept` page ... trust the catalogue structure when each load-bearing artifact has a wikilink"*.
+- 6 source-page catalogues:
+  - [`2012-09-01-luppe-2012-anchoring-accounting-indicators.md`](sources/2012-09-01-luppe-2012-anchoring-accounting-indicators.md), [`2020-01-01-habib-2020-distress-determinants-consequences-review.md`](sources/2020-01-01-habib-2020-distress-determinants-consequences-review.md), [`2022-11-28-altman-2023-omega-score-sme-default.md`](sources/2022-11-28-altman-2023-omega-score-sme-default.md), [`2024-01-01-powell-2024-asean-accounting-early-warning-distress.md`](sources/2024-01-01-powell-2024-asean-accounting-early-warning-distress.md), [`2024-06-22-hajek-2024-distress-prediction-annual-reports.md`](sources/2024-06-22-hajek-2024-distress-prediction-annual-reports.md), [`2026-02-04-bari-2026-us-small-business-distress-framework.md`](sources/2026-02-04-bari-2026-us-small-business-distress-framework.md) — `## Distinctive artifacts` sections converted from inline table reproduction to catalogue entries (each entry: type + location + brief summary + wikilink to artifact page).
+- 1 wiki catalogue:
+  - [`wiki/index.md`](index.md) — new `## Artifacts` section with the 28 artifact pages grouped by source paper.
+
+**What the user can now query (the load-bearing test).**
+
+Before this slice: an agent search for "BERTopic risk topic insurance" would not find Hajek's 26-topic taxonomy by row. After: qmd embeds [[hajek-2024-bertopic-risk-categories]] which carries the full row for `x₃₁ Insurance risk: insurance, coverage, reinsurance, catastrophe, covered`. Same pattern for Powell's per-country MDA functions ([[powell-2024-country-discriminant-functions]]), Altman's monetary-impact translation ([[altman-2023-monetary-impact]]), Habib's distress-measurement formulary ([[habib-2020-distress-measurement-models]]), and ~24 more reusable artifacts.
+
+**Concept vs artifact decision** (per the new rule of thumb in CLAUDE.md §Artifacts):
+
+- **Concept** (corpus-shared, reusable across papers) = [[sme-distress-predictor-variables]] — Altman 2023's 164-variable appendix; cited by Powell 2024, Hajek 2024, Bari 2026, Habib 2020.
+- **Artifact** (paper-tied evidence) = everything new in this slice. Each table belongs to a specific paper's empirical or methodological output.
+
+The rule-of-thumb resolution for borderline cases: *"if a second wiki source could plausibly cite the same table, it's a concept; if it's tied to this paper's specific data, it's an artifact."*
+
+**Quality interaction (D3 rubric).** The judge's D3-anchor now recognises wikilink-to-artifact as satisfying D3 = 3 — so the six paper source pages keep their ceiling scores even after the inline-reproduction was moved to the artifact pages. (Re-judge run scheduled; expected `total ≥ 0.90` across all six.)
+
+**Partial transcriptions.** Two artifact pages — [[habib-2020-determinants-literature-rows]] and [[habib-2020-consequences-literature-rows]] — reproduce column structure + exemplar rows + panel-level findings but defer the full ~80-row bibliographic transcription with explicit page-range pointers. A future re-ingest can complete those tables.
+
+**Reversibility.** Solution B reverses cleanly by merging each artifact page's content back into its source page's `## Distinctive artifacts` section and deleting the `wiki/artifacts/` directory. The wikilinks would become broken links and lint would surface them. Solution A would survive trivially; Solution C would require unwinding the renderer + Quartz build wiring.
+
+---
+
 ## [2026-05-25] refactor | close 4 automation gaps so rubric bumps propagate end-to-end (parse rubric_version from YAML; data-driven HTML; auto-chain HTML regen; PostToolUse hook on rubric.md → re-score chain); new drift lint; shared _lib
 
 **Trigger.** Post the v1.1 re-score the user asked *"Why is all this not happening automatically?"* — fair question. Four specific automation gaps were named in the post-mortem; this entry ships their fixes.

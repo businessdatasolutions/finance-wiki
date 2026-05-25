@@ -93,7 +93,8 @@ Optional per-dimension field: "below_floor_reason" (string) — REQUIRED if scor
 2. D6 must be null if the floor shows D6=null (the page has no appendix material).
 3. Score 3 requires substantive evidence per the rubric anchors — be strict; don't award 3 by default.
 4. The reasoning string should cite specific page content (e.g. "Table 4 reproduced with all 26 rows" or "limitations section is boilerplate, no paper-specific items").
-5. JSON only. No markdown code fences. No commentary before or after the JSON.`
+5. **D3 = 3 specifically:** rubric v1.3 allows full reproduction *either* inline OR by wikilink to a \`type: artifact\` / \`type: concept\` page. When the source page's \`## Distinctive artifacts\` section consists of catalogue entries each pointing to a wikilink like \`[[hajek-2024-bertopic-risk-categories]]\` or \`[[sme-distress-predictor-variables]]\` (with a brief type/location/summary), that **satisfies D3 = 3** for the artifacts so linked. You do not see the artifact pages themselves — trust the catalogue structure when each load-bearing artifact has a wikilink. D3 = 2 (not 3) applies only when artifacts are named but neither reproduced inline nor linked out.
+6. JSON only. No markdown code fences. No commentary before or after the JSON.`
 }
 
 /**

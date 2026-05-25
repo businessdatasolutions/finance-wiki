@@ -44,6 +44,56 @@ Each section is flat-listed alphabetically. Once page counts grow, sections may 
 - [[multiple-discriminant-analysis]] — MDA; the linear-classification technique underlying the Z-score family; Wilks's lambda + F-test stepwise variable selection; comparable to logit/probit but with weaker cross-context portability.
 - [[sme-distress-predictor-variables]] — The canonical 164-variable predictor catalogue (Altman Omega Score appendix) across 18 categories: Z-Score, Profitability, Liquidity, Leverage, balance-sheet Δs, Payment behaviour, Employee, Management, and firm-level controls; the corpus-wide reference catalogue distress-prediction papers can cite rather than re-deriving locally.
 
+## Artifacts
+
+v0.7 — paper-tied artifact pages (`type: artifact`). Each reproduces a single load-bearing table, figure-diagram, named equation, or instrument verbatim. Source pages' `## Distinctive artifacts` sections now catalogue these wikilinks rather than duplicating the data inline. See [CLAUDE.md §Artifacts](../CLAUDE.md#artifacts) for the schema and the concept/artifact split (paper-tied → artifact; corpus-shared → concept).
+
+### Altman 2023 — Omega Score
+
+- [[altman-2023-hypothesis-test-performance]] — Table 1: 5 sequential LASSO models, AUC 70.4 → 88.0 (+17.6).
+- [[altman-2023-omega-score-formulas]] — Three named formulas: general / 60-day Regular / 30-day Early-warning.
+- [[altman-2023-omega-score-groups]] — Table 3: Alpha/Beta/Gamma thresholds + cumulative default incidence (Gamma 92.2%).
+- [[altman-2023-prediction-performance-comparison]] — Table 5: Z′′ / Omega Groups / continuous Omega / RF / XGBoost (AUC 70.4 → 90.3).
+- [[altman-2023-monetary-impact]] — Table 6: €15.6 M improvement in correctly-classified defaulted debt.
+
+### Bari 2026 — US small-business distress
+
+- [[bari-2026-financial-distress-process-diagram]] — Figure 3: distress as iterative feedback loop (Mermaid).
+- [[bari-2026-hierarchical-regression-results]] — Tables 3–7: 7-construct regression; ΔR² +0.15; credit behaviour β = +0.34.
+- [[bari-2026-indicator-family-framework]] — 7 indicator families across financial / behavioural / relational channels (Mermaid).
+- [[bari-2026-demographic-distribution]] — Tables 1–2: 482-firm sample composition.
+
+### Habib 2020 — distress determinants & consequences review
+
+- [[habib-2020-distress-measurement-models]] — Table 1: Z-score / O-score / Zmijewski / Sudarsanam-Lai / Hillegeist BSM-Prob / Merton DTD / Campbell CHS, with usage counts.
+- [[habib-2020-determinants-consequences-taxonomy]] — The 3×4 organising frame (firm-fundamental / macro-economic / corporate-governance determinants × financial reporting / firm-level operational / capital market / corporate governance consequences).
+- [[habib-2020-determinants-literature-rows]] — Table 2: ~80 author rows; exemplar set transcribed; full bibliography deferred.
+- [[habib-2020-consequences-literature-rows]] — Table 3: ~80 author rows; panel-level findings transcribed; full bibliography deferred.
+
+### Hajek 2024 — NLP-augmented distress prediction
+
+- [[hajek-2024-prior-nlp-distress-literature]] — Table 1: 17-row prior-literature matrix (Cecchini 2010 → this study).
+- [[hajek-2024-financial-features]] — Table 2: 23 financial features × 8 categories.
+- [[hajek-2024-bertopic-risk-categories]] — Table 4: 26-topic risk-factor taxonomy (Intellectual property, R&D, Security, Tax, Litigation, …).
+- [[hajek-2024-model-comparison]] — Table 6: 11-model AUC + Sensitivity comparison; XGBOD wins on AUC + Sensitivity simultaneously.
+- [[hajek-2024-friedman-test]] — Table 7: Friedman + Shafer post-hoc multi-model significance test.
+
+### Luppe 2012 — anchoring on accounting magnitudes
+
+- [[luppe-2012-anchoring-index-results]] — Table 2: 8-company × 3-group Anchoring Indexes; mean AI = 0.91; Apple AI = 1.38.
+- [[luppe-2012-t-test-results]] — Table 4: per-company t-statistics; all p < 0.01.
+- [[luppe-2012-experimental-design]] — Jacowitz-Kahneman 3-group experimental design (Mermaid); reusable across audit-risk, fair-value, transfer-pricing contexts.
+
+### Powell 2024 — ASEAN MDA
+
+- [[powell-2024-prior-literature-matrix]] — Table 1: 14 ratios × 15 prior MDA studies; top-endorsed = EBIT/TA, WC/TA, CA/CL, TL/TA.
+- [[powell-2024-descriptive-statistics]] — Table 2: univariate distressed-vs-non-distressed gaps; EBIT/TA −0.062 vs +0.086; TL/TA 0.865 vs 0.533.
+- [[powell-2024-asean-discriminant-functions]] — Table 3: 7 ASEAN-wide Z-score functions across 7 periods; Pre-GFC X₁ sign reversal.
+- [[powell-2024-country-discriminant-functions]] — Table 4: 38 country-by-period discriminant functions (Indonesia, Malaysia, Philippines, Singapore, Thailand, Vietnam).
+- [[powell-2024-ratio-frequency]] — Table 5: EBIT/TA dominates (33 entries); profitability ratios lead.
+- [[powell-2024-classification-accuracy]] — Table 6: per-country × per-period accuracy matrix; ASEAN-wide 61.1% distressed / 81.9% non-distressed.
+- [[powell-2024-mda-dd-improvements]] — Table 8: Merton DD adds only +0.90% distressed / +0.63% non-distressed accuracy on average.
+
 ## Threads
 
 _None yet._

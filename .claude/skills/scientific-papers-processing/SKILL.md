@@ -161,23 +161,32 @@ A Pass-3-read paper supports a confidence of 0.85+ and is candidate material for
 
 ### Appendix archetypes
 
-Used by [CLAUDE.md §Check 5](../../../CLAUDE.md#check-5--appendix-inventory-what-does-the-appendix-contain-and-how-should-it-be-reproduced), [CLAUDE.md §Appendix content extraction](../../../CLAUDE.md#appendix-content-extraction), and the per-pass guidance above. The archetype determines reproduction strategy and whether the content should be promoted to a standalone wiki concept page.
+Used by [CLAUDE.md §Check 5](../../../CLAUDE.md#check-5--appendix-inventory-what-does-the-appendix-contain-and-how-should-it-be-reproduced), [CLAUDE.md §Appendix content extraction](../../../CLAUDE.md#appendix-content-extraction), [CLAUDE.md §Artifacts](../../../CLAUDE.md#artifacts), and the per-pass guidance above. The archetype determines reproduction strategy and where the reproduction lives.
 
-| Archetype | Examples | Reproduction strategy |
+| Archetype | Examples | Reproduction target |
 | --- | --- | --- |
-| **Variable definitions / data dictionaries** | Altman's 164-variable Omega Score table; KPI dictionaries; coding schemes; data-element catalogues | Reproduce as wiki-native markdown table in §Distinctive artifacts; **promote to standalone concept page** when reusable across multiple corpus sources (e.g. predictor variables shared across a financial-distress cluster) |
-| **Survey / interview instruments** | Likert scales, question batteries, interview protocols, vignettes, experimental stimuli | Reproduce as fenced quote / numbered list in §Distinctive artifacts; **promote** when the instrument is **named** (Big Five, NPS, MBTI, GHQ-12) — other studies will reuse the same instrument |
-| **Mathematical derivations / proofs** | Step-by-step proofs, alternative derivations, regularity conditions, optimisation derivations | Reproduce as fenced math (LaTeX) in §Distinctive artifacts; promote to a methods-concept page when the derivation underpins a named result reused elsewhere |
-| **Sample data / examples** | Sample firm records, anonymised case studies, example questionnaire responses, code traces | Reproduce as fenced code or table in §Distinctive artifacts; rarely promoted (case-specific) |
-| **Coding / algorithm details** | Pseudocode, hyperparameter grids, R/Python snippets, model-architecture diagrams, training schedules | Reproduce as fenced code or pseudocode in §Distinctive artifacts; **promote** when the algorithm is named and reusable (e.g. a named NLP pipeline, a benchmark protocol) |
-| **Supplementary statistical tables** | Robustness checks, sensitivity analyses, alternative specifications, sub-sample breakdowns | Describe in §Visual content with location and headline observation; reproduce in §Distinctive artifacts only if load-bearing for the page's central claims. Otherwise defer with one-line caveat. |
-| **Supplementary figures** | ROC curves, PCA plots, calibration plots, example trees, additional time-series | Describe in §Visual content (accessibility-quality description); reproduce (Mermaid / ASCII art / fenced) only if load-bearing |
-| **Glossaries / acronym lists** | Domain-specific term definitions, abbreviation tables, controlled vocabularies | Reproduce as inline table in §Distinctive artifacts; **promote** when the glossary has corpus-wide value (e.g. a domain-vocabulary reference other sources will cite) |
-| **Author bios / funding / disclosures / IRB statements** | "About the authors", grant numbers, conflict-of-interest, ethics approval, registered-trial IDs | **Skip transcription.** One-line marker in §Appendix content: `> Appendix [X] contains author bios / funding / disclosures — not substantive content; not transcribed.` |
+| **Variable definitions / data dictionaries** | Altman's 164-variable Omega Score table; KPI dictionaries; coding schemes; data-element catalogues | **Concept page** when reusable across the cluster (e.g. predictor variables shared across a financial-distress cluster — see [[sme-distress-predictor-variables]]). **Artifact page** when paper-specific (one paper's variable list run on its own data). Inline in §Distinctive artifacts only for tiny (<8-row) lists. |
+| **Survey / interview instruments** | Likert scales, question batteries, interview protocols, vignettes, experimental stimuli | **Concept page** when the instrument is *named* (Big Five, NPS, MBTI, GHQ-12) — other studies will reuse it. **Artifact page** for paper-specific custom instruments. Fenced quote / numbered list. |
+| **Mathematical derivations / proofs** | Step-by-step proofs, alternative derivations, regularity conditions, optimisation derivations | **Concept page** when the derivation underpins a named result reused elsewhere. **Artifact page** for paper-specific derivations. Fenced LaTeX or blockquoted equations. |
+| **Sample data / examples** | Sample firm records, anonymised case studies, example questionnaire responses, code traces | **Artifact page** (case-specific); rarely promoted to concept. Fenced code or table. |
+| **Coding / algorithm details** | Pseudocode, hyperparameter grids, R/Python snippets, model-architecture diagrams, training schedules | **Concept page** when the algorithm is named and reusable (e.g. a named NLP pipeline, a benchmark protocol). **Artifact page** for paper-specific hyperparameter grids. Fenced code/pseudocode. |
+| **Headline / model-comparison tables** | AUC tables, classification-accuracy tables, regression-coefficient summaries, multi-model benchmark tables | **Artifact page** by default — these are the most cited tables in any paper and always paper-specific. Inline §Distinctive artifacts only when ≤5 rows. |
+| **Per-country / per-segment empirical tables** | Country-by-country MDA coefficients, industry-segment breakdowns, sub-sample regression results | **Artifact page** — paper-specific empirical output; the wikilink-and-summary catalogue entry on the source page stays brief. |
+| **Supplementary statistical tables** | Robustness checks, sensitivity analyses, alternative specifications, sub-sample breakdowns | **Defer with reason** in §Appendix content when not load-bearing for the page's central claims. **Artifact page** when robustness check is the *whole point* of the paper. |
+| **Supplementary figures** | ROC curves, PCA plots, calibration plots, example trees, additional time-series | Describe in §Visual content (accessibility-quality). **Artifact page** only when load-bearing (Mermaid / ASCII art / fenced). |
+| **Taxonomies / classification schemes** | Risk-disclosure topic models (Hajek BERTopic), industry classifications, capability taxonomies | **Concept page** when taxonomy is intended to generalise (e.g. a published industry taxonomy). **Artifact page** when produced by the paper's own run on its own data. |
+| **Literature-synthesis matrices** | Author-by-finding review tables, model-by-ratio prior-literature matrices | **Artifact page** — bibliographic artifacts tied to the surveying paper. The catalogue value justifies full reproduction even at 30–80 rows. |
+| **Glossaries / acronym lists** | Domain-specific term definitions, abbreviation tables, controlled vocabularies | **Concept page** when the glossary has corpus-wide value (other sources will cite). **Artifact page** for paper-specific notation tables. |
+| **Author bios / funding / disclosures / IRB statements** | "About the authors", grant numbers, conflict-of-interest, ethics approval, registered-trial IDs | **Skip transcription.** One-line marker in §Appendix content. |
 
-The taxonomy is non-exhaustive. When you encounter an appendix that doesn't fit, treat it like the closest archetype and document the reasoning in the §Appendix content entry. New archetypes can be added here as they emerge from real ingests.
+The taxonomy is non-exhaustive. When you encounter an artifact that doesn't fit, treat it like the closest archetype and document the reasoning in the §Distinctive artifacts catalogue entry on the source page.
 
-**Promotion heuristic** (which appendices become standalone concept pages): the appendix earns promotion when (a) more than one corpus source could cite the same artifact, (b) the artifact has a name the wider literature uses (instrument, algorithm, formula, taxonomy), or (c) the artifact is the kind of thing an *expert reader would copy out for their own work* — variable lists, survey instruments, glossaries, named procedures. Bias toward promotion when the choice is borderline; the cost of an under-cited concept page is much lower than the cost of leaving a reusable artifact locked in a single source's body.
+**Promotion heuristic** (the concept-vs-artifact split — see [CLAUDE.md §Artifacts](../../../CLAUDE.md#artifacts) for the full rule):
+
+- **Concept page** when **any** of: (a) more than one corpus source could plausibly cite the same artifact, (b) the artifact has a name the wider literature uses (instrument, algorithm, formula, taxonomy), or (c) the artifact is the kind of thing an *expert reader would copy out for their own work* — variable lists, survey instruments, glossaries, named procedures.
+- **Artifact page** when the artifact is **paper-tied evidence**: the paper's own regression output, the paper's own variable run, the paper's own sample, the paper's own per-segment breakdown.
+
+Bias toward *promotion to artifact page* when the choice is borderline; the cost of an under-cited artifact page is much lower than the cost of leaving a reusable table locked in a single source's `## Distinctive artifacts` section as paraphrase.
 
 ### 2.3 Discuss key takeaways with the user
 
@@ -304,7 +313,8 @@ for the full contract. If the paper genuinely has no visuals, write
 order, each with: heading (`### Appendix [letter/number] — <name>`),
 **Type:** (archetype from the [§Appendix archetypes](#appendix-archetypes) table),
 **Location:** pp. NN–NN (PDF pp. MM–MM if different), **Reproduction:** inline
-in §Distinctive artifacts | extracted to `[[concept-page-slug]]` | deferred
+in §Distinctive artifacts | extracted to `[[concept-page-slug]]` |
+extracted to `[[artifact-slug]]` | deferred
 (<reason>), followed by a 50–200-word content summary (row counts / question
 counts / key categories / load-bearing observations). Formal back matter (author
 bios, funding, IRB) gets a single one-line marker. See [CLAUDE.md §Appendix
@@ -315,13 +325,33 @@ quality scorer treats absence as N/A (excluded from denominator).>
 ## Distinctive artifacts
 
 <The paper's named taxonomies, key tables, headline figures, named equations,
-cause-effect diagrams, and named scores — reproduced where reasonable.
-Enumerate taxonomies as lists or markdown tables; transcribe formulae as
-blockquotes or fenced code; reproduce flow diagrams as Mermaid blocks where
-the structure is clear from the source. This is the structural home for
-D3 of [quality-rubric.md](../../.claude/skills/scientific-papers-processing/quality-rubric.md)
-and the answer to "what does this paper show that the prose summary cannot
-replace?". Distinguish distinctive artifacts (named scores, headline tables,
+cause-effect diagrams, and named scores. v0.7 changes the default reproduction
+target: each load-bearing artifact is promoted to its own page under
+`wiki/artifacts/<slug>.md` (or `wiki/concepts/<slug>.md` when the artifact is
+genuinely reusable across the corpus — see the promotion heuristic in
+§Appendix archetypes and [CLAUDE.md §Artifacts](../../../CLAUDE.md#artifacts)).
+This section becomes a **catalogue** of those artifacts: each entry names the
+artifact, locates it in the source, and links to its dedicated page. Reserve
+inline reproduction for the smallest tables (<8 rows), short equations, and
+brief Mermaid diagrams where the artifact-page overhead exceeds its value.
+
+Catalogue entry skeleton:
+
+```markdown
+### Table N — <verbatim caption or short topic>
+
+**Type:** <archetype from §Appendix archetypes>
+**Location:** pp. NN–MM
+**Reproduced in:** [[<artifact-slug>]]
+
+<1-2 sentence summary of what the artifact carries and why it matters.>
+```
+
+This section is the structural home for D3 of
+[quality-rubric.md](quality-rubric.md). D3 = 3 is satisfied when every load-
+bearing artifact is reproduced *either* inline here *or* by wikilink to a
+`type: artifact` / `type: concept` page where the verbatim reproduction lives.
+Distinguish distinctive artifacts (named scores, headline tables,
 argument-carrying diagrams) from incidental ones (correlation heatmaps,
 descriptive-statistics tables, reference lists) — only the former belong here.
 Visuals reproduced here should also appear (as descriptions) in `## Visual
@@ -515,16 +545,25 @@ The HTML embeds the JSONL data inline at generate-time, so re-run the generator 
 
 Invoke the **[`neighbour-source-scan`](../neighbour-source-scan/SKILL.md) skill** — both Path A (W&W cell overlap) and Path B (shared concept-page citations). Add the resulting typed edges to `relationships:` frontmatter and write the body wikilinks. **At ≥3 candidate neighbours, surface the list before commit.**
 
-### 2.7 Update concepts, entities, threads
+### 2.7 Update concepts, entities, threads, artifacts
 
 For every concept or entity page touched, bump `last_confirmed` and `accessed_at` to today and recompute `source_count` + `confidence` per the Lifecycle rules. For each new author meeting the second-source promotion rule, create an entity page. If the paper contradicts an existing wiki claim, add an entry to that page's `## Debates and supersession` section.
+
+For each load-bearing artifact identified in §2.2 Pass 2 (figures, tables, named scores, taxonomies, instruments, regression outputs, per-segment breakdowns), apply the promotion heuristic in §Appendix archetypes:
+
+- **Reusable across the corpus** → create / update a `wiki/concepts/<slug>.md` page. Carry the v0.2 lifecycle contract (`confidence`, `source_count`, `last_confirmed`, `accessed_at`).
+- **Paper-tied evidence** → create a `wiki/artifacts/<slug>.md` page per [CLAUDE.md §Artifacts](../../../CLAUDE.md#artifacts). Frontmatter: `type: artifact`, `artifact_kind:`, `source: [[<source-slug>]]`, `source_table_ref:`, `source_pages:`, `last_confirmed:`, `accessed_at:`. No `confidence:`, no `source_count:`.
+- **Tiny (<8 rows) or fully captured inline** → leave in the source page's `## Distinctive artifacts` section as a verbatim reproduction (no promotion).
+
+Update the source page's `## Distinctive artifacts` section to point at each new artifact page via wikilink — the section is a catalogue, not a duplicate of the data.
 
 ### 2.8 Catalogue updates
 
 - Add the new source page to `wiki/index.md` under `## Sources`, one-line summary.
-- Prepend a `log.md` entry: `## [<today>] ingest | <slug>` (or `acquire | <slug>` if Process is being deferred).
+- Add any new artifact pages to `wiki/index.md` under `## Artifacts` (new section), one-line summary each.
+- Prepend a `log.md` entry: `## [<today>] ingest | <slug>` (or `acquire | <slug>` if Process is being deferred). When multiple artifacts were promoted, mention the count.
 - Re-run `node scripts/quality-score.mjs` for any concept page touched.
-- Re-embed for search: `npx @tobilu/qmd embed`.
+- Re-embed for search: `npx @tobilu/qmd embed`. (This catches the new artifact pages automatically; the qmd collection root is `./wiki`.)
 
 ## Pass-depth quick-reference
 

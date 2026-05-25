@@ -187,63 +187,31 @@ The paper carries no figures, no equations rendered as images, no flowcharts. Th
 
 ## Distinctive artifacts
 
-### The 3 × 4 taxonomy (the review's contribution)
+Each load-bearing artifact lives as a standalone wiki page — this section is the catalogue.
 
-```
-                    DETERMINANTS (3 buckets) × CONSEQUENCES (4 buckets)
+### The 3 × 4 determinants × consequences taxonomy
 
-                             | Firm-fundamental | Macro-economic | Corporate-governance |
-─────────────────────────────────────────────────────────────────────────────────────────
-Fin. reporting & auditing    |   ✓ (§4.1)      |                |     ✓ (§4.1)         |
-Firm-level operational       |   ✓ (§4.2)      |    ✓ (§4.2)    |                      |
-Capital market               |   ✓ (§4.3)      |    ✓ (§4.3)    |                      |
-Corporate governance         |                  |                |     ✓ (§4.4)         |
-```
+**Type:** organising-frame matrix · **Location:** §4 body · **Reproduced in:** [[habib-2020-determinants-consequences-taxonomy]]
 
-(The matrix shows where the review *fills* cells; empty cells signal future-research gaps Habib et al. explicitly flag.)
+Three determinant categories (firm-fundamental, macro-economic, corporate-governance) × four consequence categories (financial reporting & auditing, firm-level operational, capital market, corporate governance) = 12-cell matrix. Cells the review fills are marked ✓; empty cells signal research gaps. This is the review's central conceptual contribution and the index by which all four downstream papers in the corpus are organised.
 
-### Table 1 (reproduced) — Distress-measurement models
+### Table 1 — Distress-measurement models
 
-| Model | Formula | Interpretation |
-|---|---|---|
-| **Altman (1968) Z-score** | `Z = 1.2 A + 1.4 B + 3.3 C + 0.6 D + 1.0 E` where A = WC/TA, B = RE/TA, C = EBIT/TA, D = MVE/TL, E = Sales/TA | Z > 2.67 sound; Z < 1.81 distressed; 1.81 ≤ Z ≤ 2.67 grey zone |
-| **Ohlson (1980) O-score** | 9-factor linear combination → exp(O) / (1 + exp(O)) | Probability > 0.5 indicates high default likelihood |
-| **Zmijewski (1984)** | `Zm = −4.336 − 4.513 X₁ + 5.679 X₂ − 0.004 X₃` where X₁ = NI/TA, X₂ = TD/TA, X₃ = CA/CL | Probability > 0.5 → bankrupt |
-| **Hillegeist et al. (2004) BSM-Prob** | `P = N[(ln(V_A / X) + (μ − δ − 0.5 σ_A²) T) / (σ_A √T)]` — Black-Scholes-Merton probability of bankruptcy | Higher BSM-Prob → larger expected equity-value decrease per unit asset-value decline → more litigation, more covenant violations |
-| **Distance-to-default (Merton 1974 derived)** | `DTD = (V_A − X) / (V_A σ_A)` (simplified form; Habib's Table 1 gives full derivation) | Number of standard deviations the firm's asset value can fall before default |
+**Type:** named-formula catalogue · **Location:** pp. 1028–1033 (6-page spread) · **Reproduced in:** [[habib-2020-distress-measurement-models]]
 
-Counts of survey-papers using each measure (determinants / consequences):
+Catalogue of all distress-measurement formulas used across the surveyed literature: accounting-based (Altman Z, Ohlson O, Zmijewski, Sudarsanam-Lai Taffler Z, rudimentary signal-based classifications) + market-based (Hillegeist BSM-Prob, Merton DTD, Campbell-Hilscher-Szilagyi CHS). The accounting-based:market-based usage ratio of 8:1 is the review's key empirical observation about *what gets used*.
 
-| Measure | Determinants studies | Consequences studies |
-|---|---:|---:|
-| Altman Z-score | 6 | 12 |
-| Ohlson O-score | 2 | 6 |
-| Zmijewski | 1 | 8 |
-| BSM-Prob (Hillegeist) | 0 | 1 |
-| DTD (Merton) | 2 | 4 |
-| Rudimentary (neg. WC / neg. OCF / interest coverage) | several | several |
+### Table 2 — Determinants-of-distress literature synthesis (~80 author rows)
 
-The accounting-based:market-based ratio is roughly 8 : 1 across the surveyed literature — the review's key empirical observation about *what gets used*.
+**Type:** literature-synthesis matrix · **Location:** pp. 1034–1048 (14-page spread) · **Reproduced in:** [[habib-2020-determinants-literature-rows]]
 
-### Table 2 (structure + headline rows) — Determinants
+Six-column author-by-author matrix organised into three panels (firm-fundamental / macro-economic / corporate-governance determinants). The artifact page reproduces the column structure, exemplar rows for each panel, and panel-level headline findings; the full ~80-row transcription is deferred-with-reason and listed as a backfill candidate.
 
-Selected exemplar rows (illustrative, not exhaustive — the full table is 14 pages):
+### Table 3 — Consequences-of-distress literature synthesis (~80 author rows)
 
-| Author | Topic | Sample | Distress measure | Headline finding |
-|---|---|---|---|---|
-| Al-Hadi et al. 2017 | CSR × life cycle | Australia 651 firm-years 2007–2013 | Altman + Berger et al. + Almeida-Campello | +1-SD CSR → −1.46 % distress, stronger in mature life-cycle stage |
-| Zhang 2015 | R&D investment | USA 55,652 firm-years 1980–2011 | Delisted-from-exchange | +1-SD R&D/assets → +1.3 % distress likelihood |
-| Magee 2013 | FX hedging | USA 401 obs 1996–2000, large firms | Merton 1974 DTD | +1-SD FX-derivative/assets → +0.870 DTD (distress decreases) |
-| Kane et al. 2005 | Employee relations | USA 2,228 firm-years 1991–2001 | Altman Z | Good employee relations → less future distress |
-| Tinoco-Wilson 2013 | Accounting + market + macro | UK 23,218 firm-years 1980–2011 | Logistic | Multi-channel model ≈ neural-net ≈ Altman in accuracy |
-| Gottardo-Moisello 2017 | Family ownership | Italy 1,137 obs 2004–2013, large | Registered distress procedure | Family firms ↓ distress; female CEO mitigates |
-| Darrat et al. 2016 | Board composition | USA 217 bankrupt + 9,100 healthy 1996–2006 | Logistic | Large boards & inside directors ↓ bankruptcy for complex/specialty firms; female-board ↓, long-CEO ↓ |
-| Hsu-Wu 2014 | Grey vs. independent directors | UK 234 matched-pair 1997–2010 | Dummy failed/non-failed | Grey directors > independent directors for survival |
-| Kallunki-Pyykko 2013 | Defaulting CEOs/directors | Finland 48,716 private-firm obs 2001–2008 | Adjusted Z + Adjusted O | CEO/director past default ↑ corporate bankruptcy |
+**Type:** literature-synthesis matrix · **Location:** pp. 1049–1067 (12-page spread) · **Reproduced in:** [[habib-2020-consequences-literature-rows]]
 
-### Table 3 (structure) — Consequences
-
-Same six columns as Table 2, organised by four panels matching §4.1 / §4.2 / §4.3 / §4.4. The headline findings are summarised in §Results above (earnings management, classification shifting, dividend cuts, accrual-anomaly pricing, CEO turnover). Reproducing the full author-by-author row list would replicate ~12 pages of the paper; the prose summary is sufficient for wiki search.
+Same six-column structure as Table 2, organised into four panels matching the [[habib-2020-determinants-consequences-taxonomy|3×4 taxonomy]] consequence categories. The artifact page reproduces the column structure and panel-level findings; the full ~80-row transcription is deferred-with-reason. Headline panel findings: earnings management & classification shifting (auditing panel), dividend cuts & layoffs (operational panel), distress anomaly & accrual mispricing (capital-market panel), CEO turnover & blockholder activism (governance panel).
 
 ## Discussion / Significance (SO WHAT)
 

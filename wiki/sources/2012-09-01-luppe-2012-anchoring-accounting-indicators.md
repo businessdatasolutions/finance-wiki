@@ -220,7 +220,27 @@ The paper carries **no figures**, no flowcharts, no equations rendered as images
 
 ## Distinctive artifacts
 
-### Anchoring Index formulae
+Each load-bearing artifact is reproduced as a standalone artifact page — this section is the catalogue. The Anchoring Index formulae and the Jacowitz-Kahneman transformation stay inline because they're short and conceptually anchor the rest.
+
+### Table 2 — Anchoring Index per company (8 questions × 7 columns)
+
+**Type:** core experimental-results table · **Location:** p. 125 · **Reproduced in:** [[luppe-2012-anchoring-index-results]]
+
+Headline empirical artifact. Mean AI = 0.91; two companies show AI > 1 (Apple 1.38, Grupo Pão de Açúcar 1.36 — respondents over-shot the high anchor); Wal-Mart is the outlier (AI = 0.50 because the US$ 100 B high anchor was implausibly large).
+
+### Table 4 — t-test results
+
+**Type:** statistical-test table · **Location:** p. 126 · **Reproduced in:** [[luppe-2012-t-test-results]]
+
+8 per-company t-statistics ranging 6.34 to 11.46, all p < 0.01 with N = 79. Anchoring is highly significant in this experimental context.
+
+### 8-company × 3-group experimental design
+
+**Type:** methodology Mermaid diagram · **Location:** §Methods (pp. 122–124) · **Reproduced in:** [[luppe-2012-experimental-design]]
+
+The Jacowitz-Kahneman 1995 replication design adapted to accounting-judgment estimation. Three randomised groups (calibration / low-anchor / high-anchor), 117 graduate accounting students, eight companies' 2006 net profit. The protocol is reusable across audit-risk, fair-value, transfer-pricing, and environmental-liability estimation contexts.
+
+### Anchoring Index formulae (inline — short)
 
 ```
 General AI:    AI = (median_high_anchor − median_low_anchor) / (high_anchor − low_anchor)
@@ -250,27 +270,6 @@ Transformed_score(x) = 50 + (estimate − min_value) · 50 / (calibration_median
 (Equivalent to a piecewise rescaling that puts the calibration median at 50, the
 calibration extremes at 0 and 100, and values outside the calibration range at
 0 or 100 by clipping.)
-```
-
-### The 8-company × 3-group experimental design (Mermaid reproduction)
-
-```mermaid
-flowchart LR
-    Sample[Graduate Accounting Students<br/>University of São Paulo<br/>3 classes, ~117 valid responses]
-
-    Sample --> G1[Calibration group<br/>N = 38<br/>No anchor]
-    Sample --> G2[Low-anchor group<br/>N = 35<br/>15th-percentile anchor]
-    Sample --> G3[High-anchor group<br/>N = 44<br/>85th-percentile anchor]
-
-    G1 --> M1[Estimates 8 companies'<br/>2006 net profit<br/>+ confidence 0–10]
-    G2 --> Q2[Higher/lower than anchor?] --> M2[Estimate + confidence]
-    G3 --> Q3[Higher/lower than anchor?] --> M3[Estimate + confidence]
-
-    M1 --> AI[Compute Anchoring Index<br/>per Jacowitz-Kahneman 1995]
-    M2 --> AI
-    M3 --> AI
-
-    AI --> R[Result: mean AI = 0.91<br/>Low-anchor AI = 0.96<br/>High-anchor AI = 0.73]
 ```
 
 ### Three robust findings (paraphrased from conclusion)

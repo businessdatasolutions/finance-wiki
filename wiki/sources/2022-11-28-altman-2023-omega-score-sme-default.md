@@ -238,79 +238,51 @@ Each variable carries a code name (e.g. `l3 = Quick ratio`) and a verbatim descr
 
 ## Distinctive artifacts
 
-### Omega Score — general form
+The Omega Score formulas, headline performance comparison, and monetary impact each live as a standalone artifact page — this section is the catalogue. The 164-variable predictor catalogue from the appendix lives as a concept page (cross-cluster reusable, not paper-tied).
 
-```
-Omega Score = Set 1 {Financial indicators}
-            + Set 2 {Payment behavior variables}
-            + Set 3 {Employee-related variables}
-            + Set 4 {Management-related variables}
-```
+### Table 1 — Hypothesis-test prediction performance (5 sequential LASSO models)
 
-### Omega Score — Regular (60-day default) formula
+**Type:** hypothesis-test table · **Location:** p. 2401 · **Reproduced in:** [[altman-2023-hypothesis-test-performance]]
 
-```
-Omega Score = Set 1 { +0.003 · Days of debtors' change
-                      −0.328 · Retained earnings / Total assets
-                      −0.617 · Quick ratio
-                      −0.695 · Surplus dummy }
-            + Set 2 { +0.621 · Number of short credit payment defaults }
-            + Set 3 { +0.626 · Firing ratio
-                      −0.029 · Mean employee tenure }
-            + Set 4 { +0.395 · Change in management }
+5 sequential LASSO models with monotonically increasing AUC (70.4 → 79.6 → 82.6 → 86.0 → 88.0). The +17.6 AUC lift from benchmark Z′′ to full LASSO is the paper's headline economic-significance number, broken down by variable group: payment-behavior +6.4, management+employee +3.0, all combined +17.6.
 
-Omega Score Groups:
-  Alpha   (Omega Score ≤ 0.007)         — Healthy SME
-  Beta    (0.007 < Omega Score ≤ 1.626) — Moderate-risk SME
-  Gamma   (Omega Score ≥ 1.626)         — High-risk SME
-```
+### Table 2 — LASSO selected variables and logit coefficients
 
-### Omega Score — Early-warning (30-day default) formula
+**Type:** variable-coefficient table · **Location:** p. 2402 · *Source:* LASSO output for both 60-day and 30-day models with the previous-payment-default escalation RR ladder (1-block ≈ 3.7, 4+ blocks ≈ 12.7–17.3). Not separately transcribed as an artifact page — the headline coefficients are embedded in [[altman-2023-omega-score-formulas]].
 
-```
-Omega Score = Set 1 { +0.154 · Days of clients' change
-                      −0.299 · Personnel costs / Gross profit
-                      −0.585 · Quick ratio
-                      +0.002 · Days of debtors' change
-                      −0.594 · Surplus dummy }
-            + Set 2 { +0.798 · Number of short creditor payment defaults }
-            + Set 3 { +0.583 · Firing ratio
-                      −0.029 · Mean employee tenure }
+### Omega Score — three formulas (general, 60-day Regular, 30-day Early-warning)
 
-Omega Score Groups:
-  Alpha   (Omega Score ≤ 0.564)        — Healthy SME
-  Beta    (0.564 < Omega Score ≤ 0.931) — Moderate-risk SME
-  Gamma   (Omega Score ≥ 0.931)         — High-risk SME
-```
+**Type:** named-score equation block · **Location:** pp. 2402–2406 · **Reproduced in:** [[altman-2023-omega-score-formulas]]
 
-Note the early-warning model **does not retain `Change in management`** — interpretable as: a board change is a slower-acting signal that shows up at 60-day default but not yet at 30-day. The personnel-cost / gross-profit and equity / total-investments ratios appear only in the 30-day model, consistent with shorter-horizon liquidity pressure.
+The paper's eponymous score, in three variants. Set 1 (financial) + Set 2 (payment) + Set 3 (employee) + Set 4 (management). The 30-day model drops `Change in management` (slower-acting signal) and adds `Personnel costs / Gross profit` (shorter-horizon margin pressure).
 
-### Omega Score Group thresholds + cumulative default incidence (Table 3, reproduced)
+### Table 3 — Omega Score Groups + cumulative default incidence
 
-| Group | 60-day band | 60-day default rate | 30-day band | 30-day default rate |
-|---|---|---:|---|---:|
-| Alpha | ≤ 0.007 | 15.6 % | ≤ 0.564 | 18.1 % |
-| Beta | (0.007, 1.626] | 66.0 % | (0.564, 0.931] | 60.5 % |
-| Gamma | ≥ 1.626 | **92.2 %** | ≥ 0.931 | **92.4 %** |
+**Type:** default-threshold table · **Location:** p. 2404 · **Reproduced in:** [[altman-2023-omega-score-groups]]
 
-### Table 5 (reproduced) — Z′′, Omega and ML model performance
+Alpha / Beta / Gamma three-band classification with cumulative-incidence percentages. Headline: Gamma (high-risk) cumulative default = **92.2% at 60 days**, 92.4% at 30 days. Risk ratio (Alpha reference): Beta 4.23×, Gamma 5.91×.
 
-| Model | AUC | Δ AUC | Accuracy | Specificity |
-|---|---:|---:|---:|---:|
-| Benchmark Z′′ (recalibrated) | 70.4 | — | 65.6 | 66.4 |
-| Omega Score Groups | 82.2 | +11.8 | 78.4 | 71.4 |
-| **Omega Score (continuous)** | **87.2** | **+16.8** | 78.4 | 82.0 |
-| Random forest | 89.0 | +18.6 | 81.4 | 79.7 |
-| XGBoost | **90.3** | **+19.9** | 82.6 | 78.6 |
+### Table 4 — Omega vs Z′′ performance
 
-### Table 6 (reproduced) — Monetary impact of the prediction improvement
+**Type:** model-comparison table · **Location:** p. 2406 · *Source:* 60-day and 30-day variants vs recalibrated Z′′ benchmark — the +16.8 AUC headline lift is captured in the broader Table 5 reproduction.
 
-| Test-sample slice | SMEs | Bank-defaulted debt | Supplier-defaulted debt | Government-defaulted debt | Total |
-|---|---:|---:|---:|---:|---:|
-| SMEs defaulted (100 %) | 458 | €135.3 M | €113.9 M | €24.8 M | **€274.0 M** |
-| Benchmark Type-II error (37.6 %) | 172 | €41.8 M | €33.7 M | €7.0 M | €82.5 M |
-| Omega Type-II error (28 %) | 126 | €32.2 M | €28.0 M | €6.7 M | €66.9 M |
-| **Improved prediction** | — | — | — | — | **€15.6 M** |
+### Table 5 — Z′′, Omega, Random Forest, XGBoost performance comparison
+
+**Type:** model-comparison table · **Location:** p. 2407 · **Reproduced in:** [[altman-2023-prediction-performance-comparison]]
+
+Recalibrated Z′′ (AUC 70.4) → Omega Groups (82.2) → continuous Omega (87.2) → Random Forest (89.0) → XGBoost (90.3). The 3-point gap between Omega and XGBoost is the interpretability-vs-accuracy trade-off the paper's Discussion centres on.
+
+### Table 6 — Monetary impact
+
+**Type:** economic-significance table · **Location:** p. 2408 · **Reproduced in:** [[altman-2023-monetary-impact]]
+
+€274 M total defaulted debt in the test sample; benchmark Z′′ misclassifies €82.5 M, Omega misclassifies €66.9 M — **€15.6 M (18.9%) improvement**. At Croatian recovery rate 36%, unrecovered amount avoided ≈ €10 M.
+
+### Appendix — 164-variable Omega Score corpus catalogue
+
+**Type:** variable-definitions catalogue · **Location:** pp. 2411–2417 · **Reproduced in:** [[sme-distress-predictor-variables]]
+
+The 164-variable candidate space that LASSO selects from. Kept as `type: concept` (not `type: artifact`) because it's reusable across the financial-distress cluster — Powell 2024, Hajek 2024, Bari 2026, and Habib 2020 all draw on overlapping variables.
 
 ## Discussion / Significance (SO WHAT)
 
