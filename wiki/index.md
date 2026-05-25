@@ -6,6 +6,10 @@ Each section is flat-listed alphabetically. Once page counts grow, sections may 
 
 ## Sources
 
+### Textbook chapters — corporate-finance foundations
+
+- [[2019-01-01-ross-2019-fundamentals-ch3-financial-statements]] — Ross/Westerfield/Jordan 2019 §3. Canonical pedagogical reference for financial-statement analysis: closed vocabulary of ~22 financial ratios across 5 categories; DuPont identity; standardisation toolkit (common-size, common-base year); benchmarking taxonomy (SIC/NAICS/RMA); honest §3.5 catalogue of ratio-analysis's structural limits. Definitional backbone for every distress-prediction source in the corpus.
+
 ### Academic papers — financial-distress prediction
 
 - [[2012-09-01-luppe-2012-anchoring-accounting-indicators]] — Luppe & Fávero 2012. Tversky-Kahneman anchoring heuristic applied to net-profit estimation; mean Anchoring Index = 0.91 across 8 companies.
@@ -31,9 +35,12 @@ Each section is flat-listed alphabetically. Once page counts grow, sections may 
 ## Concepts
 
 - [[altman-z-score]] — The Z-score lineage (1968 → Z′ → Z′′ → International → Omega); MDA-derived accounting-based distress score; the most-cited distress measure in the empirical literature.
+- [[common-size-statements]] — Statement-level standardisation technique (vertical / horizontal / combined); the sister technique to ratio analysis, used invisibly by every cross-firm distress sample assembly.
+- [[dupont-identity]] — ROE decomposed into profit margin × total asset turnover × equity multiplier (= operating × asset-use × leverage efficiency); the canonical performance-attribution framework.
 - [[dutch-construction-sector]] — Dutch *bouwsector* and its six sub-sectors; production-cycle 2024–2026 trough; consolidation trajectory toward 2040; krappe arbeidsmarkt + stikstof + netcongestie constraints.
 - [[dutch-housing-shortage]] — Structural Dutch *woningtekort*; ~420,000 dwellings by 2026; supply-side, financing-side, demand-side causes; policy responses (Regiewet, coalitieakkoord 2026–2030, beter benutten, cooperative housing).
 - [[financial-distress]] — Umbrella concept; multi-stage observable process; defined per Habib 2020 across failure / insolvency / bankruptcy / default; operationalised differently across the corpus; now includes a sectoral-distress sub-concept covering the Dutch woningcorporaties case.
+- [[financial-ratio-analysis]] — Umbrella concept for the chapter-canonical closed vocabulary of ~22 financial ratios across five categories (liquidity / leverage / turnover / profitability / market value); the definitional backbone of every distress-prediction source in the corpus.
 - [[multiple-discriminant-analysis]] — MDA; the linear-classification technique underlying the Z-score family; Wilks's lambda + F-test stepwise variable selection; comparable to logit/probit but with weaker cross-context portability.
 
 ## Threads

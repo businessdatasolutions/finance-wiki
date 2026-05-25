@@ -8,6 +8,37 @@ Permitted operations: `ingest`, `acquire`, `query`, `lint`, `synthesize`, `refac
 
 ---
 
+## [2026-05-25] ingest | Ross/Westerfield/Jordan 2019 — Fundamentals of Corporate Finance Ch.3 (Working with Financial Statements)
+
+Third ingest of the day — the wiki's **first textbook-chapter source**. A 42-page chapter extract from the 12th edition of Ross/Westerfield/Jordan's *Fundamentals of Corporate Finance* (McGraw-Hill 2019, ISBN 9781259918957), Chapter 3 *Working with Financial Statements*. Establishes `kind: book-chapter` as a new source discriminator (companion to the existing `kind: paper`).
+
+**Identity correction surfaced during pre-flight Check 2:** the PDF on disk is named `Fundamentals of Corporate Finance - Stephen M. Ross.pdf` — wrong. The textbook's lead author is **Stephen A. Ross** (MIT Sloan, Modigliani Professor, deceased 2017), not Stephen M. Ross (the unrelated Michigan businessman/philanthropist). Recorded the mismatch in the source page's `## Citation` note and in the raw markdown extract's `notes:` frontmatter; the literal PDF filename is preserved on disk per CLAUDE.md identity-mismatch convention.
+
+**Acquire**: PDF converted with `pdftotext -layout` to `raw/books/ross-2019-fundamentals-ch3-financial-statements.md` (2505-line extract; YAML frontmatter contract attached). The original PDF stays at `raw/books/Fundamentals of Corporate Finance - Stephen M. Ross.pdf` (book bucket; not moved to `raw/assets/` because the new `raw/books/` typed subfolder is the canonical home for both PDF + markdown extract of book-kind sources).
+
+**Source page written**:
+
+- [[2019-01-01-ross-2019-fundamentals-ch3-financial-statements]] — Pass 2 read; chapter-native body skeleton (TL;DR → walkthrough §3.1-§3.6 → vocabulary → Visual content → Distinctive artifacts → Significance → Caveats → Linked entities → Source-to-source). **8 artifacts reproduced**: Table 3.8 full ratio catalogue (5 categories × ~22 ratios), DuPont identity Eq 3.26 with algebraic equivalents, Figure 3.1 Extended DuPont Chart as Mermaid decomposition tree, Tables 3.1 / 3.2 / 3.3 / 3.9 reproduced, §3.5 Problems-with-financial-statement-analysis 8-point catalogue. Quality self-score: **12/12 = 1.00** (ceiling).
+
+**Neighbour-source scan** surfaced **6 candidates** — all six academic distress papers in the corpus are downstream users of the chapter's ratio vocabulary. Added 6 `supports` typed edges (to Habib 2020, Altman 2023, Powell 2024, Hajek 2024, Bari 2026, Luppe 2012); Ross is established as the **definitional backbone** for the wiki's distress-prediction layer. Rabobank reports skipped — too sectoral for a defensible typed edge to a pedagogical reference.
+
+**Concept pages created (3)**:
+
+- [[financial-ratio-analysis]] — umbrella concept for the closed ratio vocabulary across five categories; catalogues Ross §3.5's structural-limits-of-ratio-analysis as the wiki's reference for *why* augmentation is valuable. confidence: 0.80, source_count: 1.
+- [[dupont-identity]] — the ROE = profit margin × total asset turnover × equity multiplier decomposition; includes Yahoo!/Alphabet 2015 worked example and the General Motors 1989–1993 equity-multiplier warning; full Extended DuPont Mermaid reproduction lives on the source page. confidence: 0.80, source_count: 1.
+- [[common-size-statements]] — vertical / horizontal / combined standardisation toolkit; named explicitly as the *invisible scaffolding* of cross-firm distress-modelling samples. confidence: 0.75, source_count: 1.
+
+**Concept pages updated (2)**:
+
+- [[financial-distress]] — source_count 6 → 7. Added `uses` typed relationship to [[financial-ratio-analysis]]. Body now distinguishes "operationalisations" (already catalogued per source) from the **definitional input layer** (Ross §3.3 as the canonical pedagogical reference for the ratios distress is measured against).
+- [[altman-z-score]] — source_count 3 → 4. Added `uses` typed relationship to [[financial-ratio-analysis]]. Body now mapping the five Z-score ratios to their Ross §3.3 equation numbers (X₁ ↔ Eq 3.4, X₃ ↔ Eq 3.20, X₅ ↔ Eq 3.18) — clarifies that Altman 1968's contribution was the *combination via MDA*, not the ratio definitions.
+
+**Entities**: Ross / Westerfield / Jordan all listed as **Dangling** (per second-source promotion rule) on the source page. No entity pages created on this ingest.
+
+**W&W tags**: omitted. Chapter is methodological accounting pedagogy outside the Warner & Wäger digital-transformation lens; per CLAUDE.md guidance, tagging omitted rather than force-fit.
+
+**Index updates**: new "Textbook chapters — corporate-finance foundations" section under Sources (with this page); 3 new concept entries (`financial-ratio-analysis`, `dupont-identity`, `common-size-statements`) inserted alphabetically under Concepts.
+
 ## [2026-05-25] ingest | Rabobank reports batch (Sectorprognoses 2025-12, Woningcorporaties limiet, Vastgoed 2026, Beter benutten, Bouw- en Vastgoedbericht 2025)
 
 Second ingest of the day — five Rabobank/RaboResearch practitioner publications covering Dutch real-estate, construction, and housing-finance. **Acquire**: 10 raw PDFs in `raw/reports/` converted to markdown via `pdftotext -layout`; the 6 web-clipper PDFs of the Rabobank Bouw- en Vastgoedbericht 2025 chapters consolidated into a single source page (rather than 6 thin per-chapter pages) on the basis that they form one online publication.

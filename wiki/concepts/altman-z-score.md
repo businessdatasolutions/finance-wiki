@@ -9,10 +9,13 @@ aliases:
   - Altman Z'' score
 confidence: 0.90
 last_confirmed: 2026-05-25
-source_count: 3
+source_count: 4
 accessed_at: 2026-05-25
-tags: [altman-z-score, financial-distress, multiple-discriminant-analysis, bankruptcy-prediction, financial-ratios]
-relationships: []
+tags: [altman-z-score, financial-distress, multiple-discriminant-analysis, bankruptcy-prediction, financial-ratios, financial-ratio-analysis]
+relationships:
+  - type: uses
+    target: financial-ratio-analysis
+    via: "The Z-score's five constituent ratios (WC/TA, RE/TA, EBIT/TA, ME/TL, Sales/TA) are members of the closed ratio vocabulary catalogued in Ross §3.3"
 ---
 
 # Altman Z-score
@@ -43,6 +46,8 @@ where
 | Z < 1.81 | Financial distress |
 
 The five-ratio coefficients were derived via [[multiple-discriminant-analysis]] (MDA) on a paired sample of bankrupt vs. non-bankrupt US manufacturers in the 1960s.
+
+**Ratio-vocabulary mapping.** Each of the Z-score's five inputs is a member of [[financial-ratio-analysis|Ross §3.3's closed ratio vocabulary]]: X₁ is a liquidity-leverage hybrid (NWC-to-total-assets, Ross Eq 3.4); X₃ is a profitability ratio with a total-assets denominator (cf. Ross Eq 3.20 ROA); X₄ is a market-based variant of the long-term debt ratio (Ross Eq 3.9); X₅ is total asset turnover (Ross Eq 3.18). The Altman 1968 contribution was *not* defining the ratios — those were already standard — but *combining* them into a single weighted score via MDA on a labelled-distress sample. See [[2019-01-01-ross-2019-fundamentals-ch3-financial-statements|Ross 2019 §3.3]] for the canonical pedagogical definitions of each ratio family.
 
 ## The Z-score lineage (named successors)
 
@@ -82,11 +87,14 @@ The Omega Score is the most recent named addition. See [[omega-score]] for its f
 - [[2022-11-28-altman-2023-omega-score-sme-default]] — extends the lineage with Omega Score; recalibrates Z′′ on Croatian SMEs.
 - [[2020-01-01-habib-2020-distress-determinants-consequences-review]] — provides the formula + threshold + survey-count.
 - [[2024-01-01-powell-2024-asean-accounting-early-warning-distress]] — applies MDA methodology to 6 ASEAN countries.
+- [[2019-01-01-ross-2019-fundamentals-ch3-financial-statements]] — Ross/Westerfield/Jordan §3.3 — the canonical pedagogical definitions of the five constituent ratios (Eq 3.4, 3.18, 3.20 and kin).
 
 ## Related concepts
 
 - [[financial-distress]] — the broader concept Z-score measures.
+- [[financial-ratio-analysis]] — the closed vocabulary the five Z inputs are drawn from.
 - [[multiple-discriminant-analysis]] — the statistical method Z-score relies on.
+- [[dupont-identity]] — algebraic kin: three of the five Z inputs are DuPont primitives (turnover, profitability-with-TA-denominator, leverage).
 - [[omega-score]] — the most recent Altman-lineage extension.
 - [[ohlson-o-score]] — the logit-based alternative.
 - [[merton-distance-to-default]] — the structural / option-pricing alternative.

@@ -7,10 +7,13 @@ aliases:
   - Distress risk
 confidence: 0.90
 last_confirmed: 2026-05-25
-source_count: 6
+source_count: 7
 accessed_at: 2026-05-25
-tags: [financial-distress, bankruptcy, default, insolvency, distress-prediction, sector-distress]
-relationships: []
+tags: [financial-distress, bankruptcy, default, insolvency, distress-prediction, sector-distress, financial-ratio-analysis]
+relationships:
+  - type: uses
+    target: financial-ratio-analysis
+    via: "Every distress operationalisation in the corpus computes ratios drawn from the Ross §3.3 closed vocabulary"
 ---
 
 # Financial distress
@@ -48,6 +51,8 @@ The five distress-prediction sources operationalise distress differently:
 
 The operational definition matters: the closer the cut-off is to bankruptcy, the rarer the events (Hajek's 96.1 % non-distressed), the more class-imbalance becomes the modelling challenge. The further upstream from bankruptcy (Altman's 30-day block; Bari's behavioural composite), the more events become observable but the noisier the signal.
 
+**Definitional input layer.** Every operationalisation above ultimately reduces to ratios computed from the financial statements. The wiki's canonical pedagogical reference for those ratios — current, quick, cash, total debt, debt-equity, TIE, cash coverage, profit margin, ROA, ROE, inventory turnover, receivables turnover, asset turnover — is [[2019-01-01-ross-2019-fundamentals-ch3-financial-statements|Ross/Westerfield/Jordan 2019 §3.3]]. The [[financial-ratio-analysis]] concept page catalogues the full closed vocabulary; this concept page treats distress as the *target* those ratios predict.
+
 ## Determinants (Habib's 3-bucket taxonomy)
 
 1. **Firm-level fundamentals** — R&D investment (Zhang 2015 +1.3 % per 1-SD); FX hedging (Magee 2013); employee relations (Kane et al. 2005); CSR performance (Al-Hadi et al. 2017 –1.46 % per 1-SD); MD&A narrative tone (Tennyson et al. 1990; Mayew et al. 2015); book-tax differences; audit-opinion qualifications.
@@ -76,6 +81,10 @@ The operational definition matters: the closer the cut-off is to bankruptcy, the
 **Sectoral-distress practitioner reports** (added 2026-05-25):
 
 - [[2025-12-18-rabobank-woningcorporaties-aan-hun-limiet]] — Dutch woningcorporaties at sector-wide financial limit; ATAD / Vpb / WSW mechanics. The canonical sectoral-distress case study in the wiki.
+
+**Definitional / pedagogical reference** (added 2026-05-25):
+
+- [[2019-01-01-ross-2019-fundamentals-ch3-financial-statements]] — Ross/Westerfield/Jordan 2019 §3.3, the canonical pedagogical reference for the financial ratios used to operationalise distress across the corpus above.
 
 ## Sectoral financial distress (added 2026-05-25 with the Rabobank-reports ingest)
 
