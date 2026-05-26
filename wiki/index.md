@@ -23,11 +23,22 @@ Each section is flat-listed alphabetically. Once page counts grow, sections may 
 
 - [[2026-05-24-erginbilgic-2026-rolls-royce-turnaround-playbook]] — Bloomberg Podcasts (*Leaders with Francine Lacqua*), interview with Tufan Erginbilgiç. The wiki's first primary-source CEO testimony on the *response* side of financial distress: four-pillar transformation playbook + burning-platform speech protocol + resilience-before-crisis principle. Stock 10× under his tenure; McKinsey case-study designation.
 - [[2026-05-19-sternfels-2026-mckinsey-leading-through-transformation]] — McKinsey Unpacked webcast (recruiting series); Bob Sternfels (McKinsey global managing partner) on leadership, AI, and the next generation at McKinsey's 2026 centennial. Brand and candidate-recruiting content; few named frameworks; useful as a baseline for what McKinsey says publicly about leadership.
+- [[2026-05-26-mckinsey-2026-rewired-to-win-reimagining-enterprise-tech-ai]] — McKinsey Live webinar revisiting the book *Rewired* (Lamarre/Smaje/Zemmel, 2023) in the post-2023 generative-AI context. Hosts Lucia Rahilly + Rob Levin + Kate Smaje on the value gap between AI claims and AI outcomes; outperformer-behaviour framework (focus + capabilities + change). Yt-dlp fallback ingest.
+- [[2026-05-26-mckinsey-2026-leaders-not-knowing-it-all]] — McKinsey Podcast *Leadership Shaped by Experience* (inaugural episode); Eric Kutcher interviews David Novak (former CEO + cofounder Yum! Brands). Leadership via asking-questions + recognition-as-lever; the Crystal Pepsi failure case study. Yt-dlp fallback ingest.
 
 ### Corporate governance & mission protection — Eric Ries / *Incorruptible*
 
 - [[2026-05-26-yc-2026-defend-against-mediocrity-and-rot]] — Y Combinator's *Main Function* podcast (Garry Tan + Eric Ries, 50 min). Ries's central argument: shareholder primacy is a doctrine not a law; "financial gravity" predictably degrades successful companies; governance structures (PBC, mission-controlled boards, industrial foundations, dual-class) can resist that erosion. Live cases: Anthropic, Costco, Patagonia, Novo Nordisk, Twilio.
 - [[2026-05-26-lennys-2026-anthropic-costco-patagonia-incorruptible-companies]] — Lenny's Podcast (Lenny Rachitsky + Eric Ries, 99 min). The long-form sibling to the YC episode — same author, same book, more depth on Anthropic's Long-Term Benefit Trust mechanics and the OpenAI/Anthropic divergence story. Cleaner companion transcript on Lenny's Substack.
+
+### Industry-level competitive-strategy research
+
+- [[2026-05-26-mckinsey-2026-next-big-arenas-of-competition]] — McKinsey Global Institute virtual event (May 12, 2026); authors Kweilin Ellingrud + Kevin Russell. Names **8 arenas of outsized growth** (AI services, semiconductors, cloud infrastructure, advanced manufacturing, robotics, next-generation energy systems, space, biopharma) and introduces **"omniscalers"** — 9 firms competing across multiple arenas at unprecedented capex scale. Most data-dense McKinsey source in the corpus.
+
+### Methodology — system dynamics + go-to-market
+
+- [[2026-05-26-mit-sloan-2026-systems-thinking-for-leaders]] — MIT Sloan Executive Education webinar; John Sterman (JW Forrester Professor of Management) on system dynamics for executives. The methodology side of complex-systems analysis; pairs naturally with the wiki's resilience-triptych concepts as the analytical toolkit. 58 min; yt-dlp fallback ingest.
+- [[2026-05-26-yc-2026-50-founders-first-customers]] — Y Combinator S23-batch montage; 16 named startups answering "how did you get your first customer?" Network-channel dominance (~5 of 16); cold outreach (~4); viral launch as high-variance outlier (Reworkd AI). First go-to-market source in the corpus.
 
 ### Rabobank practitioner reports — Dutch real-estate / construction sectors
 
@@ -69,6 +80,10 @@ v0.7 — paper-tied artifact pages (`type: artifact`). Each reproduces a single 
 ### Ries 2026 — *Incorruptible* (mission-protection governance)
 
 - [[ries-2026-four-mission-protection-mechanisms]] — The four governance structures Ries names in *Incorruptible* (2026) for resisting financial-gravity-driven mission erosion: Dual-class shares (weak) / Public Benefit Corp (moderate) / Mission-controlled board / Long-Term Benefit Trust (strong) / Industrial foundation (strongest). Live cases: Anthropic, Patagonia, Novo Nordisk, Costco. Mermaid diagram + per-mechanism strengths/weaknesses/case-study.
+
+### McKinsey Global Institute 2026 — competitive arenas
+
+- [[mgi-2026-eight-arenas-and-omniscalers]] — The 8 arenas + 9 omniscalers framework from MGI's May 2026 *The race takes off in the next big arenas of competition*. Arena definitions, cross-arena structure (AI services + semiconductors + cloud as a stack), 2024-vs-2026 update, geographic-concentration patterns. Reproduces the framework at webcast-level fidelity; the underlying report is not yet ingested.
 
 ### Altman 2023 — Omega Score
 

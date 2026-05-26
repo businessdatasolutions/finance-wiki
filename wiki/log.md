@@ -8,6 +8,51 @@ Permitted operations: `ingest`, `acquire`, `query`, `lint`, `synthesize`, `refac
 
 ---
 
+## [2026-05-26] ingest | YouTube re-acquisition: 5 previously-deferred videos completed via yt-dlp fallback; full transcripts + source pages + 1 new artifact (MGI 8 arenas + 9 omniscalers); resolves the panel-render gap from earlier today's ingest+acquire batch
+
+**Trigger.** Earlier today (commit `5ed6546`) 5 videos failed the youtube-transcript-skill's panel-render check and landed as acquire-only. User requested re-acquisition. Retried at 300s timeout — still failed. Built a **yt-dlp fallback path** that downloads auto-subtitles via a different YouTube API surface (not panel-gated). All 5 succeeded.
+
+**Why yt-dlp succeeded where the skill failed.** The youtube-transcript-skill drives a real Chromium and reads the transcript engagement panel — when YouTube stalls that panel (channel-specific anti-automation behaviour observed on McKinsey + some YC content), the skill hangs. yt-dlp instead hits the player's caption-track API directly via `--write-auto-sub`, which doesn't depend on watch-page panel rendering at all. The fallback script lives at `/tmp/yt-fallback/fetch_via_ytdlp.py` and emits the same JSON shape as the skill for downstream consistency.
+
+**Affected files (16 touched: 5 raw rewrites + 5 new source pages + 1 new artifact + 2 catalogue updates + 3 already-existing files unchanged).**
+
+*Raw files rewritten (5)* — previously metadata-only acquire-only landings, now contain full transcripts:
+
+- `raw/videos/mckinsey-2026-rewired-to-win-reimagining-enterprise-tech-ai.md` — 850 segments.
+- `raw/videos/mckinsey-2026-leaders-not-knowing-it-all.md` — 667 segments.
+- `raw/videos/mckinsey-2026-next-big-arenas-of-competition.md` — 1,508 segments (the longest of the batch, ~60 min event).
+- `raw/videos/mit-sloan-2026-systems-thinking-for-leaders.md` — 1,470 segments.
+- `raw/videos/yc-2026-50-founders-first-customers.md` — 121 segments (~4 min short).
+
+*New wiki source pages (5):*
+
+- [`wiki/sources/2026-05-26-mckinsey-2026-rewired-to-win-reimagining-enterprise-tech-ai.md`](sources/2026-05-26-mckinsey-2026-rewired-to-win-reimagining-enterprise-tech-ai.md) — McKinsey Live webinar adapting the *Rewired* book (Lamarre/Smaje/Zemmel 2023) to the 2026 generative-AI context. Hosts Lucia Rahilly + Rob Levin + Kate Smaje. `supports` edge to [[2026-05-24-erginbilgic-2026-rolls-royce-turnaround-playbook]] (both name multi-dimensional change frameworks).
+- [`wiki/sources/2026-05-26-mckinsey-2026-leaders-not-knowing-it-all.md`](sources/2026-05-26-mckinsey-2026-leaders-not-knowing-it-all.md) — McKinsey Podcast inaugural episode of *Leadership Shaped by Experience*; Eric Kutcher interviews David Novak (former Yum! Brands CEO). Crystal Pepsi failure case + asking-questions + recognition-as-lever. No typed edges (new thematic territory).
+- [`wiki/sources/2026-05-26-mckinsey-2026-next-big-arenas-of-competition.md`](sources/2026-05-26-mckinsey-2026-next-big-arenas-of-competition.md) — McKinsey Global Institute virtual event launching the 2026 report. 8 named arenas + 9 omniscalers. Most data-dense McKinsey source in the corpus; cross-references [[mission-protection-via-governance]] via the biopharma arena and Novo Nordisk.
+- [`wiki/sources/2026-05-26-mit-sloan-2026-systems-thinking-for-leaders.md`](sources/2026-05-26-mit-sloan-2026-systems-thinking-for-leaders.md) — MIT Sloan Executive Education webinar; John Sterman on system dynamics for executives. The first methodology-focused source in the wiki — connects to the resilience-triptych concepts as the analytical toolkit.
+- [`wiki/sources/2026-05-26-yc-2026-50-founders-first-customers.md`](sources/2026-05-26-yc-2026-50-founders-first-customers.md) — Y Combinator S23 montage; 16 named startups on first-customer acquisition. First go-to-market source in the corpus. Documents network-channel dominance pattern.
+
+*New artifact (1):*
+
+- [`wiki/artifacts/mgi-2026-eight-arenas-and-omniscalers.md`](artifacts/mgi-2026-eight-arenas-and-omniscalers.md) — MGI's 8-arena × 9-omniscaler framework. Arena definitions (AI services / semiconductors / cloud / advanced manufacturing / robotics / next-gen energy / space / biopharma), cross-arena structure, 2024-vs-2026 update, geographic-concentration. Reproduces the framework at webcast-level fidelity; the underlying report is not yet ingested.
+
+*Modified (2):*
+
+- [`wiki/index.md`](index.md) — new sub-sections under Sources for "Industry-level competitive-strategy research" and "Methodology — system dynamics + go-to-market"; new [[mgi-2026-eight-arenas-and-omniscalers]] under Artifacts.
+- [`wiki/log.md`](log.md) — this entry.
+
+**Entity promotions deferred.** Several entities are listed as Dangling on the new source pages — Kate Smaje, Rob Levin, Lucia Rahilly (Rewired), David Novak + Eric Kutcher (McKinsey Podcast), Kweilin Ellingrud + Kevin Russell + Chris Bradley (MGI), John Sterman + Jay Forrester + Donella Meadows (MIT Sloan). None met the second-source rule in this batch alone. A future related ingest (e.g. Novak's *Take Charge of You*; Sterman's *Business Dynamics*; a second MGI report) would trigger promotion.
+
+**Y Combinator as organisation entity** — now appears as a content source in **two batch sources** (the YC Ries interview earlier today + the YC 50-founders montage now). The two-source rule fires; entity promotion deferred to a future commit for batch hygiene but flagged on the relevant source page.
+
+**Concepts touched.** No new concepts created in this batch — the new sources connect to existing [[corporate-turnaround]] and [[mission-protection-via-governance]] via prose/typed-edge rather than seeding new umbrella concepts. Several future-concept candidates flagged: [[ai-enterprise-transformation]], [[competitive-arenas]], [[system-dynamics-methodology]], [[early-stage-go-to-market]] — each would benefit from second-source corroboration before seeding.
+
+**Pattern documented for future ingests.** When the youtube-transcript-skill stalls at panel-render, **yt-dlp is now the established fallback path**. The script at `/tmp/yt-fallback/fetch_via_ytdlp.py` (not committed to the repo — it's a one-shot fallback rather than a permanent skill) emits the same JSON shape; rerunning the same processing pipeline on its output produces equivalent raw files. Could be promoted to a `.claude/skills/youtube-transcript-skill/fetch_fallback.py` companion script in a future maintenance commit.
+
+**Quality scoring.** None — videos are `kind: video`, outside the v0.6 paper-only scorer scope.
+
+---
+
 ## [2026-05-26] ingest+acquire | YouTube interview batch (8 URLs): 3 full ingests (Sternfels @ McKinsey + Ries × 2 on *Incorruptible*) seed [[mission-protection-via-governance]] concept and promote [[Eric-Ries]] entity via two-source rule; 5 acquire-only landings deferred at panel-render timeout
 
 **Trigger.** User shared 8 YouTube URLs across two follow-up messages in the same session. Workflow: fetch all via [`youtube-transcript-skill`](../.claude/skills/youtube-transcript-skill/SKILL.md) at 60-120s timeouts → land the 3 that produced transcripts as full ingests → land the 5 that failed the transcript-panel-render as **acquire-only** raw files (per CLAUDE.md §Acquire step 5: *"When Acquire runs without Process in the same session, log as `acquire | ...`"* — this batch uses the combined `ingest+acquire` op for the mixed batch).
