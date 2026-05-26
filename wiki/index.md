@@ -22,6 +22,12 @@ Each section is flat-listed alphabetically. Once page counts grow, sections may 
 ### Practitioner CEO interviews — corporate turnaround / leadership
 
 - [[2026-05-24-erginbilgic-2026-rolls-royce-turnaround-playbook]] — Bloomberg Podcasts (*Leaders with Francine Lacqua*), interview with Tufan Erginbilgiç. The wiki's first primary-source CEO testimony on the *response* side of financial distress: four-pillar transformation playbook + burning-platform speech protocol + resilience-before-crisis principle. Stock 10× under his tenure; McKinsey case-study designation.
+- [[2026-05-19-sternfels-2026-mckinsey-leading-through-transformation]] — McKinsey Unpacked webcast (recruiting series); Bob Sternfels (McKinsey global managing partner) on leadership, AI, and the next generation at McKinsey's 2026 centennial. Brand and candidate-recruiting content; few named frameworks; useful as a baseline for what McKinsey says publicly about leadership.
+
+### Corporate governance & mission protection — Eric Ries / *Incorruptible*
+
+- [[2026-05-26-yc-2026-defend-against-mediocrity-and-rot]] — Y Combinator's *Main Function* podcast (Garry Tan + Eric Ries, 50 min). Ries's central argument: shareholder primacy is a doctrine not a law; "financial gravity" predictably degrades successful companies; governance structures (PBC, mission-controlled boards, industrial foundations, dual-class) can resist that erosion. Live cases: Anthropic, Costco, Patagonia, Novo Nordisk, Twilio.
+- [[2026-05-26-lennys-2026-anthropic-costco-patagonia-incorruptible-companies]] — Lenny's Podcast (Lenny Rachitsky + Eric Ries, 99 min). The long-form sibling to the YC episode — same author, same book, more depth on Anthropic's Long-Term Benefit Trust mechanics and the OpenAI/Anthropic divergence story. Cleaner companion transcript on Lenny's Substack.
 
 ### Rabobank practitioner reports — Dutch real-estate / construction sectors
 
@@ -35,12 +41,14 @@ Each section is flat-listed alphabetically. Once page counts grow, sections may 
 
 - [[Ahsan-Habib]] — Professor at Massey University School of Accountancy; first author of the canonical 1966–2017 distress literature review; the wiki's foundational definitional reference.
 - [[Edward-I-Altman]] — Professor Emeritus at NYU Stern; founder of statistical bankruptcy prediction; author of the Z-score lineage (1968 → Z′′ 1995 → Omega 2023).
+- [[Eric-Ries]] — Author of *The Lean Startup* (2011) and *Incorruptible* (2026). Promoted on the 2026-05-26 ingest batch via the second-source rule (YC + Lenny's interviews). Pre-Anthropic adviser; named the "financial gravity" failure mode; seeded the wiki's [[mission-protection-via-governance]] concept.
 
 ## Concepts
 
 - [[altman-z-score]] — The Z-score lineage (1968 → Z′ → Z′′ → International → Omega); MDA-derived accounting-based distress score; the most-cited distress measure in the empirical literature.
 - [[common-size-statements]] — Statement-level standardisation technique (vertical / horizontal / combined); the sister technique to ratio analysis, used invisibly by every cross-firm distress sample assembly.
 - [[corporate-turnaround]] — The **response phase** to financial distress: what management actually does once detection models say a firm is in trouble. Single-source so far (Erginbilgiç @ Rolls-Royce, 2026); seeded with the four-pillar transformation playbook + burning-platform speech protocol. Future ingests of academic turnaround literature, consulting frameworks, and comparable CEO case studies will deepen the concept.
+- [[mission-protection-via-governance]] — The **prevention phase** of corporate resilience. Eric Ries's *Incorruptible* (2026) framework: four governance mechanisms (dual-class, Public Benefit Corp, mission-controlled board / long-term-benefit trust, industrial foundation) that resist the "financial gravity" pull toward mediocrity. Seeded by the YC + Lenny's interview pair; the prevention dual of [[corporate-turnaround]] and the upstream-cause concept the academic-paper detection cluster measures the downstream-effect of.
 - [[dupont-identity]] — ROE decomposed into profit margin × total asset turnover × equity multiplier (= operating × asset-use × leverage efficiency); the canonical performance-attribution framework.
 - [[dutch-construction-sector]] — Dutch *bouwsector* and its six sub-sectors; production-cycle 2024–2026 trough; consolidation trajectory toward 2040; krappe arbeidsmarkt + stikstof + netcongestie constraints.
 - [[dutch-housing-shortage]] — Structural Dutch *woningtekort*; ~420,000 dwellings by 2026; supply-side, financing-side, demand-side causes; policy responses (Regiewet, coalitieakkoord 2026–2030, beter benutten, cooperative housing).
@@ -57,6 +65,10 @@ v0.7 — paper-tied artifact pages (`type: artifact`). Each reproduces a single 
 
 - [[erginbilgic-2026-four-pillar-turnaround-playbook]] — The four jointly-necessary pillars (people / granular strategy / contract renegotiation / performance management) framed as the operational difference between *transformation* (multi-dimensional culture + business-model change) and *restructuring* (cost cutting alone). Mermaid framework.
 - [[erginbilgic-2026-burning-platform-speech-protocol]] — The named-event communication protocol that launched the Rolls-Royce transformation: 4 months pre-arrival External Benchmarking → 1.5-hour internal town hall (NOT a press conference) → data-grounded mirror (Part 1) + energising vision (Part 2) in one event. Mermaid protocol.
+
+### Ries 2026 — *Incorruptible* (mission-protection governance)
+
+- [[ries-2026-four-mission-protection-mechanisms]] — The four governance structures Ries names in *Incorruptible* (2026) for resisting financial-gravity-driven mission erosion: Dual-class shares (weak) / Public Benefit Corp (moderate) / Mission-controlled board / Long-Term Benefit Trust (strong) / Industrial foundation (strongest). Live cases: Anthropic, Patagonia, Novo Nordisk, Costco. Mermaid diagram + per-mechanism strengths/weaknesses/case-study.
 
 ### Altman 2023 — Omega Score
 

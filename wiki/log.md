@@ -8,6 +8,56 @@ Permitted operations: `ingest`, `acquire`, `query`, `lint`, `synthesize`, `refac
 
 ---
 
+## [2026-05-26] ingest+acquire | YouTube interview batch (8 URLs): 3 full ingests (Sternfels @ McKinsey + Ries × 2 on *Incorruptible*) seed [[mission-protection-via-governance]] concept and promote [[Eric-Ries]] entity via two-source rule; 5 acquire-only landings deferred at panel-render timeout
+
+**Trigger.** User shared 8 YouTube URLs across two follow-up messages in the same session. Workflow: fetch all via [`youtube-transcript-skill`](../.claude/skills/youtube-transcript-skill/SKILL.md) at 60-120s timeouts → land the 3 that produced transcripts as full ingests → land the 5 that failed the transcript-panel-render as **acquire-only** raw files (per CLAUDE.md §Acquire step 5: *"When Acquire runs without Process in the same session, log as `acquire | ...`"* — this batch uses the combined `ingest+acquire` op for the mixed batch).
+
+**Fetch results.**
+
+| Status | Slug | Channel | Length |
+|---|---|---|---|
+| ✓ ingested | `sternfels-2026-mckinsey-leading-through-transformation` | McKinsey | 42:43 |
+| ✓ ingested | `yc-2026-defend-against-mediocrity-and-rot` | Y Combinator | 50:04 |
+| ✓ ingested | `lennys-2026-anthropic-costco-patagonia-incorruptible-companies` | Lenny's Podcast | 1:39:22 |
+| ⚠ acquire-only | `mckinsey-2026-rewired-to-win-reimagining-enterprise-tech-ai` | McKinsey | 30:47 |
+| ⚠ acquire-only | `mit-sloan-2026-systems-thinking-for-leaders` | MIT Sloan | 57:48 |
+| ⚠ acquire-only | `mckinsey-2026-leaders-not-knowing-it-all` | McKinsey | 22:26 |
+| ⚠ acquire-only | `mckinsey-2026-next-big-arenas-of-competition` (live) | McKinsey | 59:41 |
+| ⚠ acquire-only | `yc-2026-50-founders-first-customers` | Y Combinator | 3:59 |
+
+**Pattern observed:** all 4 McKinsey-channel videos + 1 YC short hit the documented [skill failure mode](../.claude/skills/youtube-transcript-skill/SKILL.md#failure-modes) "transcript panel did not render" even at 120s timeout. This is likely a channel-specific YouTube anti-automation surface or a slow panel-load path the skill doesn't currently handle. **Re-acquisition path** documented in each raw file's `notes:` field — try longer timeout, headed Playwright mode, or yt-dlp + auto-subtitle fallback.
+
+**Affected files (15 touched: 8 new raw + 3 new source pages + 1 new entity + 1 new concept + 1 new artifact + 1 modified index + 1 modified log).**
+
+*New (12 wiki + 8 raw = 20 files):*
+
+- `wiki/sources/2026-05-19-sternfels-2026-mckinsey-leading-through-transformation.md` — McKinsey global managing partner on leadership / AI / next-gen leaders. Candidate-recruiting webcast; primarily-brand content; no artifact promotion. Confidence 0.65.
+- `wiki/sources/2026-05-26-yc-2026-defend-against-mediocrity-and-rot.md` — Eric Ries on *The Main Function*. 50-min interview on *Incorruptible*. Confidence 0.80.
+- `wiki/sources/2026-05-26-lennys-2026-anthropic-costco-patagonia-incorruptible-companies.md` — Eric Ries on Lenny's Podcast. 99-min long-form sibling. Confidence 0.85. Source-to-source typed `supports` edge with the YC sibling.
+- `wiki/entities/Eric-Ries.md` — **PROMOTED** via the second-source rule. Two interviews about the same book in the same batch satisfies the threshold cleanly.
+- `wiki/concepts/mission-protection-via-governance.md` — **new concept seeded** by the Ries interview pair. Positioned as the *prevention* dual to [[corporate-turnaround]]'s *response* phase; together they form a detection → prevention → response triptych for corporate resilience.
+- `wiki/artifacts/ries-2026-four-mission-protection-mechanisms.md` — Ries's named four-mechanism governance taxonomy (Dual-class / PBC / Mission-controlled board / Industrial foundation) with Mermaid diagram, per-mechanism strengths/weaknesses, and live cases (Anthropic, Patagonia, Novo Nordisk, Costco).
+- 8 raw files under `raw/videos/` — 3 full transcripts + 5 acquire-only metadata files. Each acquire-only file's `notes:` field documents the re-acquisition path.
+
+*Modified (2):*
+
+- `wiki/index.md` — new "Practitioner CEO interviews — corporate turnaround / leadership" addition (Sternfels); new "Corporate governance & mission protection — Eric Ries / *Incorruptible*" sub-section under Sources (Ries × 2); new [[Eric-Ries]] entity; new [[mission-protection-via-governance]] concept; new "Ries 2026 — *Incorruptible*" sub-section under Artifacts.
+- `wiki/log.md` — this entry.
+
+**Conceptual significance.** This batch completes a triptych the wiki has been building:
+
+- **Detection** — the 6-paper academic cluster (Altman / Habib / Hajek / Powell / Bari / Luppe) measures distress.
+- **Response** — [[corporate-turnaround]] (seeded 2026-05-26 by Erginbilgiç) documents what to do once distress is detected.
+- **Prevention** — [[mission-protection-via-governance]] (seeded today by the Ries interview pair) documents the governance structures that resist the financial-gravity pull toward distress in the first place.
+
+Future ingests in any of the three columns now have natural homes.
+
+**Entity-promotion mechanics validated.** The Ries case is the cleanest possible trigger for the second-source rule: same person, same book, two different podcasts, same batch ingest. The rule fires unambiguously; the [[Eric-Ries]] entity is anchored on the two source pages and gives downstream concept/artifact pages a stable reference target. This is the *intended* working of the rule (per CLAUDE.md §Author-entity promotion).
+
+**Quality scoring.** None — videos are `kind: video`, outside the v0.6 paper-only scorer scope.
+
+---
+
 ## [2026-05-26] ingest | Erginbilgiç (Bloomberg Podcasts, 2026) — Rolls-Royce CEO turnaround interview; first primary-source response-phase content in the wiki; new [[corporate-turnaround]] concept; 2 new artifact pages (four-pillar playbook; burning-platform speech protocol)
 
 **Trigger.** User shared a YouTube URL: `https://youtu.be/yYkBpzq5Sqw` — Bloomberg Podcasts *Leaders with Francine Lacqua*, 23:44 interview with Rolls-Royce CEO Tufan Erginbilgiç.
