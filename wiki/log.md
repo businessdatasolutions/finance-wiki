@@ -8,6 +8,34 @@ Permitted operations: `ingest`, `acquire`, `query`, `lint`, `synthesize`, `refac
 
 ---
 
+## [2026-05-26] ingest | Erginbilgiç (Bloomberg Podcasts, 2026) — Rolls-Royce CEO turnaround interview; first primary-source response-phase content in the wiki; new [[corporate-turnaround]] concept; 2 new artifact pages (four-pillar playbook; burning-platform speech protocol)
+
+**Trigger.** User shared a YouTube URL: `https://youtu.be/yYkBpzq5Sqw` — Bloomberg Podcasts *Leaders with Francine Lacqua*, 23:44 interview with Rolls-Royce CEO Tufan Erginbilgiç.
+
+**Acquire.** Fetched via [`youtube-transcript-skill`](../.claude/skills/youtube-transcript-skill/SKILL.md) in `--json` mode; cleaned ASR-style timestamp-readout prefixes ("N minutes, M seconds") that the captioner prepended to most segments; wrote [`raw/videos/rolls-royce-ceo-tufan-erginbilgic-turnaround-playbook.md`](../raw/videos/rolls-royce-ceo-tufan-erginbilgic-turnaround-playbook.md) (169 segments, 6 chapters, manual English captions — not ASR-only).
+
+**Process.** Pass 2 read covering all six chapters. Visual content trivial (single fixed-shot interview, two speakers, no slides). No appendix (videos don't have one). W&W `dynamic_capabilities:` tagging skipped — the W&W process model lives in the AI wiki, not this finance wiki; the content is corporate-turnaround leadership, not digital transformation.
+
+**Affected files (6 touched, 5 new + 1 modified):**
+
+*New (5):*
+- [`wiki/sources/2026-05-24-erginbilgic-2026-rolls-royce-turnaround-playbook.md`](sources/2026-05-24-erginbilgic-2026-rolls-royce-turnaround-playbook.md) — the source page. Honest about being single-source one-sided CEO narrative; flagged limitations the interview format obscures (cyclical aerospace recovery, defence-spending tailwinds, selection bias on the playbook).
+- [`wiki/concepts/corporate-turnaround.md`](concepts/corporate-turnaround.md) — new concept page. Frames the response phase to financial distress; positioned as the dual of the wiki's detection-heavy academic corpus (Altman / Habib / Hajek / Powell / Bari). Single-source so far; lists future ingest candidates (Slatter & Lovett, Pearce & Robbins, Bain/BCG/McKinsey turnaround literature, comparable CEO case studies like Gerstner @ IBM, Mulally @ Ford, Nadella @ Microsoft).
+- [`wiki/artifacts/erginbilgic-2026-four-pillar-turnaround-playbook.md`](artifacts/erginbilgic-2026-four-pillar-turnaround-playbook.md) — Erginbilgiç's named framework reproduced as a Mermaid diagram with detailed per-pillar exposition and explicit "what this artifact is NOT" caveats.
+- [`wiki/artifacts/erginbilgic-2026-burning-platform-speech-protocol.md`](artifacts/erginbilgic-2026-burning-platform-speech-protocol.md) — the named communication-launch event reproduced as a reproducible 5-step protocol with Mermaid + the avoid-tough-love-framing rule + the authenticity-as-failure-mode caveat.
+- [`raw/videos/rolls-royce-ceo-tufan-erginbilgic-turnaround-playbook.md`](../raw/videos/rolls-royce-ceo-tufan-erginbilgic-turnaround-playbook.md) — cleaned transcript with YAML frontmatter.
+
+*Modified (1):*
+- [`wiki/index.md`](index.md) — new ## Sources sub-section "Practitioner CEO interviews — corporate turnaround / leadership"; new [[corporate-turnaround]] concept under ## Concepts; new "Erginbilgiç 2026 — Rolls-Royce turnaround" sub-section under ## Artifacts with the 2 new artifact pages.
+
+**Entities deferred (per author-promotion rule — first-source only).** Tufan Erginbilgiç, Francine Lacqua, Rolls-Royce all listed as Dangling on the source page; entity pages **not** created. Second-source promotion required.
+
+**Source-to-source relationships.** None — this source opens new thematic territory (the corpus's first response-phase content; existing five academic papers are all detection-phase). The honest neighbour-scan outcome is "no defensible typed edge" rather than forcing a `supports / contradicts` relationship that doesn't fit. The connection lives in prose on both the source page and on [[corporate-turnaround]].
+
+**Quality scoring.** The v0.6 quality scorer filters to `kind: paper`; this source is `kind: video` and drops out of the rubric. The video-source LLM-judge slice is a future v0.8+ candidate.
+
+---
+
 ## [2026-05-25] refactor | v0.7 appendix backfill — close 4 appendix gaps deferred in the initial Solution-B pass; 4 new artifact pages; 3 source-page catalogues extended; Altman SM gap documented as raw-layer (not processing-layer) deferral
 
 **Trigger.** User asked: *"Did you also include appendices in the process?"* — honest audit: the v0.7 bulk slice focused on in-body tables and unilaterally deferred 4 specific appendix items (Hajek A.1, Hajek Figure A.1, Powell Appendices A+B+C, Altman SM). User then asked to close the gaps.

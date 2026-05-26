@@ -19,6 +19,10 @@ Each section is flat-listed alphabetically. Once page counts grow, sections may 
 - [[2024-06-22-hajek-2024-distress-prediction-annual-reports]] — Hajek & Munk 2024. FinBERT sentiment + BERTopic 26-topic taxonomy on 10-K/20-F risk-factor sections; XGBOD SSL for class imbalance; AUC 0.9864, sensitivity 0.8616.
 - [[2026-02-04-bari-2026-us-small-business-distress-framework]] — Bari 2026. Early-warning framework for US small businesses (N = 482); 7 indicator families; 6 of 7 hypotheses rejected; ΔR² 0.31→0.46; credit behaviour the largest single channel (β = +0.34).
 
+### Practitioner CEO interviews — corporate turnaround / leadership
+
+- [[2026-05-24-erginbilgic-2026-rolls-royce-turnaround-playbook]] — Bloomberg Podcasts (*Leaders with Francine Lacqua*), interview with Tufan Erginbilgiç. The wiki's first primary-source CEO testimony on the *response* side of financial distress: four-pillar transformation playbook + burning-platform speech protocol + resilience-before-crisis principle. Stock 10× under his tenure; McKinsey case-study designation.
+
 ### Rabobank practitioner reports — Dutch real-estate / construction sectors
 
 - [[2025-rabobank-bouw-en-vastgoedbericht-2025]] — RaboResearch 2025. Online multi-chapter publication; sub-sector deep dives (woningbouw, utiliteitsbouw, GWW, installatie, ruw-afbouw); Buildsight production forecasts 2023–2027.
@@ -36,6 +40,7 @@ Each section is flat-listed alphabetically. Once page counts grow, sections may 
 
 - [[altman-z-score]] — The Z-score lineage (1968 → Z′ → Z′′ → International → Omega); MDA-derived accounting-based distress score; the most-cited distress measure in the empirical literature.
 - [[common-size-statements]] — Statement-level standardisation technique (vertical / horizontal / combined); the sister technique to ratio analysis, used invisibly by every cross-firm distress sample assembly.
+- [[corporate-turnaround]] — The **response phase** to financial distress: what management actually does once detection models say a firm is in trouble. Single-source so far (Erginbilgiç @ Rolls-Royce, 2026); seeded with the four-pillar transformation playbook + burning-platform speech protocol. Future ingests of academic turnaround literature, consulting frameworks, and comparable CEO case studies will deepen the concept.
 - [[dupont-identity]] — ROE decomposed into profit margin × total asset turnover × equity multiplier (= operating × asset-use × leverage efficiency); the canonical performance-attribution framework.
 - [[dutch-construction-sector]] — Dutch *bouwsector* and its six sub-sectors; production-cycle 2024–2026 trough; consolidation trajectory toward 2040; krappe arbeidsmarkt + stikstof + netcongestie constraints.
 - [[dutch-housing-shortage]] — Structural Dutch *woningtekort*; ~420,000 dwellings by 2026; supply-side, financing-side, demand-side causes; policy responses (Regiewet, coalitieakkoord 2026–2030, beter benutten, cooperative housing).
@@ -47,6 +52,11 @@ Each section is flat-listed alphabetically. Once page counts grow, sections may 
 ## Artifacts
 
 v0.7 — paper-tied artifact pages (`type: artifact`). Each reproduces a single load-bearing table, figure-diagram, named equation, or instrument verbatim. Source pages' `## Distinctive artifacts` sections now catalogue these wikilinks rather than duplicating the data inline. See [CLAUDE.md §Artifacts](../CLAUDE.md#artifacts) for the schema and the concept/artifact split (paper-tied → artifact; corpus-shared → concept).
+
+### Erginbilgiç 2026 — Rolls-Royce turnaround
+
+- [[erginbilgic-2026-four-pillar-turnaround-playbook]] — The four jointly-necessary pillars (people / granular strategy / contract renegotiation / performance management) framed as the operational difference between *transformation* (multi-dimensional culture + business-model change) and *restructuring* (cost cutting alone). Mermaid framework.
+- [[erginbilgic-2026-burning-platform-speech-protocol]] — The named-event communication protocol that launched the Rolls-Royce transformation: 4 months pre-arrival External Benchmarking → 1.5-hour internal town hall (NOT a press conference) → data-grounded mirror (Part 1) + energising vision (Part 2) in one event. Mermaid protocol.
 
 ### Altman 2023 — Omega Score
 
