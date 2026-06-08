@@ -8,6 +8,21 @@ Permitted operations: `ingest`, `acquire`, `query`, `lint`, `synthesize`, `refac
 
 ---
 
+## [2026-05-29] query | Tooling evaluation: Mistral Document AI vs Landing AI ADE for the Acquire-step PDF→markdown converter
+
+**Trigger.** User is considering upgrading the [Acquire](../CLAUDE.md#acquire) phase's document processing and surfaced two candidates (Mistral Document AI / Landing AI ADE), asking for a MECE comparison including integration effort and value to the wiki. Filed the answer back as a concept page per the [Query](../CLAUDE.md#query) operation's "file good answers back into the wiki" rule.
+
+**Method.** Fetched primary vendor docs for both (Mistral OCR Processor + Annotations + pricing; Landing AI ADE Overview + Extract + Parsing Models + Pricing) and one web search to confirm current Mistral OCR 3 pricing ($2/1k pages standard, $1/1k batch). No raw files ingested — sources are external vendor documentation, so the page carries `source_count: 0` with external citations in its `## Sources` section.
+
+**Headline finding.** Mistral = markdown-native, ~$0.001–0.002/page, ~half-day drop-in replacement for `marker` (best *fit for the existing pipeline*). Landing AI = grounded chunk JSON (page+coordinate per element) + cross-page/merged-cell table reconstruction, ~15–30× the per-page cost and 2–3 days of integration to exploit. **Recommendation:** adopt Mistral as the default Acquire converter; pilot Landing AI on the free 1,000 credits against 2–3 table/appendix-dense distress-prediction papers, and promote it to a per-source premium tier only if grounding measurably cuts artifact-build effort.
+
+**Affected files (2 touched):**
+
+- [`wiki/concepts/document-ai-ingestion-options.md`](concepts/document-ai-ingestion-options.md) — **new** concept page (meta/tooling). 7-dimension MECE comparison + phased recommendation + open questions. No typed `relationships:` (external-tooling concept; no internal source/concept targets beyond contextual mentions of the financial-distress artifact cluster).
+- [`wiki/index.md`](index.md) — added the page to the Concepts section.
+
+**Note on page type.** This is a meta/infrastructure concept, not finance-domain knowledge. It will be picked up by the mechanical [quality scorer](../CLAUDE.md#quality) (concepts are in scope) — expect `quality_notes` flags on citation density, since its citations are external URLs rather than `[[wiki source]]` links. That is acceptable for a tooling-evaluation page and noted in its provenance block.
+
 ## [2026-05-26] ingest | YouTube re-acquisition: 5 previously-deferred videos completed via yt-dlp fallback; full transcripts + source pages + 1 new artifact (MGI 8 arenas + 9 omniscalers); resolves the panel-render gap from earlier today's ingest+acquire batch
 
 **Trigger.** Earlier today (commit `5ed6546`) 5 videos failed the youtube-transcript-skill's panel-render check and landed as acquire-only. User requested re-acquisition. Retried at 300s timeout — still failed. Built a **yt-dlp fallback path** that downloads auto-subtitles via a different YouTube API surface (not panel-gated). All 5 succeeded.
