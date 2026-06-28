@@ -61,10 +61,15 @@ if (remaining.length === 0) {
 
 const query = remaining.join(' ');
 
+// This repo is registered with qmd as the collection `finance-wiki` (rooted at
+// ./wiki). Scope the query to it so results aren't mixed with other local qmd
+// collections (e.g. ai-wiki, cmr-wiki) that share the same qmd index.
+const COLLECTION = 'finance-wiki';
+
 // ----- Step 1: run qmd query --json -----
 const qmd = spawnSync(
   'npx',
-  ['--yes', '@tobilu/qmd', 'query', query, '--json', '-n', String(n)],
+  ['--yes', '@tobilu/qmd', 'query', query, '--json', '-n', String(n), '-c', COLLECTION],
   { cwd: REPO_ROOT, encoding: 'utf8' },
 );
 

@@ -8,6 +8,46 @@ Permitted operations: `ingest`, `acquire`, `query`, `lint`, `synthesize`, `refac
 
 ---
 
+## [2026-06-28] ingest | Perplexity AI (2026) — ontology-driven agentic XAF parser; second source in the Dutch tax/compliance cluster (engineering angle) + finance-wiki qmd collection registered
+
+**Trigger.** User: "ingest @raw/articles/answer-perplexity.md". An LLM-generated Perplexity answer (Dutch) sketching a technical architecture + implementation plan for an ontology-driven agentic parser of the Dutch XAF format. Landed in `raw/articles/` by the user (with an HTML snapshot companion); renamed to a descriptive slug. `raw/` is gitignored, so the raw file is local-only.
+
+**Pre-flight.** Scope: full answer. Identity: no human author (machine-generated) — `author: ["Perplexity AI (generated answer)"]`; no publish date → used retrieval date 2026-06-28 for the filename prefix and `date_published`. Visual inventory: one Mermaid architecture diagram (reproduced verbatim in §Distinctive artifacts + described in §Visual content). Appendix: none. **Reliability: LLM-generated = lowest-authority tier** — flagged prominently; specifics (48-tables/1110-columns Invantive figure, RGS/SBR mapping, stack picks) marked as verify-before-use.
+
+**Content.** Four-layer ontology (syntax/semantic/regulatory/operational); pipeline XAF→version-detect→normalize→entity-extract→ontology-map→knowledge-graph→agent-planner→parsing-agents→XSD+SHACL+business-rule validation→multi-format output; 16 core ontology entities + 7 relations; six-step implementation approach; recommended stack (lxml/.NET, OWL/RDF+SHACL, Neo4j/GraphDB/Jena, agent orchestration).
+
+**Cross-cutting updates.** Typed edge `uses → [[concepts/xaf-auditfile-financieel]]` (body twin present). XAF concept bumped to **`source_count: 2`** but **`confidence` held at 0.70** (LLM source adds tooling perspective, not independent regulatory substantiation; documented in the concept's §Debates, which also records the 3.2-vs-4.0 model-size tension). Neighbour-scan: strong topical neighbour [[2026-03-01-harding-2026-netherlands-xaf-4-requirements]], but the two reinforce different propositions (standard vs. parser design) → linked via the shared concept rather than a same-claim `supports` edge.
+
+**Affected files (4 touched):**
+
+- [`wiki/sources/2026-06-28-perplexity-2026-ontology-agentic-xaf-parser.md`](sources/2026-06-28-perplexity-2026-ontology-agentic-xaf-parser.md) — **new** source page (`kind: article`, LLM-generated, no `confidence`).
+- [`wiki/concepts/xaf-auditfile-financieel.md`](concepts/xaf-auditfile-financieel.md) — source_count 1→2; added engineering-angle framing, second source to Cross-references, Debates note.
+- [`wiki/index.md`](index.md) — second entry under the Dutch tax/compliance heading.
+- [`wiki/log.md`](log.md) — this entry.
+
+**Infra (same session).** Registered this repo as its own qmd collection **`finance-wiki`** (rooted at `./wiki`, ~76 docs, context string attached) after discovering the `ai-wiki` qmd collection points at a *different* repo. Patched [`scripts/wiki-query.mjs`](../scripts/wiki-query.mjs) to scope `/wq` with `-c finance-wiki`. Corrected CLAUDE.md §Search (and the v0.5 landing note) to name `finance-wiki` instead of `ai-wiki`. See the [memory note](../../.claude/projects/-Users-witoldtenhove-Projects-finance-wiki/memory/qmd-collection-points-elsewhere.md).
+
+## [2026-06-28] ingest | Harding (Invoice Data Extraction, 2026) — Netherlands Auditfile Financieel (XAF 4.0) requirements guide; first source in a new Dutch tax / financial-administration compliance cluster
+
+**Trigger.** User: "ingest the latest from zotero." One new item in the `finance-wiki` Zotero collection (everything else deduped on `zotero_item_key`). Acquired via the [zotero-acquire](../.claude/skills/zotero-acquire/SKILL.md) skill — a `webpage` item (vendor blog), full text via `fulltext_source: zotero-extracted` (no PDF to convert). Acquire + Process in the same session → umbrella op `ingest`.
+
+**Pre-flight.** Scope: full article. Identity: title matches; author **David Harding** (filled from body; stub had `authors: []`); vendor source (Invoice Data Extraction / DEH Technologies LLC). Visual inventory: text-only (`> No visuals in source.`). Appendix: none. Vendor-sponsored → confidence capped ≤0.75 per §Lifecycle.
+
+**Headline content.** XAF 4.0 mandatory **2026-01-01**, retiring XAF 3.2 (2014) with no backwards compatibility; ~250→~90 data elements; **RGS**-aligned chart of accounts; the **XAF ≠ SAF-T** correction (NL has its own OECD-independent standard); five required data categories; ViDA/Peppol positioning; reactive on-demand export, seven-year retention, all NL businesses regardless of size.
+
+**Decisions (user-confirmed before write).** (1) Seed a standalone concept page rather than keeping everything on the source page. (2) Tag `dynamic_capabilities: contextual/external-triggers` with a body twin (regulatory mandate forcing digital-administration adaptation). No wikilink to a W&W concept page — `warner-wager-process-model.md` does not exist in this repo despite CLAUDE.md references.
+
+**Neighbour-source scan (step 5).** Three RaboResearch sources share the `contextual/external-triggers` cell but are real-estate/macro regulatory triggers — different domain. No defensible typed edge (*not every co-occurrence is a relationship*); new cluster opened. Loose thematic adjacency to [[concepts/document-ai-ingestion-options]] noted, not edged.
+
+**Affected files (4 touched):**
+
+- [`wiki/sources/2026-03-01-harding-2026-netherlands-xaf-4-requirements.md`](sources/2026-03-01-harding-2026-netherlands-xaf-4-requirements.md) — **new** source page (`kind: article`). No `confidence` (sources are evidence per §Lifecycle; lint only requires it on concepts/entities/syntheses). No legacy `quality_floor` fields (removed in v0.6).
+- [`wiki/concepts/xaf-auditfile-financieel.md`](concepts/xaf-auditfile-financieel.md) — **new** concept page (single-source seed, confidence 0.70).
+- [`wiki/index.md`](index.md) — new "Dutch tax / financial-administration compliance" source heading + concept entry.
+- [`wiki/log.md`](log.md) — this entry.
+
+**Schema note.** David Harding listed as dangling author (first-source rule). Belastingdienst / RGS / SBR deferred as candidate entities pending a second source.
+
 ## [2026-05-29] query | Tooling evaluation: Mistral Document AI vs Landing AI ADE for the Acquire-step PDF→markdown converter
 
 **Trigger.** User is considering upgrading the [Acquire](../CLAUDE.md#acquire) phase's document processing and surfaced two candidates (Mistral Document AI / Landing AI ADE), asking for a MECE comparison including integration effort and value to the wiki. Filed the answer back as a concept page per the [Query](../CLAUDE.md#query) operation's "file good answers back into the wiki" rule.

@@ -17,7 +17,7 @@ The wiki is instantiated. As of v0.2 the repo contains:
 - Page-type frontmatter: `type: source | entity | concept | thread | synthesis | artifact`; `kind:` discriminator on entities and sources; `artifact_kind:` discriminator on artifacts.
 - Log entries: `## [YYYY-MM-DD] <op> | <title>` where `<op>` ∈ `ingest | acquire | query | lint | synthesize | refactor | bulk-refactor`. (`acquire` is the v0.9 addition — used only when raw files land without same-session processing; the umbrella op for the typical case remains `ingest`.)
 - Quartz publishing via `npm run build` / `npm run serve`; custom extensions in `extensions/`.
-- **v0.5 is fully landed (2026-05-17).** All three slices: **retention** (`accessed_at` on concepts + entities + syntheses; §Retention decay curve as lint signal), **search** ([qmd](https://github.com/tobi/qmd) / `@tobilu/qmd` registered as collection `ai-wiki`; 205 docs / 1466 chunks; BM25 + vector + query-expansion local models in `~/.cache/qmd/`), **quality** (`quality_score` + `quality_notes` on concepts and syntheses via [`scripts/quality-score.mjs`](scripts/quality-score.mjs); mechanical rubric across structure / citations / cross-consistency). Manual `accessed_at` bumps via [`scripts/bump-accessed.mjs`](scripts/bump-accessed.mjs) pending MCP integration. See [§Lifecycle](#lifecycle), [§Retention](#retention), [§Quality](#quality), [§Search](#search).
+- **v0.5 is fully landed (2026-05-17).** All three slices: **retention** (`accessed_at` on concepts + entities + syntheses; §Retention decay curve as lint signal), **search** ([qmd](https://github.com/tobi/qmd) / `@tobilu/qmd` registered as collection `finance-wiki` (corrected from `ai-wiki` on 2026-06-28); BM25 + vector + query-expansion local models in `~/.cache/qmd/`), **quality** (`quality_score` + `quality_notes` on concepts and syntheses via [`scripts/quality-score.mjs`](scripts/quality-score.mjs); mechanical rubric across structure / citations / cross-consistency). Manual `accessed_at` bumps via [`scripts/bump-accessed.mjs`](scripts/bump-accessed.mjs) pending MCP integration. See [§Lifecycle](#lifecycle), [§Retention](#retention), [§Quality](#quality), [§Search](#search).
 - **v0.6 LLM-as-judge slice lands (2026-05-25) for source pages.** `node scripts/quality-source-page.mjs --judge` filters to `kind: paper`, computes the mechanical floor, then invokes headless Claude Code via [`scripts/_lib/llm-judge.mjs`](scripts/_lib/llm-judge.mjs) for the substantive overlay. Scores live only in `logs/quality-source-pages.jsonl` — never in the page. Concepts/syntheses remain mechanical-only. See [§Source-page scoring (v0.6)](#source-page-scoring-v06).
 
 The implementation roadmap for v2 features lives in [`llm-wiki-v2-plan.md`](llm-wiki-v2-plan.md): eight staged versions (v0.2 → v0.9). Each version lands schema before tooling, and bulk migrations are supervised batches.
@@ -673,8 +673,8 @@ At ~200 pages the wiki has outgrown `index.md` as a primary discovery surface. v
 ### What lives where
 
 - **qmd's index** (BM25 inverted index + 768-d embeddings per page) lives outside the repo, in qmd's own data directory (typically `~/.qmd/`). It is not committed.
-- **The collection mapping** is registered with qmd as the named collection `ai-wiki`, rooted at `./wiki` with the glob `**/*.md` (so the 205-page corpus of concepts, entities, sources, threads, syntheses, plus `index.md` and `log.md` is indexable).
-- **The collection context-string** (registered via `qmd context add qmd://ai-wiki "..."`) carries the schema summary so qmd's LLM re-ranker has framing when surfacing results.
+- **The collection mapping** is registered with qmd as the named collection `finance-wiki`, rooted at `./wiki` with the glob `**/*.md` (so the corpus of concepts, entities, sources, artifacts, threads, syntheses, plus `index.md` and `log.md` is indexable). **Note:** the same local qmd index also holds unrelated collections (`ai-wiki`, `cmr-wiki`) that point at *other* repos — always scope this repo's queries with `-c finance-wiki` so results aren't diluted. (Historically this collection was mis-named `ai-wiki`; corrected 2026-06-28 when `finance-wiki` was registered as its own collection.)
+- **The collection context-string** (registered via `qmd context add qmd://finance-wiki "..."`) carries the schema summary so qmd's LLM re-ranker has framing when surfacing results.
 - The wiki's typed graph (`wiki/.graph.json` from v0.3) remains the third retrieval stream; it is **not** indexed by qmd. Graph traversal is invoked separately (see §Graph) and merged with qmd's hits via Reciprocal Rank Fusion at the query-answering layer.
 
 ### When to use qmd vs `index.md`
@@ -699,7 +699,7 @@ Run via `npx @tobilu/qmd <command>` (no global install needed) or `qmd <command>
 - **`qmd get "<path>"`** — fetch a specific document by path, or `qmd get "#<docid>"` by qmd's internal id (shown in search results).
 - **`qmd multi-get "<glob>"`** — fetch multiple documents by glob (e.g. `"sources/2026-05*.md"`).
 
-The **collection name** (`ai-wiki`) becomes a URI prefix in qmd's output: results are reported as `qmd://ai-wiki/<path>`. Treat that as the wiki source-of-truth path.
+The **collection name** (`finance-wiki`) becomes a URI prefix in qmd's output: results are reported as `qmd://finance-wiki/<path>`. Treat that as the wiki source-of-truth path.
 
 ### Re-embedding after writes
 

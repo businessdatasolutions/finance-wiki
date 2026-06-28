@@ -44,6 +44,12 @@ raw/**/*.gif
 raw/**/*.webm
 raw/videos/test.txt
 
+# Raw web-snapshot exports (browser "Save Page As" HTML + asset dirs). The
+# canonical raw file is the converted .md; the HTML snapshot stays local-only,
+# mirroring the inspiration/ convention below.
+raw/**/*.html
+raw/**/*_files/
+
 # Python skill caches (e.g. youtube-transcript-skill uses uv/pyenv locally)
 .claude/skills/**/__pycache__/
 .claude/skills/**/.python-version

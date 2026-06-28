@@ -40,6 +40,11 @@ Each section is flat-listed alphabetically. Once page counts grow, sections may 
 - [[2026-05-26-mit-sloan-2026-systems-thinking-for-leaders]] — MIT Sloan Executive Education webinar; John Sterman (JW Forrester Professor of Management) on system dynamics for executives. The methodology side of complex-systems analysis; pairs naturally with the wiki's resilience-triptych concepts as the analytical toolkit. 58 min; yt-dlp fallback ingest.
 - [[2026-05-26-yc-2026-50-founders-first-customers]] — Y Combinator S23-batch montage; 16 named startups answering "how did you get your first customer?" Network-channel dominance (~5 of 16); cold outreach (~4); viral launch as high-variance outlier (Reworkd AI). First go-to-market source in the corpus.
 
+### Dutch tax / financial-administration compliance
+
+- [[2026-03-01-harding-2026-netherlands-xaf-4-requirements]] — Harding (Invoice Data Extraction, 2026). Vendor explainer on the Dutch **Auditfile Financieel (XAF)**: XAF 4.0 mandatory 2026-01-01 (no backwards compatibility), ~250→~90 data elements, RGS-aligned chart of accounts; the **XAF ≠ SAF-T** correction; five required data categories; ViDA/Peppol positioning. First source in a new NL-compliance cluster. Vendor-sourced.
+- [[2026-06-28-perplexity-2026-ontology-agentic-xaf-parser]] — Perplexity AI (LLM-generated answer, 2026). Design sketch for an **ontology-driven agentic XAF parser**: four-layer ontology (syntax/semantic/regulatory/operational), knowledge-graph + agent-orchestration pipeline, XSD+SHACL+business-rules validation, RGS/SBR/NT20 mapping. The engineering-angle complement to the XAF concept. LLM-generated — lowest authority tier.
+
 ### Rabobank practitioner reports — Dutch real-estate / construction sectors
 
 - [[2025-rabobank-bouw-en-vastgoedbericht-2025]] — RaboResearch 2025. Online multi-chapter publication; sub-sector deep dives (woningbouw, utiliteitsbouw, GWW, installatie, ruw-afbouw); Buildsight production forecasts 2023–2027.
@@ -67,6 +72,7 @@ Each section is flat-listed alphabetically. Once page counts grow, sections may 
 - [[financial-distress]] — Umbrella concept; multi-stage observable process; defined per Habib 2020 across failure / insolvency / bankruptcy / default; operationalised differently across the corpus; now includes a sectoral-distress sub-concept covering the Dutch woningcorporaties case.
 - [[financial-ratio-analysis]] — Umbrella concept for the chapter-canonical closed vocabulary of ~22 financial ratios across five categories (liquidity / leverage / turnover / profitability / market value); the definitional backbone of every distress-prediction source in the corpus.
 - [[multiple-discriminant-analysis]] — MDA; the linear-classification technique underlying the Z-score family; Wilks's lambda + F-test stepwise variable selection; comparable to logit/probit but with weaker cross-context portability.
+- [[xaf-auditfile-financieel]] — The Netherlands' national digital audit-file standard (Auditfile Financieel); XAF 4.0 mandatory 2026-01-01, RGS-aligned, OECD-SAF-T-independent; reactive on-demand export the Belastingdienst requests during a *boekenonderzoek*. Single-source seed (vendor) opening the NL-compliance cluster.
 - [[sme-distress-predictor-variables]] — The canonical 164-variable predictor catalogue (Altman Omega Score appendix) across 18 categories: Z-Score, Profitability, Liquidity, Leverage, balance-sheet Δs, Payment behaviour, Employee, Management, and firm-level controls; the corpus-wide reference catalogue distress-prediction papers can cite rather than re-deriving locally.
 
 ## Artifacts
